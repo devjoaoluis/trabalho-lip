@@ -24,7 +24,13 @@ export class UsersService {
   }
 
   async findAll() {
-    return await this.db.db.select().from(usuarios);
+    return await this.db.db
+      .select({
+        id: usuarios.id,
+        nome: usuarios.nome,
+        email: usuarios.email,
+      })
+      .from(usuarios);
   }
 
   async findOne(id: string) {
@@ -32,6 +38,20 @@ export class UsersService {
       .select()
       .from(usuarios)
       .where(eq(usuarios.id, id))
+      .limit(1);
+
+    if (!user.length) {
+      throw new NotFoundException('User not found');
+    }
+
+    return user[0];
+  }
+
+  async findByEmail(email: string) {
+    const user = await this.db.db
+      .select()
+      .from(usuarios)
+      .where(eq(usuarios.email, email))
       .limit(1);
 
     if (!user.length) {
