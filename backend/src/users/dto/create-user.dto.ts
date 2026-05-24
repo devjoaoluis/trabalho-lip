@@ -12,6 +12,7 @@ export class CreateUserDto {
   @IsNotEmpty({ message: "Email não pode ser vazio" })
   email!: string;
 
+  @IsString()
   @MinLength(6)
   senha!: string;
 }

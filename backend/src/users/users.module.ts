@@ -6,5 +6,6 @@ import { DrizzleService } from "src/db/drizzle.service";
 @Module({
   controllers: [UsersController],
   providers: [UsersService, DrizzleService],
+  exports: [UsersService],
 })
 export class UsersModule {}

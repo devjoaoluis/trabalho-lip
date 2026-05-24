@@ -46,10 +46,6 @@ export class UsersService {
   async findByEmail(email: string) {
     const user = await this.db.db.select().from(usuarios).where(eq(usuarios.email, email)).limit(1);
 
-    if (!user.length) {
-      throw new NotFoundException("User not found");
-    }
-
     return user[0];
   }
 
