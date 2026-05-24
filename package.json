@@ -1,5 +1,8 @@
 {
   "devDependencies": {
     "typescript-eslint": "^8.59.4"
+  },
+  "dependencies": {
+    "@nestjs/jwt": "^11.0.2"
   }
 }

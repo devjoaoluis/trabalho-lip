@@ -4,12 +4,9 @@
   "description": "",
   "imports": {
     "#src/*": "./src/*",
-    "#config/*": "./src/config/*",
+    "#auth/*": "./src/auth/*",
     "#db/*": "./src/db/*",
-    "#middleware/*": "./src/middleware/*",
-    "#routes/*": "./src/routes/*",
-    "#users/*": "./src/users/*",
-    "#validations/*": "./src/validations/*"
+    "#users/*": "./src/users/*"
   },
   "author": "",
   "private": true,
@@ -74,7 +71,7 @@
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "tsx": "^4.21.0",
-    "typescript": "^5.7.3",
+    "typescript": "^6.0.3",
     "typescript-eslint": "^8.20.0"
   },
   "jest": {
