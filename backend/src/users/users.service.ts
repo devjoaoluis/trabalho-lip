@@ -1,10 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { DrizzleService } from '../db/drizzle.service';
-import { usuarios } from 'src/db/schema';
-import { eq } from 'drizzle-orm';
-import * as bcrypt from 'bcrypt';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { CreateUserDto } from "./dto/create-user.dto";
+import { UpdateUserDto } from "./dto/update-user.dto";
+import { DrizzleService } from "../db/drizzle.service";
+import { usuarios } from "src/db/schema";
+import { eq } from "drizzle-orm";
+import * as bcrypt from "bcrypt";
 
 @Injectable()
 export class UsersService {
@@ -34,29 +34,17 @@ export class UsersService {
   }
 
   async findOne(id: string) {
-    const user = await this.db.db
-      .select()
-      .from(usuarios)
-      .where(eq(usuarios.id, id))
-      .limit(1);
+    const user = await this.db.db.select().from(usuarios).where(eq(usuarios.id, id)).limit(1);
 
     if (!user.length) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException("User not found");
     }
 
     return user[0];
   }
 
   async findByEmail(email: string) {
-    const user = await this.db.db
-      .select()
-      .from(usuarios)
-      .where(eq(usuarios.email, email))
-      .limit(1);
-
-    if (!user.length) {
-      throw new NotFoundException('User not found');
-    }
+    const user = await this.db.db.select().from(usuarios).where(eq(usuarios.email, email)).limit(1);
 
     return user[0];
   }
@@ -72,24 +60,21 @@ export class UsersService {
       .returning();
 
     if (!user.length) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException("User not found");
     }
 
     return user[0];
   }
 
   async remove(id: string) {
-    const user = await this.db.db
-      .delete(usuarios)
-      .where(eq(usuarios.id, id))
-      .returning();
+    const user = await this.db.db.delete(usuarios).where(eq(usuarios.id, id)).returning();
 
     if (!user.length) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException("User not found");
     }
 
     return {
-      message: 'User deleted successfully',
+      message: "User deleted successfully",
       user: user[0],
     };
   }
