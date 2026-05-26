@@ -1,4 +1,4 @@
-import { IsEnum, IsNotEmpty, IsOptional, IsString, MinLength } from "class-validator";
+import { IsDateString, IsEnum, IsNotEmpty, IsOptional, IsString, MinLength } from "class-validator";
 
 export enum Prioridade {
   BAIXA = "BAIXA",
@@ -24,9 +24,13 @@ export class CreateTaskDto {
 
   @IsEnum(Prioridade)
   @IsOptional()
-  prioridade?: Prioridade = Prioridade.MEDIA;
+  prioridade?: Prioridade;
 
   @IsEnum(StatusTarefa)
   @IsOptional()
-  status?: StatusTarefa = StatusTarefa.PENDENTE;
+  status?: StatusTarefa;
+
+  @IsDateString()
+  @IsOptional()
+  dataLimite?: string;
 }

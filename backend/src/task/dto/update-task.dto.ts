@@ -1,5 +1,5 @@
-import { IsEnum, IsOptional, IsString } from "class-validator";
-import { Prioridade, StatusTarefa } from "./create-task.dto";
+import { IsDateString, IsEnum, IsOptional, IsString } from "class-validator";
+import {Prioridade, StatusTarefa } from "./create-task.dto";
 
 export class UpdateTaskDto {
   @IsString()
@@ -17,4 +17,8 @@ export class UpdateTaskDto {
   @IsEnum(StatusTarefa)
   @IsOptional()
   status?: StatusTarefa;
+
+  @IsDateString()
+  @IsOptional()
+  dataLimite?: string;
 }
