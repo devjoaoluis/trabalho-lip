@@ -1,5 +1,5 @@
 import { IsDateString, IsEnum, IsOptional, IsString } from "class-validator";
-import {Prioridade, StatusTarefa } from "./create-task.dto";
+import { Prioridade, StatusTarefa } from "./create-task.dto";
 
 export class UpdateTaskDto {
   @IsString()

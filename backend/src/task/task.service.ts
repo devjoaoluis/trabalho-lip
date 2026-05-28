@@ -30,34 +30,34 @@ export class TaskService {
 
   async findAll() {
     const task = await this.drizzle.db
-    .select({
-      id: tarefas.id,
-      titulo: tarefas.titulo,
-      descricao: tarefas.descricao,
-      prioridade: tarefas.prioridade,
-      status: tarefas.status,
+      .select({
+        id: tarefas.id,
+        titulo: tarefas.titulo,
+        descricao: tarefas.descricao,
+        prioridade: tarefas.prioridade,
+        status: tarefas.status,
+      })
+      .from(tarefas);
 
-    })
-    .from(tarefas);
-
-    return task[0] 
+    return task[0];
   }
 
   async update(id: string, dto: UpdateTaskDto) {
     const task = await this.drizzle.db
-    .update(tarefas)
-    .set({
-      ...(dto.titulo !== undefined && { titulo: dto.titulo }),
-      ...(dto.descricao !== undefined && { descricao: dto.descricao }),
-      ...(dto.prioridade !== undefined && { prioridade: dto.prioridade }),
-      ...(dto.status !== undefined && { 
-          status: dto.status, 
-          concluidaEm: dto.status === StatusTarefa.CONCLUIDA ? new Date(): null,
+      .update(tarefas)
+      .set({
+        ...(dto.titulo !== undefined && { titulo: dto.titulo }),
+        ...(dto.descricao !== undefined && { descricao: dto.descricao }),
+        ...(dto.prioridade !== undefined && { prioridade: dto.prioridade }),
+        ...(dto.status !== undefined && {
+          status: dto.status,
+          concluidaEm: dto.status === StatusTarefa.CONCLUIDA ? new Date() : null,
         }),
-    })
-    .where(eq(tarefas.id, id)).returning();
+      })
+      .where(eq(tarefas.id, id))
+      .returning();
 
-    return task[0]; 
+    return task[0];
   }
 
   async findOne(id: string) {
@@ -69,8 +69,8 @@ export class TaskService {
   async delete(id: string) {
     const task = await this.drizzle.db.delete(tarefas).where(eq(tarefas.id, id)).returning();
 
-    if (!task.length){
-      throw new NotFoundException("Task not found")
+    if (!task.length) {
+      throw new NotFoundException("Task not found");
     }
 
     return {

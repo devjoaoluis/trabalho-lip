@@ -27,9 +27,8 @@ export class TaskController {
     return this.taskService.findOne(id);
   }
 
-
   @Delete(":id")
-  delete(@Param("id") id:string) {
-    return this.taskService.delete(id)
+  delete(@Param("id") id: string) {
+    return this.taskService.delete(id);
   }
 }
