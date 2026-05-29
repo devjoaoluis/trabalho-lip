@@ -3,7 +3,7 @@ import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { DrizzleService } from "../db/drizzle.service";
 import { usuarios } from "src/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import * as bcrypt from "bcrypt";
 
 @Injectable()
@@ -77,5 +77,18 @@ export class UsersService {
       message: "User deleted successfully",
       user: user[0],
     };
+  }
+
+  async saveRefreshToken(userId: string, token: string): Promise<void> {
+    await this.db.db.update(usuarios).set({ refreshToken: token }).where(eq(usuarios.id, userId));
+  }
+
+  async findByRefreshToken(userId: string, token: string) {
+    const result = await this.db.db
+      .select()
+      .from(usuarios)
+      .where(and(eq(usuarios.id, userId), eq(usuarios.refreshToken, token)))
+      .limit(1);
+    return result[0] ?? null;
   }
 }
