@@ -20,6 +20,7 @@ export const usuarios = pgTable("usuarios", {
   nome: varchar("nome", { length: 255 }).notNull(),
   email: varchar("email", { length: 255 }).notNull().unique(),
   senhaHash: varchar("senha_hash", { length: 255 }).notNull(),
+  refreshToken: varchar("refresh_token", { length: 255 }),
   criadoEm: timestamp("criado_em").defaultNow().notNull(),
   atualizadoEm: timestamp("atualizado_em").defaultNow().notNull(),
 });
