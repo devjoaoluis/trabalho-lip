@@ -23,13 +23,13 @@ export class TaskService {
       .returning();
 
     return {
-      messagem: "Task created successfully",
+      message: "Task created successfully",
       task: task[0],
     };
   }
 
   async findAll() {
-    const task = await this.drizzle.db
+    return await this.drizzle.db
       .select({
         id: tarefas.id,
         titulo: tarefas.titulo,
@@ -38,43 +38,43 @@ export class TaskService {
         status: tarefas.status,
       })
       .from(tarefas);
-
-    return task[0];
-  }
-
-  async update(id: string, dto: UpdateTaskDto) {
-    const task = await this.drizzle.db
-      .update(tarefas)
-      .set({
-        ...(dto.titulo !== undefined && { titulo: dto.titulo }),
-        ...(dto.descricao !== undefined && { descricao: dto.descricao }),
-        ...(dto.prioridade !== undefined && { prioridade: dto.prioridade }),
-        ...(dto.status !== undefined && {
-          status: dto.status,
-          concluidaEm: dto.status === StatusTarefa.CONCLUIDA ? new Date() : null,
-        }),
-      })
-      .where(eq(tarefas.id, id))
-      .returning();
-
-    return task[0];
   }
 
   async findOne(id: string) {
     const task = await this.drizzle.db.select().from(tarefas).where(eq(tarefas.id, id));
 
+    if (!task.length) throw new NotFoundException("Task not found");
+    return task[0];
+  }
+
+  async update(id: string, dto: UpdateTaskDto) {
+    const values: Partial<typeof tarefas.$inferInsert> = {};
+
+    if (dto.titulo !== undefined) values.titulo = dto.titulo;
+    if (dto.descricao !== undefined) values.descricao = dto.descricao;
+    if (dto.prioridade !== undefined) values.prioridade = dto.prioridade;
+    if (dto.status !== undefined) {
+      values.status = dto.status;
+      values.concluidaEm = dto.status === StatusTarefa.CONCLUIDA ? new Date() : null;
+    }
+
+    const task = await this.drizzle.db
+      .update(tarefas)
+      .set(values)
+      .where(eq(tarefas.id, id))
+      .returning();
+
+    if (!task.length) throw new NotFoundException("Task not found");
     return task[0];
   }
 
   async delete(id: string) {
     const task = await this.drizzle.db.delete(tarefas).where(eq(tarefas.id, id)).returning();
 
-    if (!task.length) {
-      throw new NotFoundException("Task not found");
-    }
+    if (!task.length) throw new NotFoundException("Task not found");
 
     return {
-      messagem: "Task deleted successfully",
+      message: "Task deleted successfully",
       task: task[0],
     };
   }
