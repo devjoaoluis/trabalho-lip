@@ -1,8 +1,8 @@
-import { DrizzleService } from "#src/db/drizzle.service.js";
+import { DrizzleService } from "../db/drizzle.service.js";
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { CreateTaskDto, StatusTarefa } from "./dto/create-task.dto";
-import { tarefas } from "#src/db/schema.js";
-import { eq } from "drizzle-orm";
+import { tarefas } from "../db/schema.js";
+import { eq, and } from "drizzle-orm";
 import { UpdateTaskDto } from "./dto/update-task.dto";
 
 @Injectable()
@@ -28,8 +28,8 @@ export class TaskService {
     };
   }
 
-  async findAll() {
-    return await this.drizzle.db
+  async findAll(usuarioId: string) {
+    const tasks = await this.drizzle.db
       .select({
         id: tarefas.id,
         titulo: tarefas.titulo,
@@ -37,39 +37,52 @@ export class TaskService {
         prioridade: tarefas.prioridade,
         status: tarefas.status,
       })
-      .from(tarefas);
+      .from(tarefas)
+      .where(eq(tarefas.usuarioId, usuarioId));
+
+    return tasks;
   }
 
-  async findOne(id: string) {
-    const task = await this.drizzle.db.select().from(tarefas).where(eq(tarefas.id, id));
-
-    if (!task.length) throw new NotFoundException("Task not found");
-    return task[0];
-  }
-
-  async update(id: string, dto: UpdateTaskDto) {
-    const values: Partial<typeof tarefas.$inferInsert> = {};
-
-    if (dto.titulo !== undefined) values.titulo = dto.titulo;
-    if (dto.descricao !== undefined) values.descricao = dto.descricao;
-    if (dto.prioridade !== undefined) values.prioridade = dto.prioridade;
-    if (dto.status !== undefined) {
-      values.status = dto.status;
-      values.concluidaEm = dto.status === StatusTarefa.CONCLUIDA ? new Date() : null;
-    }
-
+  async update(id: string, usuarioId: string, dto: UpdateTaskDto) {
     const task = await this.drizzle.db
       .update(tarefas)
-      .set(values)
-      .where(eq(tarefas.id, id))
+      .set({
+        ...(dto.titulo !== undefined && { titulo: dto.titulo }),
+        ...(dto.descricao !== undefined && { descricao: dto.descricao }),
+        ...(dto.prioridade !== undefined && { prioridade: dto.prioridade }),
+        ...(dto.status !== undefined && {
+          status: dto.status,
+          concluidaEm: dto.status === StatusTarefa.CONCLUIDA ? new Date() : null,
+        }),
+      })
+      .where(and(eq(tarefas.id, id), eq(tarefas.usuarioId, usuarioId)))
       .returning();
 
-    if (!task.length) throw new NotFoundException("Task not found");
+    if (!task.length) {
+      throw new NotFoundException("Task not found");
+    }
+
     return task[0];
   }
 
-  async delete(id: string) {
-    const task = await this.drizzle.db.delete(tarefas).where(eq(tarefas.id, id)).returning();
+  async findOne(id: string, usuarioId: string) {
+    const task = await this.drizzle.db
+      .select()
+      .from(tarefas)
+      .where(and(eq(tarefas.id, id), eq(tarefas.usuarioId, usuarioId)));
+
+    if (!task.length) {
+      throw new NotFoundException("Task not found");
+    }
+
+    return task[0];
+  }
+
+  async delete(id: string, usuarioId: string) {
+    const task = await this.drizzle.db
+      .delete(tarefas)
+      .where(and(eq(tarefas.id, id), eq(tarefas.usuarioId, usuarioId)))
+      .returning();
 
     if (!task.length) throw new NotFoundException("Task not found");
 

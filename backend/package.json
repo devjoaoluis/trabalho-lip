@@ -7,8 +7,7 @@
     "#auth/*": "./src/auth/*",
     "#db/*": "./src/db/*",
     "#users/*": "./src/users/*",
-    "#task/*": "./src/task/*",
-    "#common/*": "./src/common/*"
+    "#task/*": "./src/task/*"
   },
   "author": "",
   "private": true,
