@@ -14,6 +14,7 @@ import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { JwtAuthGuard, type JwtPayload } from "../auth/guards/jwt-auth.guard";
 import { CurrentUser } from "../auth/decorators/user.decorator";
+import { ParseUUIDPipe } from "@nestjs/common";
 
 @Controller("users")
 export class UsersController {
@@ -38,7 +39,10 @@ export class UsersController {
 
   @UseGuards(JwtAuthGuard)
   @Get(":id")
-  findOne(@Param("id") id: string, @CurrentUser() user: JwtPayload) {
+  findOne(
+    @Param("id", new ParseUUIDPipe({ version: "4" })) id: string,
+    @CurrentUser() user: JwtPayload
+  ) {
     if (id !== user.sub) {
       throw new ForbiddenException("Usuário não autorizado a acessar este recurso");
     }
@@ -54,7 +58,7 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @Patch(":id")
   update(
-    @Param("id") id: string,
+    @Param("id", new ParseUUIDPipe({ version: "4" })) id: string,
     @Body() updateUserDto: UpdateUserDto,
     @CurrentUser() user: JwtPayload
   ) {
@@ -66,7 +70,10 @@ export class UsersController {
 
   @UseGuards(JwtAuthGuard)
   @Delete(":id")
-  remove(@Param("id") id: string, @CurrentUser() user: JwtPayload) {
+  remove(
+    @Param("id", new ParseUUIDPipe({ version: "4" })) id: string,
+    @CurrentUser() user: JwtPayload
+  ) {
     if (id !== user.sub) {
       throw new ForbiddenException("Usuário não autorizado a acessar este recurso");
     }

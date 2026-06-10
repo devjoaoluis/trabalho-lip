@@ -1,10 +1,11 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Req } from "@nestjs/common";
 import { TaskService } from "./task.service";
 import { CreateTaskDto } from "./dto/create-task.dto";
-import { JwtAuthGuard, JwtPayload } from "../auth/guards/jwt-auth.guard.js";
+import { JwtAuthGuard, JwtPayload } from "../auth/guards/jwt-auth.guard";
 import { UpdateTaskDto } from "./dto/update-task.dto";
 import { UseGuards } from "@nestjs/common";
 import { Request } from "express";
+import { ParseUUIDPipe } from "@nestjs/common";
 @UseGuards(JwtAuthGuard)
 @Controller("task")
 export class TaskController {
@@ -22,7 +23,7 @@ export class TaskController {
 
   @Patch(":id")
   update(
-    @Param("id") id: string,
+    @Param("id", new ParseUUIDPipe({ version: "4" })) id: string,
     @Req() req: Request & { user: JwtPayload },
     @Body() updateDto: UpdateTaskDto
   ) {
@@ -30,12 +31,18 @@ export class TaskController {
   }
 
   @Get(":id")
-  findOne(@Param("id") id: string, @Req() req: Request & { user: JwtPayload }) {
+  findOne(
+    @Param("id", new ParseUUIDPipe({ version: "4" })) id: string,
+    @Req() req: Request & { user: JwtPayload }
+  ) {
     return this.taskService.findOne(id, req.user.sub);
   }
 
   @Delete(":id")
-  delete(@Param("id") id: string, @Req() req: Request & { user: JwtPayload }) {
+  delete(
+    @Param("id", new ParseUUIDPipe({ version: "4" })) id: string,
+    @Req() req: Request & { user: JwtPayload }
+  ) {
     return this.taskService.delete(id, req.user.sub);
   }
 }
