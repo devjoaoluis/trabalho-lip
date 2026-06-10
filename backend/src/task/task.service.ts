@@ -23,7 +23,7 @@ export class TaskService {
       .returning();
 
     return {
-      messagem: "Task created successfully",
+      message: "Task created successfully",
       task: task[0],
     };
   }
@@ -84,12 +84,10 @@ export class TaskService {
       .where(and(eq(tarefas.id, id), eq(tarefas.usuarioId, usuarioId)))
       .returning();
 
-    if (!task.length) {
-      throw new NotFoundException("Task not found");
-    }
+    if (!task.length) throw new NotFoundException("Task not found");
 
     return {
-      messagem: "Task deleted successfully",
+      message: "Task deleted successfully",
       task: task[0],
     };
   }
