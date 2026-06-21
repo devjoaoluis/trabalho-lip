@@ -20,6 +20,7 @@ async function bootstrap() {
     .setDescription("API para gerenciamento de tarefas")
     .setVersion("1.0")
     .addBearerAuth()
+    .addCookieAuth("refreshToken")
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
