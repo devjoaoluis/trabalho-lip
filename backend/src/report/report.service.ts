@@ -1,16 +1,12 @@
 import { BadRequestException, Inject, Injectable, NotFoundException } from "@nestjs/common";
 import { and, eq, gte, lt, sql, desc } from "drizzle-orm";
-import { NodePgDatabase } from "drizzle-orm/node-postgres";
-import * as schema from "../db/schema";
+import { DrizzleService } from "../db/drizzle.service";
 import { tarefas, relatorios } from "../db/schema";
 import { CreateReportDto } from "./dto/create-report.dto";
 
 @Injectable()
 export class ReportService {
-  constructor(
-    @Inject("DRIZZLE")
-    private readonly db: NodePgDatabase<typeof schema>
-  ) {}
+  constructor(private drizzle: DrizzleService) {}
 
   async gerarRelatorio(usuarioId: string, dto: CreateReportDto) {
     const { periodoInicio, periodoFim } = dto;
@@ -25,7 +21,7 @@ export class ReportService {
     const fimExclusivo = new Date(fim);
     fimExclusivo.setDate(fimExclusivo.getDate() + 1);
 
-    const [resultadoConcluidas] = await this.db
+    const [resultadoConcluidas] = await this.drizzle.db
       .select({
         total: sql<number>`cast(count(*) as int)`,
       })
@@ -39,7 +35,7 @@ export class ReportService {
         )
       );
 
-    const [resultadoPendentes] = await this.db
+    const [resultadoPendentes] = await this.drizzle.db
       .select({
         total: sql<number>`cast(count(*) as int)`,
       })
@@ -55,7 +51,7 @@ export class ReportService {
 
     const diaConclusao = sql<string>`to_char(${tarefas.concluidaEm}::date, 'YYYY-MM-DD')`;
 
-    const concluidasPorDiaRows = await this.db
+    const concluidasPorDiaRows = await this.drizzle.db
       .select({
         dia: diaConclusao,
         total: sql<number>`cast(count(*) as int)`,
@@ -80,7 +76,7 @@ export class ReportService {
     const totalConcluidas = resultadoConcluidas?.total ?? 0;
     const totalPendentes = resultadoPendentes?.total ?? 0;
 
-    const [relatorioCriado] = await this.db
+    const [relatorioCriado] = await this.drizzle.db
       .insert(relatorios)
       .values({
         usuarioId,
@@ -96,7 +92,7 @@ export class ReportService {
   }
 
   async listarRelatorios(usuarioId: string) {
-    return this.db
+    return this.drizzle.db
       .select()
       .from(relatorios)
       .where(eq(relatorios.usuarioId, usuarioId))
@@ -104,7 +100,7 @@ export class ReportService {
   }
 
   async buscarRelatorioPorId(usuarioId: string, relatorioId: string) {
-    const [relatorio] = await this.db
+    const [relatorio] = await this.drizzle.db
       .select()
       .from(relatorios)
       .where(and(eq(relatorios.id, relatorioId), eq(relatorios.usuarioId, usuarioId)));
