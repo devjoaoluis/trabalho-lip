@@ -1,5 +1,6 @@
 import { IsDateString, IsEnum, IsOptional, IsString } from "class-validator";
 import { Prioridade, StatusTarefa } from "./create-task.dto";
+import { PartialType } from "@nestjs/swagger";
 
 export class UpdateTaskDto {
   @IsString()
