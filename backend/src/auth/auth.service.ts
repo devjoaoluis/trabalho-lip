@@ -1,9 +1,18 @@
-import { Injectable, ConflictException, UnauthorizedException } from "@nestjs/common";
+import {
+  Injectable,
+  ConflictException,
+  UnauthorizedException,
+  BadRequestException,
+} from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcrypt";
 import { UsersService } from "../users/users.service";
 import { CreateUserDto } from "../users/dto/create-user.dto";
 import { LoginDto } from "./dto/login.dto";
+import { ForgotPasswordDto } from "./dto/forgot-password.dto";
+import { ResetPasswordDto } from "./dto/reset-password.dto";
+import { sendPasswordResetEmail } from "../config/mailer";
+import * as crypto from "crypto";
 
 export interface JwtPayload {
   sub: string;
@@ -105,5 +114,46 @@ export class AuthService {
     [key: string]: unknown;
   }) {
     return safe;
+  }
+
+  async forgotPassword(dto: ForgotPasswordDto): Promise<{ message: string }> {
+    const user = await this.usersService.findByEmail(dto.email);
+    if (!user) {
+      return { message: "Se o e-mail estiver cadastrado, um link de recuperação será enviado" };
+    }
+
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    const expiry = new Date(Date.now() + 15 * 60 * 1000);
+
+    await this.usersService.saveResetToken(user.id, resetToken, expiry);
+    try {
+      await sendPasswordResetEmail(user.email, resetToken);
+      console.log("👉 TOKEN GERADO COM SUCESSO:", resetToken);
+    } catch (error) {
+      console.error("Erro ao enviar email de recuperação:", error);
+      // Não rebater o erro para o cliente para evitar revelar detalhes e causar 500
+    }
+
+    return { message: "Se o e-mail estiver cadastrado, um link de recuperação será enviado" };
+  }
+
+  async resetPassword(dto: ResetPasswordDto): Promise<{ message: string }> {
+    const user = await this.usersService.findByResetToken(dto.token);
+
+    if (!user || !user.resetTokenExpiry) {
+      throw new BadRequestException("Token inválido ou expirado");
+    }
+
+    if (user.resetTokenExpiry < new Date()) {
+      await this.usersService.clearResetToken(user.id);
+      throw new BadRequestException("Token expirado. Solicite um novo link.");
+    }
+
+    const hashedPassword = await bcrypt.hash(dto.newPassword, 12);
+
+    await this.usersService.updatePassword(user.id, hashedPassword);
+    await this.usersService.clearResetToken(user.id);
+
+    return { message: "Senha redefinida com sucesso." };
   }
 }
