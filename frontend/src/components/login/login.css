@@ -1,0 +1,101 @@
+/* =============================================================
+   LOGIN PAGE – BEM styles
+   NOTA: No Tailwind v4, @apply não suporta variantes (lg:, hover:, sm:…).
+   Variantes responsivas e de estado ficam no className do TSX.
+   Aqui ficam apenas utilities estáticas.
+   ============================================================= */
+
+@reference "../../index.css";
+
+.login-page {
+  @apply min-h-screen w-full flex bg-[#0d0f1e];
+}
+
+.login-page__hero {
+  @apply relative flex flex-col px-8 py-10;
+}
+
+.login-page__hero-content {
+  @apply flex flex-col gap-8;
+}
+
+.login-page__headline {
+  @apply text-4xl font-extrabold leading-tight tracking-tight text-white;
+}
+
+.login-page__cta {
+  @apply text-sm text-white/60;
+}
+
+.login-page__cta-link {
+  @apply text-[#7c6ff7] font-medium underline-offset-4;
+}
+
+/* ── Coluna do formulário ── */
+.login-page__form-col {
+  @apply flex items-center justify-center px-6 py-12;
+}
+
+.login-card-wrapper {
+  @apply relative w-full max-w-md;
+}
+
+.login-card-wrapper__shadow {
+  @apply absolute inset-0 translate-x-3 translate-y-3 rounded-2xl bg-[#7c6ff7];
+}
+
+.login-card {
+  @apply relative z-10 flex flex-col gap-6 rounded-2xl bg-white p-8 shadow-xl;
+}
+
+.login-card__header {
+  @apply flex flex-col gap-1;
+}
+
+.login-card__title {
+  @apply text-base font-semibold text-gray-900;
+}
+
+.login-card__subtitle {
+  @apply text-sm text-gray-500;
+}
+
+.login-form {
+  @apply flex flex-col gap-3;
+}
+
+.login-form__field {
+  @apply flex flex-col;
+}
+
+.login-form__field--password {
+  @apply relative flex-row items-center;
+}
+
+.login-form__input {
+  @apply w-full rounded-lg border border-gray-200 bg-gray-50
+         px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400
+         transition-colors outline-none;
+}
+
+.login-form__input--password {
+  @apply pr-10;
+}
+
+.login-form__password-toggle {
+  @apply absolute right-3 text-gray-400 transition-colors;
+}
+
+.login-form__forgot {
+  @apply flex justify-start -mt-1;
+}
+
+.login-form__forgot-link {
+  @apply text-xs font-medium text-[#7c6ff7] underline-offset-4;
+}
+
+.login-form__submit {
+  @apply mt-1 w-full h-11 rounded-lg
+         bg-[#7c6ff7] text-white font-semibold text-sm
+         transition-colors cursor-pointer;
+}
