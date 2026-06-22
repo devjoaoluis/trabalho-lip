@@ -16,7 +16,7 @@ async function bootstrap() {
   app.use(morgan("combined", { stream: { write: message => logger.info(message.trim()) } }));
 
   app.enableCors({
-    origin: process.env.CORS_ORIGIN?.split(",") || "http://localhost:3000",
+    origin: process.env.CORS_ORIGIN?.split(",") || "http://localhost:5173",
     credentials: true,
   });
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
