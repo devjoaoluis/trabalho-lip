@@ -6,6 +6,7 @@ import { AuthGuard, GuestGuard } from "./AuthGuard"
 const LoginPage            = lazy(() => import("#pages/LoginPage"))
 const RegisterPage         = lazy(() => import("#pages/RegisterPage"))
 const DashboardPage        = lazy(() => import("#pages/DashboardPage"))
+const TasksPage            = lazy(() => import("#pages/TasksPage"))
 const NotFoundPage         = lazy(() => import("#pages/NotFoundPage"))
 const ForgotPasswordPage   = lazy(() => import("#pages/ForgotPasswordPage"))
 const ResetPasswordPage    = lazy(() => import("#pages/ResetPasswordPage"))
@@ -37,6 +38,7 @@ export function AppRouter() {
           {/* Rotas protegidas — exige autenticação */}
           <Route element={<AuthGuard />}>
             <Route path={ROUTES.DASHBOARD} element={<DashboardPage />} />
+            <Route path={ROUTES.TASKS}     element={<TasksPage />} />
             {/* Adicione novas rotas autenticadas aqui */}
           </Route>
 
