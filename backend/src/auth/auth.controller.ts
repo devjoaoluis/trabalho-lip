@@ -12,6 +12,8 @@ import type { Response, Request } from "express";
 import { AuthService } from "./auth.service";
 import { CreateUserDto } from "../users/dto/create-user.dto";
 import { LoginDto } from "./dto/login.dto";
+import { ForgotPasswordDto } from "./dto/forgot-password.dto";
+import { ResetPasswordDto } from "./dto/reset-password.dto";
 import { AccessTokenResponseDto } from "./dto/access-token-response.dto";
 import { LogoutResponseDto } from "./dto/logout-response.dto";
 import {
@@ -138,5 +140,17 @@ export class AuthController {
   logout(@Res({ passthrough: true }) res: Response) {
     res.clearCookie("refreshToken");
     return { message: "Logout realizado com sucesso" };
+  }
+
+  @Post("forgot-password")
+  @HttpCode(HttpStatus.OK)
+  forgotPassword(@Body() dto: ForgotPasswordDto) {
+    return this.authService.forgotPassword(dto);
+  }
+
+  @Post("reset-password")
+  @HttpCode(HttpStatus.OK)
+  resetPassword(@Body() dto: ResetPasswordDto) {
+    return this.authService.resetPassword(dto);
   }
 }

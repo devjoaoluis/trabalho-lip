@@ -91,4 +91,34 @@ export class UsersService {
       .limit(1);
     return result[0] ?? null;
   }
+
+  async saveResetToken(userId: string, token: string, expiry: Date): Promise<void> {
+    await this.db.db
+      .update(usuarios)
+      .set({ resetToken: token, resetTokenExpiry: expiry })
+      .where(eq(usuarios.id, userId));
+  }
+
+  async findByResetToken(token: string) {
+    const result = await this.db.db
+      .select()
+      .from(usuarios)
+      .where(eq(usuarios.resetToken, token))
+      .limit(1);
+    return result[0] ?? null;
+  }
+
+  async clearResetToken(userId: string): Promise<void> {
+    await this.db.db
+      .update(usuarios)
+      .set({ resetToken: null, resetTokenExpiry: null })
+      .where(eq(usuarios.id, userId));
+  }
+
+  async updatePassword(userId: string, hashedPassword: string): Promise<void> {
+    await this.db.db
+      .update(usuarios)
+      .set({ senhaHash: hashedPassword })
+      .where(eq(usuarios.id, userId));
+  }
 }
