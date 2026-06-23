@@ -1,0 +1,125 @@
+/* =============================================================
+   REGISTER PAGE – BEM styles
+   NOTA: No Tailwind v4, @apply não suporta variantes (lg:, hover:, sm:…).
+   Variantes responsivas e de estado ficam no className do TSX.
+   Aqui ficam apenas utilities estáticas.
+   ============================================================= */
+
+@reference "../../index.css";
+
+.register-page {
+  @apply min-h-screen w-full flex bg-[#0d0f1e];
+}
+
+.register-page__form-col {
+  @apply flex items-center justify-center px-6 py-12;
+}
+
+.register-page__hero {
+  @apply relative flex flex-col px-8 py-10;
+}
+
+.register-page__hero-content {
+  @apply flex flex-col gap-8;
+}
+
+.register-page__headline {
+  @apply text-4xl font-extrabold leading-tight tracking-tight text-white;
+}
+
+.register-page__cta {
+  @apply text-sm text-white/60;
+}
+
+.register-page__cta-link {
+  @apply text-[#7c6ff7] font-medium underline-offset-4;
+}
+
+.register-card-wrapper {
+  @apply relative w-full max-w-md;
+}
+
+.register-card-wrapper__shadow {
+  @apply absolute inset-0 translate-x-3 translate-y-3 rounded-2xl bg-[#7c6ff7];
+}
+
+.register-card {
+  @apply relative z-10 flex flex-col gap-6 rounded-2xl bg-white p-8 shadow-xl;
+}
+
+.register-card__header {
+  @apply flex flex-col gap-1;
+}
+
+.register-card__title {
+  @apply text-base font-semibold text-gray-900;
+}
+
+.register-card__subtitle {
+  @apply text-sm text-gray-500;
+}
+
+.register-form {
+  @apply flex flex-col gap-3;
+}
+
+.register-form__field {
+  @apply flex flex-col;
+}
+
+.register-form__field--password {
+  @apply relative flex-row items-center;
+}
+
+.register-form__input {
+  @apply w-full rounded-lg border border-gray-200 bg-gray-50
+         px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400
+         transition-colors outline-none;
+}
+
+.register-form__input--password {
+  @apply pr-10;
+}
+
+.register-form__password-toggle {
+  @apply absolute right-3 text-gray-400 transition-colors;
+}
+
+/* ── Hints de validação de senha ── */
+.register-form__password-hints {
+  @apply flex flex-col gap-1 mt-1 ml-0.5;
+}
+
+.register-form__hint {
+  @apply flex items-center gap-1.5 text-xs text-gray-400 transition-colors;
+}
+
+.register-form__hint--valid {
+  @apply text-green-500;
+}
+
+.register-form__hint-icon {
+  @apply shrink-0;
+}
+
+.register-form__terms {
+  @apply flex items-center gap-2 mt-1;
+}
+
+.register-form__terms-checkbox {
+  @apply h-4 w-4 rounded border border-gray-300 accent-[#7c6ff7] cursor-pointer;
+}
+
+.register-form__terms-label {
+  @apply text-sm text-gray-500 cursor-pointer select-none;
+}
+
+.register-form__terms-link {
+  @apply text-[#7c6ff7] font-medium underline-offset-4;
+}
+
+.register-form__submit {
+  @apply mt-1 w-full h-11 rounded-lg
+         bg-[#7c6ff7] text-white font-semibold text-sm
+         transition-colors cursor-pointer;
+}

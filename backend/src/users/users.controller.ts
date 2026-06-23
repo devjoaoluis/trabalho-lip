@@ -12,33 +12,101 @@ import {
 import { UsersService } from "./users.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
+import { UserResponseDto } from "./dto/response-user.dto";
 import { JwtAuthGuard, type JwtPayload } from "../auth/guards/jwt-auth.guard";
 import { CurrentUser } from "../auth/decorators/user.decorator";
 import { ParseUUIDPipe } from "@nestjs/common";
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiCreatedResponse,
+  ApiNoContentResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiParam,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from "@nestjs/swagger";
 
+@ApiTags("Users")
 @Controller("users")
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
+  @ApiOperation({
+    summary: "Criar usuário",
+    description: "Cria um novo usuário no sistema.",
+  })
+  @ApiBody({ type: CreateUserDto })
+  @ApiCreatedResponse({
+    description: "Usuário criado com sucesso.",
+    type: UserResponseDto,
+  })
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
 
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @Get()
+  @ApiOperation({
+    summary: "Listar usuários",
+    description: "Lista todos os usuários cadastrados no sistema.",
+  })
+  @ApiOkResponse({
+    description: "Usuários listados com sucesso.",
+    type: UserResponseDto,
+    isArray: true,
+  })
+  @ApiUnauthorizedResponse({
+    description: "Token não encontrado ou inválido.",
+  })
   findAll() {
     return this.usersService.findAll();
   }
 
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @Get("me")
+  @ApiOperation({
+    summary: "Buscar usuário autenticado",
+    description: "Retorna os dados do usuário autenticado pelo token JWT.",
+  })
+  @ApiOkResponse({
+    description: "Usuário autenticado retornado com sucesso.",
+    type: UserResponseDto,
+  })
+  @ApiUnauthorizedResponse({
+    description: "Token não encontrado ou inválido.",
+  })
   findMe(@CurrentUser() user: JwtPayload) {
     return this.usersService.findOne(user.sub);
   }
 
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @Get(":id")
+  @ApiOperation({
+    summary: "Buscar usuário por ID",
+    description: "Busca um usuário específico pelo ID.",
+  })
+  @ApiParam({
+    name: "id",
+    example: "b3bdbdd4-34d2-45d1-9e10-872b0d2f8a7e",
+    description: "ID do usuário.",
+  })
+  @ApiOkResponse({
+    description: "Usuário encontrado com sucesso.",
+    type: UserResponseDto,
+  })
+  @ApiNotFoundResponse({
+    description: "Usuário não encontrado.",
+  })
+  @ApiUnauthorizedResponse({
+    description: "Token não encontrado ou inválido.",
+  })
   findOne(
     @Param("id", new ParseUUIDPipe({ version: "4" })) id: string,
     @CurrentUser() user: JwtPayload
@@ -50,13 +118,54 @@ export class UsersController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @Get("email/:email")
+  @ApiOperation({
+    summary: "Buscar usuário por E-mail",
+    description: "Busca um usuário específico pelo E-mail.",
+  })
+  @ApiParam({
+    name: "email",
+    example: "joao@gmail.com",
+    description: "E-mail do usuário.",
+  })
+  @ApiOkResponse({
+    description: "Usuário encontrado com sucesso.",
+    type: UserResponseDto,
+  })
+  @ApiNotFoundResponse({
+    description: "Usuário não encontrado.",
+  })
+  @ApiUnauthorizedResponse({
+    description: "Token não encontrado ou inválido.",
+  })
   findByEmail(@Param("email") email: string) {
     return this.usersService.findByEmail(email);
   }
 
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @Patch(":id")
+  @ApiOperation({
+    summary: "Atualizar usuário",
+    description: "Atualiza parcialmente os dados de um usuário.",
+  })
+  @ApiParam({
+    name: "id",
+    example: "b3bdbdd4-34d2-45d1-9e10-872b0d2f8a7e",
+    description: "ID do usuário.",
+  })
+  @ApiBody({ type: UpdateUserDto })
+  @ApiOkResponse({
+    description: "Usuário atualizado com sucesso.",
+    type: UserResponseDto,
+  })
+  @ApiNotFoundResponse({
+    description: "Usuário não encontrado.",
+  })
+  @ApiUnauthorizedResponse({
+    description: "Token não encontrado ou inválido.",
+  })
   update(
     @Param("id", new ParseUUIDPipe({ version: "4" })) id: string,
     @Body() updateUserDto: UpdateUserDto,
@@ -69,7 +178,26 @@ export class UsersController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @Delete(":id")
+  @ApiOperation({
+    summary: "Remover usuário",
+    description: "Remove um usuário do sistema.",
+  })
+  @ApiParam({
+    name: "id",
+    example: "b3bdbdd4-34d2-45d1-9e10-872b0d2f8a7e",
+    description: "ID do usuário.",
+  })
+  @ApiNoContentResponse({
+    description: "Usuário removido com sucesso.",
+  })
+  @ApiNotFoundResponse({
+    description: "Usuário não encontrado.",
+  })
+  @ApiUnauthorizedResponse({
+    description: "Token não encontrado ou inválido.",
+  })
   remove(
     @Param("id", new ParseUUIDPipe({ version: "4" })) id: string,
     @CurrentUser() user: JwtPayload

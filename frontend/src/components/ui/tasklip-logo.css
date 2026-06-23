@@ -1,0 +1,21 @@
+@reference "../../index.css";
+
+.tasklip-logo {
+  @apply inline-flex items-center gap-2;
+}
+
+.tasklip-logo__icon {
+  @apply w-5 h-5 shrink-0;
+}
+
+.tasklip-logo__text {
+  @apply text-sm font-semibold;
+}
+
+.tasklip-logo__text--white {
+  @apply text-white;
+}
+
+.tasklip-logo__text--dark {
+  @apply text-gray-900;
+}
