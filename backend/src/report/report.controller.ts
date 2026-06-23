@@ -31,6 +31,7 @@ export class ReportController {
   @ApiBody({ type: CreateReportDto })
   @ApiCreatedResponse({
     description: "Relatório gerado com sucesso.",
+    type: ReportResponseDto,
   })
   @ApiUnauthorizedResponse({
     description: "Token não encontrado ou inválido.",
