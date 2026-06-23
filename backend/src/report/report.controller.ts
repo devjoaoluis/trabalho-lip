@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Param, Post, Req, UseGuards } from "@nestjs/common";
 import { ReportService } from "./report.service";
 import { CreateReportDto } from "./dto/create-report.dto";
+import { ReportResponseDto } from "./dto/report-response.dto.js";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard";
 import {
   ApiBearerAuth,
@@ -48,6 +49,8 @@ export class ReportController {
   })
   @ApiOkResponse({
     description: "Relatórios listados com sucesso.",
+    type: ReportResponseDto,
+    isArray: true,
   })
   @ApiUnauthorizedResponse({
     description: "Token não encontrado ou inválido.",
@@ -71,6 +74,7 @@ export class ReportController {
   })
   @ApiOkResponse({
     description: "Relatório encontrado com sucesso.",
+    type: ReportResponseDto,
   })
   @ApiNotFoundResponse({
     description: "Relatório não encontrado.",
