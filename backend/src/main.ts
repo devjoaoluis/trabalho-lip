@@ -7,6 +7,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 import logger from "./config/logger";
 import express from "express";
+import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -20,6 +21,18 @@ async function bootstrap() {
     credentials: true,
   });
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
+
+  const config = new DocumentBuilder()
+    .setTitle("Task Manager API")
+    .setDescription("API para gerenciamento de tarefas")
+    .setVersion("1.0")
+    .addBearerAuth()
+    .addCookieAuth("refreshToken")
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+
+  SwaggerModule.setup("api/docs", app, document);
 
   app.useGlobalFilters(new GlobalExceptionFilter());
 

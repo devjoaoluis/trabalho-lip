@@ -1,10 +1,7 @@
-function App() {
+import { AppRouter } from "./router/AppRouter"
 
-  return (
-    <>
-    <h1 className="text-9xl text-red-500 font-bold">Hello World, Nego Bahia!</h1>
-    </>
-  )
+function App() {
+  return <AppRouter />
 }
 
 export default App

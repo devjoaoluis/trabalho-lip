@@ -3,10 +3,6 @@ import { Injectable } from "@nestjs/common";
 @Injectable()
 export class AppService {
   getHello(): string {
-    return "Hello World!";
-  }
-
-  getTeste(): string {
-    return "Testando retorno da API!";
+    return "API de Gerenciador de Tarefas funcionando!!!";
   }
 }
