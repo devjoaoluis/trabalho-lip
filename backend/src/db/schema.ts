@@ -23,6 +23,8 @@ export const usuarios = pgTable("usuarios", {
   refreshToken: varchar("refresh_token", { length: 255 }),
   criadoEm: timestamp("criado_em").defaultNow().notNull(),
   atualizadoEm: timestamp("atualizado_em").defaultNow().notNull(),
+  resetToken: text("reset_token"),
+  resetTokenExpiry: timestamp("reset_token_expiry"),
 });
 
 export const tarefas = pgTable("tarefas", {
