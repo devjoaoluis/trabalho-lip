@@ -3,6 +3,17 @@ import { and, eq, gte, lt, sql, desc } from "drizzle-orm";
 import { DrizzleService } from "../db/drizzle.service";
 import { tarefas, relatorios } from "../db/schema";
 import { CreateReportDto } from "./dto/create-report.dto";
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiCreatedResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiParam,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from "@nestjs/swagger";
 
 @Injectable()
 export class ReportService {

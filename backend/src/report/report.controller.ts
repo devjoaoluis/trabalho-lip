@@ -2,6 +2,17 @@ import { Body, Controller, Get, Param, Post, Req, UseGuards } from "@nestjs/comm
 import { ReportService } from "./report.service";
 import { CreateReportDto } from "./dto/create-report.dto";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard";
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiCreatedResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiParam,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from "@nestjs/swagger";
 
 @Controller("report")
 export class ReportController {
