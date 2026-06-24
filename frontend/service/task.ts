@@ -1,70 +1,66 @@
 import api from "./api";
-import { isAxiosError } from "axios";
+
+export type Prioridade = "BAIXA" | "MEDIA" | "ALTA";
+export type StatusTarefa = "PENDENTE" | "EM_ANDAMENTO" | "CONCLUIDA";
 
 export interface Task {
   id: string;
-  title: string;
-  description?: string;
-  priority: "Baixo" | "Média" | "Alta";
-  status: "Pendente" | "Em Andamento" | "Concluída";
-  dueDate?: string;
-  createdAt: string;
-  updatedAt: string;
+  titulo: string;
+  descricao?: string | null;
+  prioridade: Prioridade;
+  status: StatusTarefa;
+  dataLimite?: string | null;
+  concluidaEm?: string | null;
+  criadoEm?: string;
+  atualizadoEm?: string;
+  usuarioId?: string;
 }
 
-export interface CreateTaskData {
-  title: string;
-  description?: string;
-  priority: "Baixo" | "Média" | "Alta";
-  status: "Pendente" | "Em Andamento" | "Concluída";
-  dueDate?: string;
+export interface CreateTaskPayload {
+  titulo: string;
+  descricao?: string;
+  prioridade?: Prioridade;
+  status?: StatusTarefa;
+  dataLimite?: string;
 }
 
-export type UpdateTaskData = Partial<CreateTaskData>;
+export interface UpdateTaskPayload {
+  titulo?: string;
+  descricao?: string;
+  prioridade?: Prioridade;
+  status?: StatusTarefa;
+  dataLimite?: string;
+}
+
+function authHeaders() {
+  const token = localStorage.getItem("accessToken");
+  return { Authorization: `Bearer ${token}` };
+}
 
 export async function getTasks(): Promise<Task[]> {
-  try {
-    const response = await api.get("/task");
-    return response.data;
-  } catch (error) {
-    if (isAxiosError(error)) {
-      throw new Error(error.response?.data?.message || "Erro ao buscar tarefas");
-    }
-    throw error;
-  }
+  const { data } = await api.get<Task[]>("/task", { headers: authHeaders() });
+  return data;
 }
 
-export async function createTask(data: CreateTaskData): Promise<Task> {
-  try {
-    const response = await api.post("/task", data);
-    return response.data;
-  } catch (error) {
-    if (isAxiosError(error)) {
-      throw new Error(error.response?.data?.message || "Erro ao criar tarefa");
-    }
-    throw error;
-  }
+export async function getTaskById(id: string): Promise<Task> {
+  const { data } = await api.get<Task>(`/task/${id}`, { headers: authHeaders() });
+  return data;
 }
 
-export async function updateTask(id: string, data: UpdateTaskData): Promise<Task> {
-  try {
-    const response = await api.patch(`/task/${id}`, data);
-    return response.data;
-  } catch (error) {
-    if (isAxiosError(error)) {
-      throw new Error(error.response?.data?.message || "Erro ao atualizar tarefa");
-    }
-    throw error;
-  }
+export async function createTask(payload: CreateTaskPayload): Promise<Task> {
+  const { data } = await api.post<{ message: string; task: Task }>("/task", payload, {
+    headers: authHeaders(),
+  });
+  return data.task;
+}
+
+export async function updateTask(id: string, payload: UpdateTaskPayload): Promise<Task> {
+  const { data } = await api.patch<Task>(`/task/${id}`, payload, {
+    headers: authHeaders(),
+  });
+  return data;
 }
 
 export async function deleteTask(id: string): Promise<void> {
-  try {
-    await api.delete(`/task/${id}`);
-  } catch (error) {
-    if (isAxiosError(error)) {
-      throw new Error(error.response?.data?.message || "Erro ao excluir tarefa");
-    }
-    throw error;
-  }
+  await api.delete(`/task/${id}`, { headers: authHeaders() });
 }

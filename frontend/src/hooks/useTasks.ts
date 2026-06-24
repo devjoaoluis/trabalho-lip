@@ -1,5 +1,27 @@
 import { useState, useEffect, useCallback } from "react";
-import { getTasks, createTask, updateTask, deleteTask, type  Task, type CreateTaskData, type UpdateTaskData } from "../../service/task";
+import {
+  getTasks,
+  createTask,
+  updateTask,
+  deleteTask,
+  type Task,
+  type CreateTaskPayload,
+  type UpdateTaskPayload,
+} from "../../service/task";
+
+function getHttpStatus(err: unknown): number | null {
+  if (
+    err &&
+    typeof err === "object" &&
+    "response" in err &&
+    err.response &&
+    typeof err.response === "object" &&
+    "status" in err.response
+  ) {
+    return err.response.status as number;
+  }
+  return null;
+}
 
 export function useTasks() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -12,58 +34,63 @@ export function useTasks() {
     try {
       const data = await getTasks();
       setTasks(data);
-    } catch (err: any) {
-      setError(err.message || "Erro desconhecido ao carregar tarefas");
+    } catch (err: unknown) {
+      const status = getHttpStatus(err);
+      if (status === 401) setError("Sessão expirada. Faça login novamente.");
+      else setError("Erro ao carregar tarefas. Tente novamente.");
     } finally {
       setIsLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    fetchTasks();
+    void fetchTasks();
   }, [fetchTasks]);
 
-  const handleCreateTask = async (data: CreateTaskData) => {
+  async function addTask(payload: CreateTaskPayload, onSuccess?: () => void): Promise<void> {
+    setError(null);
     try {
-      const newTask = await createTask(data);
-      setTasks((prev) => [...prev, newTask]);
-      return newTask;
-    } catch (err: any) {
-      setError(err.message || "Erro ao criar tarefa");
-      throw err;
+      const created = await createTask(payload);
+      setTasks((prev) => [created, ...prev]);
+      onSuccess?.();
+    } catch (err: unknown) {
+      const status = getHttpStatus(err);
+      if (status === 401) setError("Sessão expirada. Faça login novamente.");
+      else setError("Erro ao criar tarefa. Tente novamente.");
     }
-  };
+  }
 
-  const handleUpdateTask = async (id: string, data: UpdateTaskData) => {
+  async function editTask(
+    id: string,
+    payload: UpdateTaskPayload,
+    onSuccess?: () => void
+  ): Promise<void> {
+    setError(null);
     try {
-      const updatedTask = await updateTask(id, data);
-      setTasks((prev) =>
-        prev.map((task) => (task.id === id ? { ...task, ...updatedTask } : task))
-      );
-      return updatedTask;
-    } catch (err: any) {
-      setError(err.message || "Erro ao atualizar tarefa");
-      throw err;
+      const updated = await updateTask(id, payload);
+      setTasks((prev) => prev.map((t) => (t.id === id ? updated : t)));
+      onSuccess?.();
+    } catch (err: unknown) {
+      const status = getHttpStatus(err);
+      if (status === 404) setError("Tarefa não encontrada.");
+      else if (status === 401) setError("Sessão expirada. Faça login novamente.");
+      else setError("Erro ao atualizar tarefa. Tente novamente.");
     }
-  };
+  }
 
-  const handleDeleteTask = async (id: string) => {
+  async function removeTask(id: string, onSuccess?: () => void): Promise<void> {
+    setError(null);
     try {
       await deleteTask(id);
-      setTasks((prev) => prev.filter((task) => task.id !== id));
-    } catch (err: any) {
-      setError(err.message || "Erro ao excluir tarefa");
-      throw err;
+      setTasks((prev) => prev.filter((t) => t.id !== id));
+      onSuccess?.();
+    } catch (err: unknown) {
+      const status = getHttpStatus(err);
+      if (status === 404) setError("Tarefa não encontrada.");
+      else if (status === 401) setError("Sessão expirada. Faça login novamente.");
+      else setError("Erro ao remover tarefa. Tente novamente.");
     }
-  };
+  }
 
-  return {
-    tasks,
-    isLoading,
-    error,
-    fetchTasks,
-    createTask: handleCreateTask,
-    updateTask: handleUpdateTask,
-    deleteTask: handleDeleteTask,
-  };
+  return { tasks, isLoading, error, fetchTasks, addTask, editTask, removeTask };
 }

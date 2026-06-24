@@ -1,0 +1,309 @@
+@reference "../../index.css";
+
+.tasks-layout {
+  @apply flex min-h-screen bg-[#0d0f1e] text-white;
+}
+
+.tasks-sidebar {
+  @apply flex flex-col w-56 shrink-0 bg-[#10122a] border-r border-white/5 py-6 px-3;
+}
+
+.tasks-sidebar__logo {
+  @apply flex items-center gap-2 px-3 mb-8;
+}
+
+.tasks-sidebar__logo .tasklip-logo--sidebar {
+  @apply text-white;
+}
+
+.tasks-sidebar__nav {
+  @apply flex flex-col gap-1 flex-1;
+}
+
+.tasks-sidebar__item {
+  @apply flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/60 cursor-pointer transition-colors;
+}
+
+.tasks-sidebar__item--active {
+  @apply bg-[#7c6ff7] text-white;
+}
+
+.tasks-sidebar__footer {
+  @apply flex flex-col gap-1 mt-auto border-t border-white/5 pt-4;
+}
+
+.tasks-sidebar__user {
+  @apply flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70;
+}
+
+.tasks-sidebar__avatar {
+  @apply flex items-center justify-center w-8 h-8 rounded-full bg-[#7c6ff7] text-white text-xs font-bold shrink-0;
+}
+
+.tasks-main {
+  @apply flex flex-col flex-1 overflow-hidden;
+}
+
+.tasks-topbar {
+  @apply flex items-center gap-4 px-6 py-4 border-b border-white/5;
+}
+
+.tasks-topbar__search {
+  @apply flex items-center gap-2 flex-1 max-w-md bg-[#10122a] border border-white/10 rounded-lg px-3 py-2 text-sm text-white/50;
+}
+
+.tasks-topbar__search-input {
+  @apply bg-transparent outline-none w-full text-white placeholder:text-white/40 text-sm;
+}
+
+.tasks-topbar__actions {
+  @apply flex items-center gap-3 ml-auto;
+}
+
+.tasks-topbar__new-btn {
+  @apply flex items-center gap-2 bg-[#7c6ff7] text-white text-sm font-semibold px-4 py-2 rounded-lg cursor-pointer transition-colors;
+}
+
+.tasks-topbar__bell {
+  @apply relative flex items-center justify-center w-9 h-9 rounded-full bg-[#10122a] border border-white/10 cursor-pointer;
+}
+
+.tasks-topbar__bell-badge {
+  @apply absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-[#7c6ff7] text-white text-[9px] font-bold flex items-center justify-center;
+}
+
+.tasks-content {
+  @apply flex flex-1 overflow-hidden;
+}
+
+.tasks-panel {
+  @apply flex flex-col flex-1 px-6 py-5 overflow-auto;
+}
+
+.tasks-tabs {
+  @apply flex items-center gap-1 mb-4;
+}
+
+.tasks-tab {
+  @apply flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm text-white/50 cursor-pointer transition-colors;
+}
+
+.tasks-tab--active {
+  @apply text-white border-b-2 border-[#7c6ff7] rounded-none pb-1;
+}
+
+.tasks-tab__badge {
+  @apply text-xs bg-white/10 text-white/60 px-1.5 py-0.5 rounded-full;
+}
+
+.tasks-filter {
+  @apply flex items-center gap-1 ml-auto bg-[#10122a] border border-white/10 rounded-lg px-3 py-1.5 text-sm text-white/60 cursor-pointer;
+}
+
+.tasks-table {
+  @apply w-full;
+}
+
+.tasks-table__header {
+  @apply flex items-center px-4 py-2 text-xs text-white/40 font-medium border-b border-white/5 mb-1;
+}
+
+.tasks-table__col-title {
+  @apply flex-1;
+}
+
+.tasks-table__col-priority {
+  @apply w-28 text-center;
+}
+
+.tasks-table__col-date {
+  @apply w-32 text-center;
+}
+
+.tasks-table__col-actions {
+  @apply w-12 text-center;
+}
+
+.task-row {
+  @apply flex items-center gap-3 px-4 py-3 rounded-lg border border-transparent cursor-pointer transition-colors;
+}
+
+.task-row--selected {
+  @apply bg-white/5 border-white/10;
+}
+
+.task-row__check {
+  @apply flex items-center justify-center w-5 h-5 rounded-full border-2 border-white/30 shrink-0 cursor-pointer transition-colors;
+}
+
+.task-row__check--done {
+  @apply border-[#22c55e] bg-[#22c55e];
+}
+
+.task-row__info {
+  @apply flex flex-col flex-1 min-w-0;
+}
+
+.task-row__title {
+  @apply text-sm font-medium text-white truncate;
+}
+
+.task-row__title--done {
+  @apply line-through text-white/40;
+}
+
+.task-row__subtitle {
+  @apply text-xs text-white/40;
+}
+
+.priority-badge {
+  @apply inline-flex items-center justify-center w-20 px-2 py-0.5 rounded text-xs font-semibold;
+}
+
+.priority-badge--alta {
+  @apply bg-red-500/20 text-red-400;
+}
+
+.priority-badge--media {
+  @apply bg-yellow-500/20 text-yellow-400;
+}
+
+.priority-badge--baixa {
+  @apply bg-blue-500/20 text-blue-400;
+}
+
+.status-badge {
+  @apply inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold;
+}
+
+.status-badge--concluida {
+  @apply bg-green-500/20 text-green-400;
+}
+
+.status-badge--pendente {
+  @apply bg-white/10 text-white/60;
+}
+
+.status-badge--em-andamento {
+  @apply bg-blue-500/20 text-blue-400;
+}
+
+.tasks-pagination {
+  @apply flex items-center gap-2 pt-4 border-t border-white/5 mt-4;
+}
+
+.tasks-pagination__info {
+  @apply text-xs text-white/40;
+}
+
+.tasks-pagination__controls {
+  @apply flex items-center gap-1 ml-auto;
+}
+
+.tasks-pagination__btn {
+  @apply flex items-center justify-center w-7 h-7 rounded text-xs text-white/50 cursor-pointer transition-colors;
+}
+
+.tasks-pagination__btn--active {
+  @apply bg-[#7c6ff7] text-white;
+}
+
+.task-edit-panel {
+  @apply flex flex-col w-80 shrink-0 bg-[#10122a] border-l border-white/5 p-5 overflow-auto;
+}
+
+.task-edit-panel__header {
+  @apply flex items-center gap-2 mb-4;
+}
+
+.task-edit-panel__title {
+  @apply text-sm font-semibold text-white;
+}
+
+.task-edit-panel__name {
+  @apply text-base font-bold text-white mb-3;
+}
+
+.task-edit-panel__dates {
+  @apply flex items-center gap-2 text-xs text-white/50 mb-4;
+}
+
+.task-edit-panel__date-icon {
+  @apply text-white/30;
+}
+
+.task-edit-panel__row {
+  @apply flex items-center justify-between py-2 border-b border-white/5 text-sm;
+}
+
+.task-edit-panel__label {
+  @apply text-white/50 text-xs;
+}
+
+.task-edit-panel__desc {
+  @apply text-xs text-white/50 mt-1 mb-4 leading-relaxed;
+}
+
+.task-edit-panel__meta {
+  @apply flex flex-col gap-1 mt-auto pt-4 border-t border-white/5;
+}
+
+.task-edit-panel__meta-row {
+  @apply flex items-center justify-between text-xs text-white/40 py-1;
+}
+
+.task-edit-panel__actions {
+  @apply flex gap-2 mt-4;
+}
+
+.task-field {
+  @apply flex flex-col gap-1 mb-3;
+}
+
+.task-field__label {
+  @apply text-xs text-white/50 font-medium;
+}
+
+.task-field__input {
+  @apply w-full bg-[#0d0f1e] border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder:text-white/30 outline-none transition-colors;
+}
+
+.task-field__textarea {
+  @apply w-full bg-[#0d0f1e] border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder:text-white/30 outline-none resize-none transition-colors;
+}
+
+.task-field__select {
+  @apply w-full bg-[#0d0f1e] border border-white/10 rounded-lg px-3 py-2 text-sm text-white outline-none cursor-pointer;
+}
+
+.tasks-btn-cancel {
+  @apply flex-1 h-9 rounded-lg bg-white/5 text-white/70 text-sm font-medium cursor-pointer transition-colors;
+}
+
+.tasks-btn-save {
+  @apply flex-1 h-9 rounded-lg bg-[#7c6ff7] text-white text-sm font-semibold cursor-pointer transition-colors;
+}
+
+.tasks-modal-overlay {
+  @apply fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4;
+}
+
+.tasks-modal {
+  @apply bg-[#10122a] border border-white/10 rounded-xl p-6 w-full max-w-md;
+}
+
+.tasks-modal__title {
+  @apply text-base font-bold text-white mb-4;
+}
+
+.tasks-empty {
+  @apply flex flex-col items-center justify-center flex-1 gap-3 text-white/30 py-16;
+}
+
+.tasks-empty__icon {
+  @apply w-12 h-12 opacity-30;
+}
+
+.tasks-empty__text {
+  @apply text-sm;
+}

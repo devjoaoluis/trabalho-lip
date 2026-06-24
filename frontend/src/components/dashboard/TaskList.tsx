@@ -29,7 +29,7 @@ export function TaskList({ tasks, onToggleTask, onNewTaskClick, onCompleteAll, o
 
       <div className="task-list__items overflow-y-auto pr-2" style={{ maxHeight: "400px" }}>
         {tasks.map((task) => {
-          const isDone = task.status === "Concluída";
+          const isDone = task.status === "CONCLUIDA";
           return (
             <div key={task.id} className="task-item">
               <div className="task-item__left">
@@ -41,20 +41,20 @@ export function TaskList({ tasks, onToggleTask, onNewTaskClick, onCompleteAll, o
                 </button>
                 <div className="task-item__info">
                   <span className={`task-item__title ${isDone ? "task-item__title--done" : ""}`}>
-                    {task.title}
+                    {task.titulo}
                   </span>
                   <span className="task-item__desc">
-                    {task.description || "Sem descrição"}
+                    {task.descricao || "Sem descrição"}
                   </span>
                 </div>
               </div>
 
               <div className="task-item__right">
-                <span className={`task-badge task-badge--${task.priority.toLowerCase().replace("é", "e")}`}>
-                  {task.priority}
+                <span className={`task-badge task-badge--${task.prioridade.toLowerCase()}`}>
+                  {task.prioridade}
                 </span>
                 <span className="task-item__date">
-                  {task.dueDate ? format(parseISO(task.dueDate), "d MMM HH:mm") : "Sem data"}
+                  {task.dataLimite ? format(parseISO(task.dataLimite), "d MMM HH:mm") : "Sem data"}
                 </span>
               </div>
             </div>

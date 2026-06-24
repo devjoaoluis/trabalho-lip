@@ -12,10 +12,10 @@ export function StatisticsChart({ tasks }: StatisticsChartProps) {
   const data = Array.from({ length: 7 })
     .map((_, i) => {
       const date = subDays(new Date(), 6 - i);
-      const dayTasks = tasks.filter((t) => t.createdAt && isSameDay(parseISO(t.createdAt), date));
+      const dayTasks = tasks.filter((t) => t.criadoEm && isSameDay(parseISO(t.criadoEm), date));
       
-      const concluidas = dayTasks.filter((t) => t.status === "Concluída").length;
-      const pendentes = dayTasks.filter((t) => t.status !== "Concluída").length;
+      const concluidas = dayTasks.filter((t) => t.status === "CONCLUIDA").length;
+      const pendentes = dayTasks.filter((t) => t.status !== "CONCLUIDA").length;
 
       return {
         name: format(date, "d/MM"),

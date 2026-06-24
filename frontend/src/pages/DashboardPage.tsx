@@ -9,36 +9,36 @@ import { useTasks } from "../hooks/useTasks";
 import "./dashboard.css";
 
 export default function DashboardPage() {
-  const { tasks, isLoading, error, updateTask, deleteTask } = useTasks();
+  const { tasks, isLoading, error, editTask, removeTask } = useTasks();
   const [searchTerm, setSearchTerm] = useState("");
 
   const filteredTasks = useMemo(() => {
     if (!searchTerm) return tasks;
     return tasks.filter(
       (t) =>
-        t.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        t.description?.toLowerCase().includes(searchTerm.toLowerCase())
+        t.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        t.descricao?.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }, [tasks, searchTerm]);
 
   const total = tasks.length;
-  const completed = tasks.filter((t) => t.status === "Concluída").length;
+  const completed = tasks.filter((t) => t.status === "CONCLUIDA").length;
   const pending = total - completed;
 
   const handleToggleTask = async (id: string, isDone: boolean) => {
     try {
-      await updateTask(id, { status: isDone ? "Pendente" : "Concluída" });
+      await editTask(id, { status: isDone ? "PENDENTE" : "CONCLUIDA" });
     } catch (err) {
       console.error("Erro ao alterar status da tarefa:", err);
     }
   };
 
   const handleCompleteAll = async () => {
-    const pendingTasks = tasks.filter((t) => t.status !== "Concluída");
+    const pendingTasks = tasks.filter((t) => t.status !== "CONCLUIDA");
     // Em um cenário real com muitas tarefas, isso deveria ser uma rota de batch update
     for (const task of pendingTasks) {
       try {
-        await updateTask(task.id, { status: "Concluída" });
+        await editTask(task.id, { status: "CONCLUIDA" });
       } catch (err) {
         console.error("Erro ao completar tarefa", task.id, err);
       }
@@ -49,10 +49,10 @@ export default function DashboardPage() {
     const confirm = window.confirm("Tem certeza que deseja excluir todas as tarefas concluídas?");
     if (!confirm) return;
 
-    const completedTasks = tasks.filter((t) => t.status === "Concluída");
+    const completedTasks = tasks.filter((t) => t.status === "CONCLUIDA");
     for (const task of completedTasks) {
       try {
-        await deleteTask(task.id);
+        await removeTask(task.id);
       } catch (err) {
         console.error("Erro ao excluir tarefa", task.id, err);
       }
