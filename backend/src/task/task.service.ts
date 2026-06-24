@@ -30,13 +30,7 @@ export class TaskService {
 
   async findAll(usuarioId: string) {
     const tasks = await this.drizzle.db
-      .select({
-        id: tarefas.id,
-        titulo: tarefas.titulo,
-        descricao: tarefas.descricao,
-        prioridade: tarefas.prioridade,
-        status: tarefas.status,
-      })
+      .select()
       .from(tarefas)
       .where(eq(tarefas.usuarioId, usuarioId));
 
