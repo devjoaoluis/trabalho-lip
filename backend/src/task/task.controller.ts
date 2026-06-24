@@ -6,6 +6,7 @@ import { UpdateTaskDto } from "./dto/update-task.dto";
 import { UseGuards } from "@nestjs/common";
 import { Request } from "express";
 import { ParseUUIDPipe } from "@nestjs/common";
+import { TaskResponseDto } from "./dto/task-response.dto.js";
 import {
   ApiBearerAuth,
   ApiBody,
@@ -34,6 +35,7 @@ export class TaskController {
   @ApiBody({ type: CreateTaskDto })
   @ApiCreatedResponse({
     description: "Tarefa criada com sucesso.",
+    type: TaskResponseDto,
   })
   @ApiUnauthorizedResponse({
     description: "Token não encontrado ou inválido.",
@@ -49,6 +51,8 @@ export class TaskController {
   })
   @ApiOkResponse({
     description: "Lista de tarefas retornada com sucesso.",
+    type: TaskResponseDto,
+    isArray: true,
   })
   @ApiUnauthorizedResponse({
     description: "Token não encontrado ou inválido.",
@@ -94,6 +98,7 @@ export class TaskController {
   })
   @ApiOkResponse({
     description: "Tarefa encontrada com sucesso.",
+    type: TaskResponseDto,
   })
   @ApiNotFoundResponse({
     description: "Tarefa não encontrada.",
