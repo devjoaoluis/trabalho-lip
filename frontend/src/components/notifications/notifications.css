@@ -1,0 +1,145 @@
+@reference "../../index.css";
+
+/* ── Wrapper (positioning anchor) ──────────────────────────── */
+.notif-wrapper {
+  @apply relative;
+}
+
+/* ── Bell active state ──────────────────────────────────────── */
+.tasks-topbar__bell--active {
+  @apply bg-white/10 border-[#7c6ff7]/60;
+}
+
+/* ── Bell shake animation when there are unread notifications ─ */
+@keyframes bell-shake {
+  0%, 100% { transform: rotate(0deg); }
+  15%       { transform: rotate(12deg); }
+  30%       { transform: rotate(-10deg); }
+  45%       { transform: rotate(8deg); }
+  60%       { transform: rotate(-6deg); }
+  75%       { transform: rotate(4deg); }
+}
+
+.notif-bell--shake {
+  animation: bell-shake 1.8s ease-in-out infinite;
+  transform-origin: top center;
+}
+
+/* ── Panel ──────────────────────────────────────────────────── */
+.notif-panel {
+  @apply absolute right-0 top-full mt-2 w-80 z-50
+         bg-[#10122a] border border-white/10 rounded-xl shadow-2xl
+         overflow-hidden;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(124, 111, 247, 0.15);
+}
+
+/* ── Panel header ───────────────────────────────────────────── */
+.notif-panel__header {
+  @apply flex items-center justify-between px-4 py-3
+         border-b border-white/5;
+}
+
+.notif-panel__title {
+  @apply text-sm font-bold text-white;
+}
+
+.notif-panel__mark-all {
+  @apply text-[10px] text-[#7c6ff7] hover:text-[#9f94f9]
+         transition-colors cursor-pointer px-1;
+}
+
+/* ── Notification list ──────────────────────────────────────── */
+.notif-list {
+  @apply max-h-[420px] overflow-y-auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.1) transparent;
+}
+
+.notif-list::-webkit-scrollbar {
+  width: 4px;
+}
+.notif-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+.notif-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+}
+
+/* ── Notification item ──────────────────────────────────────── */
+.notif-item {
+  @apply relative flex items-start gap-3 px-4 py-3
+         border-b border-white/5 last:border-b-0
+         transition-colors hover:bg-white/3;
+}
+
+.notif-item--unread {
+  @apply bg-[#7c6ff7]/5;
+}
+
+.notif-item__body {
+  @apply flex flex-col gap-1 flex-1 min-w-0;
+}
+
+.notif-item__message {
+  @apply text-xs text-white/80 leading-relaxed;
+}
+
+.notif-item__footer {
+  @apply flex items-center gap-2;
+}
+
+.notif-item__link {
+  @apply flex items-center gap-0.5 text-[11px] text-[#7c6ff7]
+         hover:text-[#9f94f9] transition-colors cursor-pointer;
+}
+
+.notif-item__time {
+  @apply text-[10px] text-white/30 ml-auto;
+}
+
+.notif-item__dot {
+  @apply absolute top-3.5 right-3 w-2 h-2 rounded-full bg-[#7c6ff7] shrink-0;
+}
+
+/* ── Icons ──────────────────────────────────────────────────── */
+.notif-icon {
+  @apply flex items-center justify-center w-8 h-8 rounded-lg shrink-0 mt-0.5;
+}
+
+.notif-icon--atrasada {
+  @apply bg-orange-500/15 text-orange-400;
+}
+
+.notif-icon--vence-hoje {
+  @apply bg-red-500/15 text-red-400;
+}
+
+.notif-icon--vence-amanha {
+  @apply bg-yellow-500/15 text-yellow-400;
+}
+
+.notif-icon--concluida {
+  @apply bg-green-500/15 text-green-400;
+}
+
+.notif-icon--nova {
+  @apply bg-[#7c6ff7]/20 text-[#9f94f9];
+}
+
+.notif-icon--alta {
+  @apply bg-[#7c6ff7]/20 text-[#9f94f9];
+}
+
+/* ── Empty state ────────────────────────────────────────────── */
+.notif-empty {
+  @apply flex flex-col items-center justify-center gap-2 py-10 text-white/30;
+}
+
+.notif-empty__icon {
+  @apply opacity-25;
+}
+
+.notif-empty__text {
+  @apply text-xs;
+}
