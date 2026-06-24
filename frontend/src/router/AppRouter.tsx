@@ -10,6 +10,7 @@ const TasksPage            = lazy(() => import("#pages/TasksPage"))
 const NotFoundPage         = lazy(() => import("#pages/NotFoundPage"))
 const ForgotPasswordPage   = lazy(() => import("#pages/ForgotPasswordPage"))
 const ResetPasswordPage    = lazy(() => import("#pages/ResetPasswordPage"))
+const SettingsPage         = lazy(() => import("#pages/SettingsPage"))
 
 function PageLoader() {
   return (
@@ -39,6 +40,7 @@ export function AppRouter() {
           <Route element={<AuthGuard />}>
             <Route path={ROUTES.DASHBOARD} element={<DashboardPage />} />
             <Route path={ROUTES.TASKS}     element={<TasksPage />} />
+            <Route path={ROUTES.SETTINGS}  element={<SettingsPage />} />
             {/* Adicione novas rotas autenticadas aqui */}
           </Route>
 

@@ -11,6 +11,7 @@ import { CreateUserDto } from "../users/dto/create-user.dto";
 import { LoginDto } from "./dto/login.dto";
 import { ForgotPasswordDto } from "./dto/forgot-password.dto";
 import { ResetPasswordDto } from "./dto/reset-password.dto";
+import { ChangePasswordDto } from "./dto/change-password.dto";
 import { sendPasswordResetEmail } from "../config/mailer";
 import * as crypto from "crypto";
 
@@ -155,5 +156,19 @@ export class AuthService {
     await this.usersService.clearResetToken(user.id);
 
     return { message: "Senha redefinida com sucesso." };
+  }
+
+  async changePassword(userId: string, dto: ChangePasswordDto): Promise<{ message: string }> {
+    const user = await this.usersService.findOne(userId);
+
+    const passwordValid = await bcrypt.compare(dto.currentPassword, user.senhaHash);
+    if (!passwordValid) {
+      throw new UnauthorizedException("Senha atual incorreta.");
+    }
+
+    const hashedPassword = await bcrypt.hash(dto.newPassword, 12);
+    await this.usersService.updatePassword(userId, hashedPassword);
+
+    return { message: "Senha alterada com sucesso." };
   }
 }

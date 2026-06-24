@@ -1,0 +1,95 @@
+@reference "../../index.css";
+
+/* ── Layout ─────────────────────────────────────────────────── */
+.settings-layout {
+  @apply flex min-h-screen bg-[#0d0f1e] text-white;
+}
+
+.settings-main {
+  @apply flex flex-col flex-1 overflow-hidden;
+}
+
+/* ── Topbar ──────────────────────────────────────────────────── */
+.settings-topbar {
+  @apply flex items-center justify-end px-6 py-4 border-b border-white/5;
+}
+
+/* ── Content ─────────────────────────────────────────────────── */
+.settings-content {
+  @apply flex flex-col gap-4 px-8 py-6 max-w-3xl;
+}
+
+/* ── Card ────────────────────────────────────────────────────── */
+.settings-card {
+  @apply bg-[#10122a] border border-white/8 rounded-xl px-6 py-5;
+}
+
+.settings-card__header {
+  @apply flex items-center gap-2 mb-4;
+}
+
+.settings-card__title {
+  @apply text-sm font-semibold text-white;
+}
+
+/* ── Notifications row ───────────────────────────────────────── */
+.settings-notif__row {
+  @apply flex items-center justify-between;
+}
+
+.settings-notif__label {
+  @apply text-sm text-white/70;
+}
+
+/* ── Toggle switch ───────────────────────────────────────────── */
+.settings-toggle {
+  @apply relative inline-flex items-center w-11 h-6 rounded-full cursor-pointer
+         transition-colors duration-200 focus-visible:outline-none
+         focus-visible:ring-2 focus-visible:ring-[#7c6ff7];
+}
+
+.settings-toggle--on {
+  @apply bg-[#7c6ff7];
+}
+
+.settings-toggle--off {
+  @apply bg-white/20;
+}
+
+.settings-toggle__thumb {
+  @apply block w-5 h-5 rounded-full bg-white shadow-sm
+         transition-transform duration-200;
+}
+
+.settings-toggle__thumb--on {
+  @apply translate-x-5;
+}
+
+.settings-toggle__thumb--off {
+  @apply translate-x-0.5;
+}
+
+/* ── Security section ────────────────────────────────────────── */
+.settings-security__desc {
+  @apply text-sm text-white/60 mb-4;
+}
+
+/* ── Change password button ──────────────────────────────────── */
+.settings-btn-change-password {
+  @apply flex items-center justify-center h-10 px-6 rounded-lg
+         bg-[#7c6ff7] text-white text-sm font-semibold
+         cursor-pointer transition-colors;
+}
+
+/* ── Feedback messages ───────────────────────────────────────── */
+.settings-feedback {
+  @apply text-xs mb-3 font-medium;
+}
+
+.settings-feedback--error {
+  @apply text-red-400;
+}
+
+.settings-feedback--success {
+  @apply text-green-400;
+}

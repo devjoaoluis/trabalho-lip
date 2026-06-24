@@ -5,6 +5,7 @@ export const ROUTES = {
   TASKS: "/tasks",
   FORGOT_PASSWORD: "/forgot-password",
   RESET_PASSWORD: "/reset-password",
+  SETTINGS: "/settings",
   NOT_FOUND: "/404",
 } as const
 

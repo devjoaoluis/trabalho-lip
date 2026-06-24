@@ -1,4 +1,4 @@
-@reference "../../index.css";
+@reference "../index.css";
 
 /* Dashboard Layout Base */
 .dashboard-page {
@@ -202,7 +202,7 @@
 }
 
 .task-item {
-  @apply flex items-center justify-between py-3 group border-b border-white/5 last:border-0;
+  @apply flex items-center justify-between py-3 border-b border-white/5 last:border-0;
 }
 
 .task-item__left {
