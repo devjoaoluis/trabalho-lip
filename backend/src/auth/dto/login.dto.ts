@@ -16,5 +16,5 @@ export class LoginDto {
   })
   @IsString()
   @MinLength(6)
-  senha!: string;
+  password!: string;
 }
