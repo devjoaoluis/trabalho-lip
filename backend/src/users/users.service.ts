@@ -11,7 +11,7 @@ export class UsersService {
   constructor(private db: DrizzleService) {}
 
   async create(dto: CreateUserDto) {
-    const hash = await bcrypt.hash(dto.senha, 10);
+    const hash = await bcrypt.hash(dto.password, 10);
     const user = await this.db.db
       .insert(usuarios)
       .values({

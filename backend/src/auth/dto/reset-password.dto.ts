@@ -1,4 +1,4 @@
-import { IsString, MinLength, IsJWT, IsNotEmpty } from "class-validator";
+import { IsString, MinLength, IsNotEmpty } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
 export class ResetPasswordDto {
@@ -7,7 +7,7 @@ export class ResetPasswordDto {
     description: "Token usado para autorizar a redefinição de senha.",
   })
   @IsNotEmpty({ message: "Token é obrigatório" })
-  @IsJWT({ message: "Token inválido" })
+  @IsString({ message: "Token inválido" })
   token!: string;
 
   @ApiProperty({
