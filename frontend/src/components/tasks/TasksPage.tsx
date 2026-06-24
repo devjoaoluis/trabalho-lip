@@ -1,13 +1,7 @@
 import { useState, useMemo } from "react"
 import { useNavigate } from "react-router-dom"
 import {
-  LayoutDashboard,
   ClipboardList,
-  BarChart2,
-  LineChart,
-  Settings,
-  LogOut,
-  Bell,
   Search,
   Plus,
   Trash2,
@@ -24,7 +18,7 @@ import { cn } from "#lib/utils"
 import { Button } from "#components/ui/button"
 import { Input } from "#components/ui/input"
 import { Label } from "#components/ui/label"
-import { TaskLipLogo } from "#components/ui/TaskLipLogo"
+import { Sidebar } from "#components/ui/Sidebar"
 import { useTasks } from "#hooks/useTasks"
 import { useTaskDetail } from "#hooks/useTaskDetail"
 import { ROUTES } from "../../router/routes"
@@ -48,15 +42,6 @@ function formatDate(dateStr?: string | null): string {
   const d = new Date(dateStr)
   if (isNaN(d.getTime())) return dateStr
   return d.toLocaleDateString("pt-BR", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })
-}
-
-function getInitials(name: string): string {
-  return name
-    .split(" ")
-    .slice(0, 2)
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase()
 }
 
 function getUserName(): string {
@@ -96,91 +81,6 @@ function StatusBadge({ status }: { status: StatusTarefa }) {
     >
       {STATUS_LABEL[status]}
     </span>
-  )
-}
-
-interface SidebarProps {
-  userName: string
-  onLogout: () => void
-}
-
-function Sidebar({ userName, onLogout }: SidebarProps) {
-  return (
-    <nav className="tasks-sidebar" aria-label="Menu principal">
-      <div className="tasks-sidebar__logo">
-        <TaskLipLogo variant="white" className="tasklip-logo--sidebar" />
-      </div>
-
-      <ul className="tasks-sidebar__nav" role="list">
-        <li>
-          <Button
-            variant="ghost"
-            className="tasks-sidebar__item w-full justify-start hover:bg-white/5"
-            aria-label="Início"
-          >
-            <LayoutDashboard size={18} aria-hidden="true" />
-            <span>Início</span>
-          </Button>
-        </li>
-        <li>
-          <Button
-            variant="ghost"
-            className="tasks-sidebar__item tasks-sidebar__item--active w-full justify-start"
-            aria-label="Tarefas"
-            aria-current="page"
-          >
-            <ClipboardList size={18} aria-hidden="true" />
-            <span>Tarefas</span>
-          </Button>
-        </li>
-        <li>
-          <Button
-            variant="ghost"
-            className="tasks-sidebar__item w-full justify-start hover:bg-white/5"
-            aria-label="Relatórios"
-          >
-            <BarChart2 size={18} aria-hidden="true" />
-            <span>Relatórios</span>
-          </Button>
-        </li>
-        <li>
-          <Button
-            variant="ghost"
-            className="tasks-sidebar__item w-full justify-start hover:bg-white/5"
-            aria-label="Estatísticas"
-          >
-            <LineChart size={18} aria-hidden="true" />
-            <span>Estatísticas</span>
-          </Button>
-        </li>
-      </ul>
-
-      <div className="tasks-sidebar__footer">
-        <div className="tasks-sidebar__user">
-          <span className="tasks-sidebar__avatar" aria-hidden="true">
-            {getInitials(userName)}
-          </span>
-          <span className="text-sm truncate">{userName}</span>
-        </div>
-        <Button
-          variant="ghost"
-          className="tasks-sidebar__item w-full justify-start hover:bg-white/5"
-          aria-label="Configurações"
-        >
-          <Settings size={18} aria-hidden="true" />
-          <span>Configurações</span>
-        </Button>
-        <Button
-          variant="ghost"
-          className="tasks-sidebar__item w-full justify-start hover:bg-red-500/10 hover:text-red-400"
-          aria-label="Sair"
-          onClick={onLogout}
-        >
-          <LogOut size={18} aria-hidden="true" />
-          <span>Sair</span>
-        </Button>
-      </div>
-    </nav>
   )
 }
 
@@ -636,7 +536,7 @@ export function TasksPage() {
 
   return (
     <div className="tasks-layout">
-      <Sidebar userName={userName} onLogout={handleLogout} />
+      <Sidebar userName={userName} activePage="tasks" onLogout={handleLogout} />
 
       <div className="tasks-main">
         {/* Topbar */}

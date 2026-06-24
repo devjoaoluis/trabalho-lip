@@ -77,7 +77,7 @@ function ResetPasswordForm() {
     if (!allRulesValid || !passwordsMatch) return
 
     await submit(
-      { token, password },
+      { token, newPassword: password },
       () => navigate(ROUTES.LOGIN, { replace: true, state: { passwordReset: true } })
     )
   }
