@@ -1,0 +1,270 @@
+@reference "../../index.css";
+
+/* Dashboard Layout Base */
+.dashboard-page {
+  @apply min-h-screen bg-[#0d0f1e] text-white flex;
+  font-family: "Inter", sans-serif;
+}
+
+.dashboard-main {
+  @apply flex-1 flex flex-col p-6 max-w-[1400px] mx-auto overflow-y-auto;
+}
+
+/* Sidebar */
+.dashboard-sidebar {
+  @apply w-[250px] bg-[#131527] border-r border-white/5 flex flex-col pt-8 pb-6 px-4 shrink-0 h-screen sticky top-0;
+}
+
+.dashboard-sidebar__logo {
+  @apply px-4 mb-10;
+}
+
+.dashboard-sidebar__nav {
+  @apply flex flex-col h-full;
+}
+
+.dashboard-sidebar__menu {
+  @apply flex flex-col gap-2;
+}
+
+.dashboard-sidebar__menu--bottom {
+  @apply mt-auto border-t border-white/5 pt-4;
+}
+
+.dashboard-sidebar__link {
+  @apply flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-white/60 hover:text-white hover:bg-white/5 transition-colors;
+}
+
+.dashboard-sidebar__link--active {
+  @apply bg-[#4b3fda] text-white hover:bg-[#5a4cf2];
+}
+
+/* Header */
+.dashboard-header {
+  @apply flex items-center justify-between mb-8 gap-4;
+}
+
+.dashboard-header__search-container {
+  @apply relative flex-1 max-w-[400px];
+}
+
+.dashboard-header__search-icon {
+  @apply absolute left-3 top-1/2 -translate-y-1/2 text-white/40;
+}
+
+.dashboard-header__search-input {
+  @apply w-full bg-[#131527] border border-white/5 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-[#7c6ff7] transition-colors;
+}
+
+.dashboard-header__actions {
+  @apply flex items-center gap-4;
+}
+
+.dashboard-header__new-btn {
+  @apply flex items-center gap-2 bg-[#5a4cf2] hover:bg-[#6c5ef7] text-white px-5 py-2.5 rounded-xl text-sm font-medium transition-colors cursor-pointer;
+}
+
+/* Notifications */
+.dashboard-header__notifications-wrapper {
+  @apply relative;
+}
+
+.dashboard-header__bell-btn {
+  @apply relative w-11 h-11 flex items-center justify-center rounded-xl bg-[#1a1c31] text-white/80 hover:text-white hover:bg-[#22243a] transition-colors border border-white/5 cursor-pointer;
+}
+
+.dashboard-header__bell-badge {
+  @apply absolute -top-1 -right-1 w-5 h-5 bg-[#5a4cf2] rounded-full flex items-center justify-center text-[10px] font-bold text-white border-2 border-[#0d0f1e];
+}
+
+.dashboard-notifications {
+  @apply absolute right-0 top-[calc(100%+8px)] w-[360px] bg-[#1a1c31] border border-white/5 rounded-xl shadow-2xl z-50 overflow-hidden;
+}
+
+.dashboard-notifications__header {
+  @apply px-5 py-4 border-b border-white/5;
+}
+
+.dashboard-notifications__header h3 {
+  @apply text-sm font-semibold text-white;
+}
+
+.dashboard-notifications__list {
+  @apply flex flex-col p-2;
+}
+
+.dashboard-notifications__item {
+  @apply relative flex gap-3 p-3 rounded-lg hover:bg-white/5 transition-colors items-start;
+}
+
+.dashboard-notifications__icon {
+  @apply flex items-center justify-center w-8 h-8 rounded-full shrink-0;
+}
+
+.dashboard-notifications__icon--warning {
+  @apply bg-amber-500/10 text-amber-500;
+}
+
+.dashboard-notifications__icon--success {
+  @apply bg-emerald-500/10 text-emerald-500;
+}
+
+.dashboard-notifications__icon--info {
+  @apply bg-[#5a4cf2]/10 text-[#5a4cf2];
+}
+
+.dashboard-notifications__content {
+  @apply flex-1 flex flex-col gap-1 min-w-0;
+}
+
+.dashboard-notifications__content p {
+  @apply text-sm text-white/90 truncate;
+}
+
+.dashboard-notifications__link {
+  @apply text-xs text-[#5a4cf2] hover:underline font-medium;
+}
+
+.dashboard-notifications__time {
+  @apply text-xs text-white/40 shrink-0 mt-0.5;
+}
+
+/* Dashboard Grid Layout */
+.dashboard-grid {
+  @apply grid gap-6;
+  grid-template-columns: minmax(0, 1fr) 350px;
+  grid-template-areas:
+    "summary stats"
+    "tasks calendar";
+}
+
+@media (max-width: 1024px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "summary"
+      "stats"
+      "calendar"
+      "tasks";
+  }
+}
+
+.dashboard-area-summary { grid-area: summary; }
+.dashboard-area-stats { grid-area: stats; }
+.dashboard-area-tasks { grid-area: tasks; }
+.dashboard-area-calendar { grid-area: calendar; }
+
+/* Dashboard Card Base */
+.dashboard-card {
+  @apply bg-[#131527] border border-white/5 rounded-2xl p-6 flex flex-col;
+}
+
+.dashboard-card__header {
+  @apply flex items-center justify-between mb-6;
+}
+
+.dashboard-card__title {
+  @apply flex items-center gap-2 text-sm font-medium text-white;
+}
+
+/* Summary Widget */
+.summary-widget {
+  @apply flex items-center justify-around gap-4 h-full;
+}
+
+.summary-item {
+  @apply flex items-center gap-4;
+}
+
+.summary-item__info {
+  @apply flex flex-col;
+}
+
+.summary-item__value {
+  @apply text-2xl font-bold text-white leading-none mb-1;
+}
+
+.summary-item__label {
+  @apply text-xs text-white/50;
+}
+
+/* Task List */
+.task-list__header-actions {
+  @apply flex items-center gap-2;
+}
+
+.task-list__add-btn {
+  @apply flex items-center gap-1 text-xs font-medium text-[#5a4cf2] hover:text-[#6c5ef7] hover:bg-[#5a4cf2]/10 px-2 py-1.5 rounded-lg transition-colors cursor-pointer;
+}
+
+.task-list__items {
+  @apply flex flex-col gap-2;
+}
+
+.task-item {
+  @apply flex items-center justify-between py-3 group border-b border-white/5 last:border-0;
+}
+
+.task-item__left {
+  @apply flex items-center gap-4 flex-1 min-w-0;
+}
+
+.task-item__checkbox {
+  @apply w-5 h-5 rounded-full border-2 border-white/20 flex items-center justify-center cursor-pointer transition-colors shrink-0;
+}
+
+.task-item__checkbox--done {
+  @apply bg-emerald-500 border-emerald-500 text-[#131527];
+}
+
+.task-item__checkbox:not(.task-item__checkbox--done):hover {
+  @apply border-[#5a4cf2];
+}
+
+.task-item__info {
+  @apply flex flex-col truncate;
+}
+
+.task-item__title {
+  @apply text-sm font-medium text-white truncate;
+}
+
+.task-item__title--done {
+  @apply text-white/40 line-through;
+}
+
+.task-item__desc {
+  @apply text-xs text-white/40 truncate;
+}
+
+.task-item__right {
+  @apply flex items-center gap-6 shrink-0;
+}
+
+.task-badge {
+  @apply px-2.5 py-1 rounded-md text-[10px] font-bold tracking-wider uppercase;
+}
+
+.task-badge--alta {
+  @apply bg-rose-500/10 text-rose-500;
+}
+
+.task-badge--media {
+  @apply bg-amber-500/10 text-amber-500;
+}
+
+.task-badge--baixa {
+  @apply bg-blue-500/10 text-blue-500;
+}
+
+.task-item__date {
+  @apply text-xs text-white/40 w-20 text-right;
+}
+
+.task-list__footer {
+  @apply flex items-center justify-between mt-6 pt-4 border-t border-white/5;
+}
+
+.task-list__footer-btn {
+  @apply text-xs font-medium text-[#5a4cf2] hover:text-[#6c5ef7] hover:underline cursor-pointer;
+}
