@@ -48,6 +48,7 @@ export class TaskService {
           status: dto.status,
           concluidaEm: dto.status === StatusTarefa.CONCLUIDA ? new Date() : null,
         }),
+        ...(dto.dataLimite !== undefined && { dataLimite: dto.dataLimite }),
       })
       .where(and(eq(tarefas.id, id), eq(tarefas.usuarioId, usuarioId)))
       .returning();
