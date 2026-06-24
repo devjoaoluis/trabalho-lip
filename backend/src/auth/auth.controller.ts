@@ -24,6 +24,7 @@ import {
   ApiOperation,
   ApiTags,
   ApiUnauthorizedResponse,
+  ApiBody,
 } from "@nestjs/swagger";
 
 @ApiTags("Auth")
@@ -144,12 +145,47 @@ export class AuthController {
 
   @Post("forgot-password")
   @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: "Solicitar redefinição de senha",
+    description: "Recebe o e-mail do usuário e envia ou gera um token para redefinição de senha.",
+  })
+  @ApiBody({ type: ForgotPasswordDto })
+  @ApiOkResponse({
+    description: "Solicitação de redefinição de senha realizada com sucesso.",
+    schema: {
+      example: {
+        message: "Se o e-mail estiver cadastrado, as instruções de redefinição serão enviadas.",
+      },
+    },
+  })
+  @ApiBadRequestResponse({
+    description: "E-mail inválido ou dados mal formatados.",
+  })
   forgotPassword(@Body() dto: ForgotPasswordDto) {
     return this.authService.forgotPassword(dto);
   }
 
   @Post("reset-password")
   @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: "Redefinir senha",
+    description: "Redefine a senha do usuário usando um token de recuperação válido.",
+  })
+  @ApiBody({ type: ResetPasswordDto })
+  @ApiOkResponse({
+    description: "Senha redefinida com sucesso.",
+    schema: {
+      example: {
+        message: "Senha redefinida com sucesso.",
+      },
+    },
+  })
+  @ApiBadRequestResponse({
+    description: "Nova senha inválida ou dados mal formatados.",
+  })
+  @ApiUnauthorizedResponse({
+    description: "Token inválido ou expirado.",
+  })
   resetPassword(@Body() dto: ResetPasswordDto) {
     return this.authService.resetPassword(dto);
   }
