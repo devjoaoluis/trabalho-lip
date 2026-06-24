@@ -7,7 +7,6 @@ import {
   LineChart,
   Settings,
   LogOut,
-  Bell,
   Search,
   Plus,
   Trash2,
@@ -27,6 +26,8 @@ import { Label } from "#components/ui/label"
 import { TaskLipLogo } from "#components/ui/TaskLipLogo"
 import { useTasks } from "#hooks/useTasks"
 import { useTaskDetail } from "#hooks/useTaskDetail"
+import { useNotifications } from "#hooks/useNotifications"
+import { NotificationPanel } from "../notifications/NotificationPanel"
 import { ROUTES } from "../../router/routes"
 import type { Task, CreateTaskPayload, UpdateTaskPayload, Prioridade, StatusTarefa } from "../../../service/task"
 import "./tasks.css"
@@ -534,6 +535,18 @@ export function TasksPage() {
   const [showNewModal, setShowNewModal] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
   const [menuOpenId, setMenuOpenId] = useState<string | null>(null)
+  const [notifOpen, setNotifOpen] = useState(false)
+
+  const { notifications, unreadCount, markAllRead, markRead } = useNotifications(tasks)
+
+  function handleNavigateToTask(taskId: string) {
+    setNotifOpen(false)
+    const task = tasks.find((t) => t.id === taskId)
+    if (task) {
+      setSelectedTaskId(taskId)
+      void fetchById(taskId)
+    }
+  }
 
   // A task exibida no painel: a detalhada (se já carregou) ou a da lista (enquanto carrega)
   const selectedTaskBase = tasks.find((t) => t.id === selectedTaskId) ?? null
@@ -662,15 +675,15 @@ export function TasksPage() {
               Nova Tarefa
             </Button>
 
-            <Button
-              variant="outline"
-              size="icon"
-              className="tasks-topbar__bell hover:bg-white/10"
-              aria-label="Notificações"
-            >
-              <Bell size={16} aria-hidden="true" />
-              <span className="tasks-topbar__bell-badge" aria-label="1 notificação">1</span>
-            </Button>
+            <NotificationPanel
+              notifications={notifications}
+              unreadCount={unreadCount}
+              isOpen={notifOpen}
+              onToggle={() => setNotifOpen((v) => !v)}
+              onMarkAllRead={markAllRead}
+              onMarkRead={markRead}
+              onNavigateToTask={handleNavigateToTask}
+            />
           </div>
         </header>
 
