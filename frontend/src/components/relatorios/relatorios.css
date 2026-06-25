@@ -1,0 +1,138 @@
+@reference "../../index.css";
+
+.relatorios-layout {
+  @apply flex min-h-screen bg-[#0d0f1e] text-white font-sans antialiased p-8;
+}
+
+.relatorios-main-container {
+  @apply flex flex-col lg:flex-row gap-8 w-full items-start justify-start max-w-none;
+}
+
+.relatorios-col-esquerda {
+  @apply flex flex-col gap-4 w-full lg:w-10/12 shrink-0;
+}
+
+.relatorios-filters-container {
+  @apply flex flex-col gap-3 w-full;
+}
+
+.relatorios-search-wrapper {
+  @apply flex items-center gap-3 bg-[#11132c] border border-white/[0.02] rounded-xl px-4 h-11 w-full;
+}
+
+.relatorios-search-input {
+  @apply bg-transparent border-none outline-none text-sm text-white/90 w-full placeholder:text-white/30;
+}
+
+.relatorios-filter-btn {
+  @apply flex items-center gap-2 text-xs font-medium text-white/80 hover:text-white transition-colors self-start px-1;
+}
+
+.relatorios-card {
+  @apply bg-[#11132c] border border-white/[0.04] rounded-2xl p-6;
+}
+
+.relatorios-card--list {
+  @apply w-full; 
+}
+
+.relatorios-card--form {
+  @apply w-full lg:w-[340px] shrink-0 lg:mt-[90px];
+}
+
+.relatorios-card__header {
+  @apply flex items-center justify-between border-b border-white/[0.04] pb-4 mb-2;
+}
+
+.relatorios-card__title {
+  @apply text-sm font-semibold text-white;
+}
+
+.relatorios-badge {
+  @apply bg-white/10 text-white/60 text-[10px] font-bold px-2 py-0.5 rounded-md;
+}
+
+.relatorios-actions {
+  @apply flex items-center gap-3;
+}
+
+.relatorios-action-btn {
+  @apply text-white/40 hover:text-white transition-colors;
+}
+
+.relatorios-list {
+  @apply flex flex-col;
+}
+
+.relatorios-row {
+  @apply flex items-center justify-between py-3.5 border-b border-white/[0.03] last:border-none;
+}
+
+.relatorios-checkbox {
+  @apply w-5 h-5 rounded-full border border-white/20 flex items-center justify-center cursor-pointer transition-all;
+}
+
+.relatorios-checkbox.checked {
+  @apply bg-[#3cdb7d] border-[#3cdb7d];
+}
+
+.relatorios-row__name {
+  @apply text-sm font-medium text-white/90 leading-tight;
+}
+
+.relatorios-row__sub {
+  @apply text-xs text-white/40 mt-0.5;
+}
+
+.relatorios-row__date {
+  @apply text-xs text-white/40 font-mono;
+}
+
+.relatorios-pagination {
+  @apply flex items-center justify-between pt-4 mt-2 border-t border-white/[0.03];
+}
+
+.relatorios-pagination__controls {
+  @apply flex items-center gap-2;
+}
+
+.relatorios-page-arrow {
+  @apply text-white/40 hover:text-white p-1 transition-colors;
+}
+
+.relatorios-page-num {
+  @apply text-xs font-medium w-6 h-6 rounded flex items-center justify-center text-white/40 hover:text-white transition-colors;
+}
+
+.relatorios-page-num.active {
+  @apply bg-[#5f52eb] text-white rounded-md;
+}
+
+.relatorios-form__main-title {
+  @apply text-base font-semibold text-white mb-6;
+}
+
+.relatorios-form-group {
+  @apply flex flex-col gap-2 mb-5;
+}
+
+.relatorios-label {
+  @apply text-[11px] font-bold text-white/50 tracking-wider;
+}
+
+.relatorios-date-row {
+  @apply flex items-center gap-3 w-full;
+}
+
+.relatorios-date-display {
+  @apply flex items-center gap-3 bg-[#161832] border border-white/[0.02] rounded-xl px-3 h-10 flex-1 text-xs font-medium text-white/80;
+}
+
+
+.relatorios-alterar-btn {
+  @apply h-10 px-4 border border-white/20 rounded-lg text-xs font-medium text-white/90 hover:bg-white/5 transition-colors;
+}
+
+.relatorios-btn-primary {
+  @apply flex items-center justify-center gap-2 w-fit h-11 px-5 mt-2 bg-[#4f3df5] text-white text-xs font-semibold rounded-xl transition-all;
+}

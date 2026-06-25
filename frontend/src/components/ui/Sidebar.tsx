@@ -76,8 +76,10 @@ export function Sidebar({ userName, activePage, onLogout }: SidebarProps) {
         <li>
           <Button
             variant="ghost"
-            className="tasks-sidebar__item w-full justify-start hover:bg-white/5"
+            className={cn( "tasks-sidebar__item w-full justify-start", activePage === "reports" ? "tasks-sidebar__item--active" : "hover:bg-white/5" )}
             aria-label="Relatórios"
+            aria-current={activePage === "reports" ? "page" : undefined}
+            onClick={() => navigate(ROUTES.RELATORIOS)}
           >
             <BarChart2 size={18} aria-hidden="true" />
             <span>Relatórios</span>
