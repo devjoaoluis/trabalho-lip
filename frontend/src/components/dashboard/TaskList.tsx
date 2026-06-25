@@ -104,11 +104,6 @@ export function TaskList({
               {displayed.length}
             </span>
           </h2>
-          <div className="task-list__header-actions">
-            <button className="task-list__add-btn" onClick={onNewTaskClick}>
-              <Plus size={14} /> Adicionar nova tarefa
-            </button>
-          </div>
         </div>
 
         <div className="task-list__items overflow-y-auto pr-2" style={{ maxHeight: "400px" }}>

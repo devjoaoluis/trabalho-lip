@@ -1,11 +1,8 @@
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
-import { Bell, ShieldCheck } from "lucide-react"
+import { ShieldCheck, Bell } from "lucide-react"
 import { cn } from "#lib/utils"
 import { Button } from "#components/ui/button"
-import { Sidebar } from "#components/ui/Sidebar"
 import { useForgotPassword } from "#hooks/useForgotPassword"
-import { ROUTES } from "../../router/routes"
 import "./settings.css"
 
 /* ─── helpers ─────────────────────────────────────────────────── */
@@ -19,29 +16,12 @@ function getUserEmail(): string {
   }
 }
 
-function getUserName(): string {
-  try {
-    const raw = localStorage.getItem("accessToken") ?? ""
-    const payload = JSON.parse(atob(raw.split(".")[1] ?? "e30="))
-    return (payload.nome as string | undefined) ?? "Usuário"
-  } catch {
-    return "Usuário"
-  }
-}
-
 /* ─── Main page ────────────────────────────────────────────────── */
 export function SettingsPage() {
-  const navigate = useNavigate()
-  const userName = getUserName()
   const userEmail = getUserEmail()
 
   const [notifEnabled, setNotifEnabled] = useState(true)
   const { isLoading, error, success, submit } = useForgotPassword()
-
-  function handleLogout() {
-    localStorage.removeItem("accessToken")
-    navigate(ROUTES.LOGIN, { replace: true })
-  }
 
   async function handleChangePassword() {
     if (!userEmail) return
@@ -49,24 +29,9 @@ export function SettingsPage() {
   }
 
   return (
-    <div className="settings-layout">
-      <Sidebar userName={userName} activePage="settings" onLogout={handleLogout} />
-
-      <div className="settings-main">
-        {/* Topbar com sino */}
-        <header className="settings-topbar">
-          <Button
-            variant="outline"
-            size="icon"
-            className="tasks-topbar__bell hover:bg-white/10"
-            aria-label="Notificações"
-          >
-            <Bell size={16} aria-hidden="true" />
-          </Button>
-        </header>
-
-        {/* Conteúdo */}
-        <main className="settings-content" aria-label="Configurações">
+    <div className="settings-main">
+      {/* Conteúdo */}
+      <main className="settings-content" aria-label="Configurações">
 
           {/* Card – Notificações */}
           <section className="settings-card" aria-label="Notificações">
@@ -137,7 +102,6 @@ export function SettingsPage() {
           </section>
 
         </main>
-      </div>
     </div>
   )
 }

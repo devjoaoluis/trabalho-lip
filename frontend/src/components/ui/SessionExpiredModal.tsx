@@ -42,7 +42,7 @@ export function SessionExpiredModal() {
       <div className="session-modal">
         {/* Logo */}
         <div className="session-modal__logo">
-          <TaskLipLogo variant="dark" />
+          <TaskLipLogo variant="white" />
         </div>
 
         {/* Title */}

@@ -6,9 +6,9 @@
   font-family: "Inter", sans-serif;
 }
 
-/* Ensure shared sidebar is sticky in dashboard context */
-.dashboard-page .tasks-sidebar {
-  @apply h-screen sticky top-0;
+/* When rendered inside AppLayout, the panel fills the content area */
+.dashboard-panel {
+  @apply flex flex-col flex-1 p-4 lg:p-6 overflow-y-auto min-h-0;
 }
 
 .dashboard-main {

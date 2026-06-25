@@ -454,6 +454,11 @@
     @apply justify-center px-0;
   }
 
+  /* Oculta o texto "Task Lip" do logo */
+  .tasks-sidebar__logo .tasklip-logo__text {
+    @apply hidden;
+  }
+
   .tasks-sidebar__item span,
   .tasks-sidebar__user span:not(.tasks-sidebar__avatar) {
     @apply hidden;

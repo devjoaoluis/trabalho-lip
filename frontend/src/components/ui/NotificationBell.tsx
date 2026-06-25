@@ -1,9 +1,35 @@
-import { useRef, useEffect, useState } from "react"
+import { useRef, useEffect, useState, useCallback } from "react"
 import { Bell, Clock, Check, Flame } from "lucide-react"
 import { cn } from "#lib/utils"
-import { useNotifications, type AppNotification } from "#hooks/useNotifications"
+import {
+  useNotifications,
+  clearNotificationsStorage,
+  type AppNotification,
+} from "#hooks/useNotifications"
 import type { Task } from "../../../service/task"
 import "../tasks/tasks.css"
+
+const DISMISSED_KEY = "task_lip_dismissed_notifications"
+
+function loadDismissed(): Set<string> {
+  try {
+    const raw = localStorage.getItem(DISMISSED_KEY)
+    if (!raw) return new Set()
+    const parsed = JSON.parse(raw)
+    if (Array.isArray(parsed)) return new Set<string>(parsed as string[])
+  } catch {
+    // ignore
+  }
+  return new Set()
+}
+
+function saveDismissed(ids: Set<string>): void {
+  try {
+    localStorage.setItem(DISMISSED_KEY, JSON.stringify(Array.from(ids)))
+  } catch {
+    // ignore
+  }
+}
 
 interface NotificationBellProps {
   tasks: Task[]
@@ -47,12 +73,18 @@ export function NotificationBell({
   onNavigateToTask,
 }: NotificationBellProps) {
   const [open, setOpen] = useState(false)
-  const [dismissed, setDismissed] = useState<Set<string>>(new Set())
+  // dismissed IDs persisted in localStorage
+  const [dismissed, setDismissed] = useState<Set<string>>(() => loadDismissed())
   const ref = useRef<HTMLDivElement>(null)
-  const { notifications, timeAgo } = useNotifications(tasks)
+  const { notifications } = useNotifications(tasks)
 
   const visible = notifications.filter((n) => !dismissed.has(n.id))
   const unreadCount = visible.length
+
+  // Sync dismissed set to localStorage whenever it changes
+  useEffect(() => {
+    saveDismissed(dismissed)
+  }, [dismissed])
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -61,6 +93,17 @@ export function NotificationBell({
     document.addEventListener("mousedown", handleClick)
     return () => document.removeEventListener("mousedown", handleClick)
   }, [])
+
+  const handleClearAll = useCallback(() => {
+    // Mark all current notifications as dismissed
+    const allIds = new Set(notifications.map((n) => n.id))
+    setDismissed(allIds)
+    saveDismissed(allIds)
+    // Also wipe the notifications array from localStorage so on reload it starts fresh
+    clearNotificationsStorage()
+    // Remove dismissed list too since there's nothing to dismiss anymore
+    localStorage.removeItem(DISMISSED_KEY)
+  }, [notifications])
 
   const bellClass =
     variant === "dashboard"
@@ -98,7 +141,7 @@ export function NotificationBell({
                 <span className="notif-panel__count">{unreadCount}</span>
                 <button
                   className="notif-panel__clear"
-                  onClick={() => setDismissed(new Set(notifications.map((n) => n.id)))}
+                  onClick={handleClearAll}
                   aria-label="Limpar todos os lembretes"
                 >
                   Limpar
@@ -119,13 +162,16 @@ export function NotificationBell({
                     {onNavigateToTask && (
                       <button
                         className="notif-item__link"
-                        onClick={() => { onNavigateToTask(n.taskId); setOpen(false) }}
+                        onClick={() => {
+                          onNavigateToTask(n.taskId)
+                          setOpen(false)
+                        }}
                       >
                         Ver tarefa →
                       </button>
                     )}
                   </div>
-                  <span className="notif-item__time">{timeAgo(n.eventDate)}</span>
+                  <span className="notif-item__time">{n.eventDate ? new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" }).format(new Date(n.eventDate)) : ""}</span>
                 </li>
               ))}
             </ul>
