@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { Clock } from "lucide-react"
 import { TaskLipLogo } from "#components/ui/TaskLipLogo"
 import { ROUTES } from "../../router/routes"
+import "../tasks/tasks.css"
 
 const SESSION_EXPIRED_EVENT = "session:expired"
 

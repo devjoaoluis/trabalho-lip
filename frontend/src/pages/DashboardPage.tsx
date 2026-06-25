@@ -55,7 +55,6 @@ export default function DashboardPage() {
   };
 
   const handleClearList = async () => {
-    if (!window.confirm("Excluir todas as tarefas concluídas?")) return;
     for (const task of tasks.filter((t) => t.status === "CONCLUIDA")) {
       await removeTask(task.id);
     }

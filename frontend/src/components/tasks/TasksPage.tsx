@@ -8,7 +8,6 @@ import {
   CheckCircle2,
   MoreVertical,
   Check,
-  Bell,
   ChevronLeft,
   ChevronRight,
   Pencil,
@@ -445,10 +444,7 @@ export function TasksPage() {
             <Button className="tasks-topbar__new-btn hover:bg-[#6a5fe0] active:bg-[#5c52cc] focus-visible:ring-2 focus-visible:ring-[#7c6ff7]" onClick={() => setShowNewModal(true)} aria-label="Nova tarefa">
               <Plus size={16} aria-hidden="true" /> Nova Tarefa
             </Button>
-            <Button variant="outline" size="icon" className="tasks-topbar__bell hover:bg-white/10" aria-label="Notificações">
-              <Bell size={16} aria-hidden="true" />
-              <span className="tasks-topbar__bell-badge" aria-label="1 notificação">1</span>
-            </Button>
+            <NotificationBell tasks={tasks} variant="tasks" />
           </div>
         </header>
 
@@ -514,7 +510,13 @@ export function TasksPage() {
                       </button>
                       <div className="task-row__info">
                         <span className={cn("task-row__title", task.status === "CONCLUIDA" && "task-row__title--done")}>{task.titulo}</span>
-                        <span className="task-row__subtitle">LIP</span>
+                        <span className="task-row__subtitle">
+                          {task.descricao
+                            ? task.descricao.length > 20
+                              ? task.descricao.slice(0, 20) + "…"
+                              : task.descricao
+                            : "Sem descrição"}
+                        </span>
                       </div>
                       <div className="tasks-table__col-priority flex justify-center"><PriorityBadge prioridade={task.prioridade} /></div>
                       <div className="tasks-table__col-date text-center text-xs text-white/50">{formatDate(task.dataLimite)}</div>
