@@ -307,3 +307,163 @@
 .tasks-empty__text {
   @apply text-sm;
 }
+
+/* ── Confirm Delete Modal ────────────────────────────────────── */
+.tasks-confirm-modal {
+  @apply bg-[#10122a] border border-white/10 rounded-xl p-8 w-full max-w-sm flex flex-col items-center gap-4 text-center;
+}
+
+.tasks-confirm-modal__icon-wrap {
+  @apply flex items-center justify-center w-20 h-20 rounded-full border-4 border-yellow-400/40 bg-yellow-400/10;
+}
+
+.tasks-confirm-modal__title {
+  @apply text-lg font-bold text-white;
+}
+
+.tasks-confirm-modal__text {
+  @apply text-sm text-white/60;
+}
+
+.tasks-confirm-modal__actions {
+  @apply flex gap-3 w-full mt-2;
+}
+
+.tasks-confirm-modal__btn-cancel {
+  @apply flex-1 h-10 rounded-lg border border-white/20 bg-transparent text-white text-sm font-medium;
+}
+
+.tasks-confirm-modal__btn-delete {
+  @apply flex-1 h-10 rounded-lg bg-red-500 text-white text-sm font-semibold;
+}
+
+/* ── Notification Bell (shared) ──────────────────────────────── */
+.notif-wrapper {
+  @apply relative;
+}
+
+.notif-panel {
+  @apply absolute right-0 top-[calc(100%+10px)] w-80 bg-[#10122a] border border-white/10 rounded-2xl shadow-2xl z-50 overflow-hidden;
+}
+
+.notif-panel__header {
+  @apply flex items-center justify-between px-5 py-4 border-b border-white/5;
+}
+
+.notif-panel__title {
+  @apply text-sm font-bold text-white;
+}
+
+.notif-panel__count {
+  @apply text-xs bg-[#7c6ff7] text-white font-bold px-2 py-0.5 rounded-full;
+}
+
+.notif-panel__clear {
+  @apply text-xs text-white/40 hover:text-white/70 transition-colors cursor-pointer;
+}
+
+.notif-panel__empty {
+  @apply text-sm text-white/40 px-5 py-6 text-center;
+}
+
+.notif-panel__list {
+  @apply flex flex-col p-2 max-h-80 overflow-y-auto;
+}
+
+.notif-item {
+  @apply flex items-start gap-3 px-3 py-3 rounded-xl hover:bg-white/5 transition-colors;
+}
+
+.notif-icon {
+  @apply flex items-center justify-center w-8 h-8 rounded-full shrink-0 mt-0.5;
+}
+
+.notif-icon--warning {
+  @apply bg-amber-500/15 text-amber-400;
+}
+
+.notif-icon--success {
+  @apply bg-emerald-500/15 text-emerald-400;
+}
+
+.notif-icon--info {
+  @apply bg-[#7c6ff7]/15 text-[#7c6ff7];
+}
+
+.notif-item__content {
+  @apply flex flex-col gap-0.5 flex-1 min-w-0;
+}
+
+.notif-item__text {
+  @apply text-sm text-white/90 leading-snug;
+}
+
+.notif-item__link {
+  @apply text-xs text-[#7c6ff7] hover:underline font-medium text-left;
+}
+
+.notif-item__time {
+  @apply text-xs text-white/30 shrink-0 mt-1;
+}
+
+/* ── Session Expired Modal ───────────────────────────────────── */
+.session-modal-overlay {
+  @apply fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[100] p-4;
+}
+
+.session-modal {
+  @apply bg-[#10122a] border border-white/10 rounded-2xl p-8 w-full max-w-sm flex flex-col gap-5;
+}
+
+.session-modal__logo {
+  @apply flex justify-center mb-1;
+}
+
+.session-modal__header {
+  @apply flex items-center gap-2;
+}
+
+.session-modal__header-icon {
+  @apply text-white/70;
+}
+
+.session-modal__title {
+  @apply text-sm font-bold text-white tracking-widest uppercase;
+}
+
+.session-modal__question {
+  @apply text-base font-semibold text-white -mb-2;
+}
+
+.session-modal__list {
+  @apply list-disc list-inside text-sm text-white/60 space-y-1;
+}
+
+.session-modal__btn {
+  @apply w-full h-12 rounded-2xl bg-[#7c6ff7] text-white font-semibold text-sm mt-1
+         cursor-pointer transition-colors;
+}
+
+/* ── Sidebar collapsed (responsive) ──────────────────────────── */
+@media (max-width: 768px) {
+  .tasks-sidebar {
+    @apply w-16 px-2;
+  }
+
+  .tasks-sidebar__logo {
+    @apply justify-center px-0;
+  }
+
+  .tasks-sidebar__item span,
+  .tasks-sidebar__user span:not(.tasks-sidebar__avatar) {
+    @apply hidden;
+  }
+
+  .tasks-sidebar__item {
+    @apply justify-center px-0;
+  }
+
+  .tasks-sidebar__user {
+    @apply justify-center px-0;
+  }
+}

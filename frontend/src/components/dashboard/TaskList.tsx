@@ -1,23 +1,38 @@
 import { ListTodo, Plus, Check } from "lucide-react";
 import { type Task } from "../../../service/task";
-import { format, parseISO } from "date-fns";
+import { format, parseISO, isSameDay } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 interface TaskListProps {
   tasks: Task[];
+  selectedDate: Date | null;
   onToggleTask: (id: string, isDone: boolean) => void;
   onNewTaskClick: () => void;
   onCompleteAll: () => void;
   onClearList: () => void;
 }
 
-export function TaskList({ tasks, onToggleTask, onNewTaskClick, onCompleteAll, onClearList }: TaskListProps) {
+export function TaskList({ tasks, selectedDate, onToggleTask, onNewTaskClick, onCompleteAll, onClearList }: TaskListProps) {
+  const displayed = selectedDate
+    ? tasks.filter((t) => {
+        if (!t.dataLimite) return false;
+        // Parse date-only string without timezone shift
+        const parts = t.dataLimite.split("T")[0].split("-");
+        const taskDate = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+        return isSameDay(taskDate, selectedDate);
+      })
+    : tasks;
+
+  const title = selectedDate
+    ? `Tarefas de ${format(selectedDate, "dd/MM", { locale: ptBR })}`
+    : "Suas tarefas";
   return (
     <div className="dashboard-card dashboard-area-tasks">
       <div className="dashboard-card__header">
         <h2 className="dashboard-card__title">
-          <ListTodo size={18} className="text-white/60" /> Suas tarefas
+          <ListTodo size={18} className="text-white/60" /> {title}
           <span className="bg-white/10 text-white/80 px-2 py-0.5 rounded-md text-xs ml-2">
-            {tasks.length}
+            {displayed.length}
           </span>
         </h2>
         <div className="task-list__header-actions">
@@ -28,7 +43,7 @@ export function TaskList({ tasks, onToggleTask, onNewTaskClick, onCompleteAll, o
       </div>
 
       <div className="task-list__items overflow-y-auto pr-2" style={{ maxHeight: "400px" }}>
-        {tasks.map((task) => {
+        {displayed.map((task) => {
           const isDone = task.status === "CONCLUIDA";
           return (
             <div key={task.id} className="task-item">
@@ -36,6 +51,7 @@ export function TaskList({ tasks, onToggleTask, onNewTaskClick, onCompleteAll, o
                 <button
                   className={`task-item__checkbox ${isDone ? "task-item__checkbox--done" : ""}`}
                   onClick={() => onToggleTask(task.id, isDone)}
+                  aria-label={isDone ? "Marcar como pendente" : "Marcar como concluída"}
                 >
                   {isDone && <Check size={12} strokeWidth={3} />}
                 </button>
@@ -54,15 +70,21 @@ export function TaskList({ tasks, onToggleTask, onNewTaskClick, onCompleteAll, o
                   {task.prioridade}
                 </span>
                 <span className="task-item__date">
-                  {task.dataLimite ? format(parseISO(task.dataLimite), "d MMM HH:mm") : "Sem data"}
+                  {task.dataLimite
+                    ? (() => {
+                        const parts = task.dataLimite.split("T")[0].split("-");
+                        const d = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+                        return format(d, "d MMM", { locale: ptBR });
+                      })()
+                    : "Sem data"}
                 </span>
               </div>
             </div>
           );
         })}
-        {tasks.length === 0 && (
+        {displayed.length === 0 && (
           <div className="text-center py-8 text-white/40 text-sm">
-            Nenhuma tarefa encontrada.
+            {selectedDate ? "Nenhuma tarefa neste dia." : "Nenhuma tarefa encontrada."}
           </div>
         )}
       </div>

@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 import { lazy, Suspense } from "react"
 import { ROUTES } from "./routes"
 import { AuthGuard, GuestGuard } from "./AuthGuard"
+import { SessionExpiredModal } from "#components/ui/SessionExpiredModal"
 
 const LoginPage            = lazy(() => import("#pages/LoginPage"))
 const RegisterPage         = lazy(() => import("#pages/RegisterPage"))
@@ -23,6 +24,7 @@ function PageLoader() {
 export function AppRouter() {
   return (
     <BrowserRouter>
+      <SessionExpiredModal />
       <Suspense fallback={<PageLoader />}>
         <Routes>
           {/* Rota raiz → redireciona para login */}
