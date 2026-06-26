@@ -38,13 +38,13 @@ export function AppRouter() {
           </Route>
 
           {/* Rotas protegidas — exige autenticação */}
-          {/*<Route element={<AuthGuard />}>*/}
+          <Route element={<AuthGuard />}>
             <Route path={ROUTES.DASHBOARD} element={<DashboardPage />} />
             <Route path={ROUTES.TASKS}     element={<TasksPage />} />
             <Route path={ROUTES.SETTINGS}  element={<SettingsPage />} />
             <Route path={ROUTES.RELATORIOS}  element={<RelatoriosPage />} />
             {/* Adicione novas rotas autenticadas aqui */}
-          {/*</Route>*/}
+          </Route>
 
           {/* Fallback — rota não encontrada */}
           <Route path={ROUTES.NOT_FOUND} element={<NotFoundPage />} />

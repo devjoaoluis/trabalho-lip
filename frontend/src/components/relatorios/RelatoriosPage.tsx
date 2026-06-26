@@ -1,18 +1,8 @@
 import { useState } from "react"
-import { 
-  Search, 
-  ListFilter, 
-  Trash2, 
-  CheckSquare, 
-  MoreVertical, 
-  Check, 
-  Calendar, 
-  Pencil, 
-  Plus, 
-  ChevronLeft, 
-  ChevronRight 
-} from "lucide-react"
+import { Search, ListFilter, Trash2, CheckSquare, MoreVertical, Check, Calendar, Pencil, Plus, ChevronLeft, ChevronRight} from "lucide-react"
 import { Button } from "#components/ui/button"
+import { CalendarWidget } from "#components/dashboard/CalendarWidget"
+import { useEffect } from "react"
 
 import "./relatorios.css"
 
@@ -26,8 +16,12 @@ interface Relatorio {
 
 export function RelatoriosPage() {
   const [search, setSearch] = useState("")
+  const [dataInicio, setDataInicio] = useState<Date>(new Date(2026, 4, 25));
+  const [dataFim, setDataFim] = useState<Date>(new Date(2026, 4, 28));
+  const [calendarioAberto, setCalendarioAberto] = useState<"de" | "ate" | null>(null);
 
-    const [relatorios, setRelatorios] = useState<Relatorio[]>([
+
+  const [relatorios, setRelatorios] = useState<Relatorio[]>([
     { id: 1, name: "Finalizar Projeto", category: "LIP", date: "24 May 13:00", completed: true }, 
   ])
 
@@ -37,10 +31,22 @@ export function RelatoriosPage() {
     )
   }
 
+  useEffect(() => {
+  const fecharAoClicarFora = (e: MouseEvent) => {
+    const target = e.target as HTMLElement;
+    // Se o clique não foi no botão "Alterar" e nem dentro do popover do calendário, fecha ele
+    if (!target.closest(".relatorios-alterar-btn") && !target.closest(".calendario-popover")) {
+      setCalendarioAberto(null);
+    }
+  };
+
+  document.addEventListener("click", fecharAoClicarFora);
+  return () => document.removeEventListener("click", fecharAoClicarFora);
+}, []);
+
   return (
   <div className="relatorios-layout">
     <div className="relatorios-main-container">
-
       <div className="relatorios-col-esquerda">
         <header className="relatorios-filters-container">
           <div className="relatorios-search-wrapper">
@@ -119,35 +125,148 @@ export function RelatoriosPage() {
           </label>
         </div>
 
-        <div className="relatorios-form-group">
-          <label className="relatorios-label uppercase tracking-wider font-bold">De</label>
+        {/* Bloco DE */}
+        <div className="relatorios-form-group mt-4">
+          <label className="relatorios-label uppercase tracking-wider font-bold">Início</label>
           <div className="relatorios-date-row">
             <div className="relatorios-date-display">
               <Calendar size={16} className="text-[#5f52eb]" />
-              <span>25/05/2026</span>
+              <span>{dataInicio.toLocaleDateString("pt-BR")}</span>
             </div>
-            <button className="relatorios-alterar-btn">Alterar</button>
+            
+            {/* Wrapper para ancorar o modal em cima do botão */}
+            <div className="calendario-modal-wrapper">
+              <div className="calendario-popover-container">
+                <button 
+                  className="relatorios-alterar-btn"
+                  onClick={() => setCalendarioAberto(calendarioAberto === "de" ? null : "de")}
+                >
+                  Alterar
+                </button>
+
+                {calendarioAberto === "de" && (
+                  <div 
+                    className="calendario-popover" 
+                    onClick={(e) => {
+                      const container = e.currentTarget;
+                      const target = e.target as HTMLElement;
+
+                      // 1. Monitora cliques em qualquer botão de dentro do Widget de Calendário
+                      if (target.closest("button")) {
+                        // Dá um tempo milimétrico (1ms) para o Widget processar o clique e aplicar a classe roxa no novo dia
+                        setTimeout(() => {
+                          // Procura o botão que ganhou a classe roxa de selecionado no seu widget
+                          const botaoSelecionado = container.querySelector("button[class*='bg-[#5a4cf2]']");
+                          
+                          if (botaoSelecionado instanceof HTMLElement) {
+                            const dia = botaoSelecionado.innerText.padStart(2, "0");
+                            
+                            // Lê o mês e o ano que estão visíveis no cabeçalho do seu calendário agora
+                            const textoMes = container.querySelector(".capitalize")?.textContent?.toLowerCase() || "";
+                            const ano = container.querySelector(".flex.gap-2 span:last-child")?.textContent || "2026";
+
+                            // Mapeia o texto do cabeçalho para achar o número do mês correto
+                            const meses: { [key: string]: string } = {
+                              jan: "01", fev: "02", mar: "03", abr: "04", mai: "05", jun: "06", 
+                              jul: "07", ago: "08", set: "09", out: "10", nov: "11", dez: "12"
+                            };
+
+                            const prefixoMes = textoMes.trim().substring(0, 3);
+                            const numeroMes = meses[prefixoMes] || "06";
+
+                            // Alimenta o useState correto da tela com a data capturada por completo e fecha o modal
+                            const dataReal = new Date(Number(ano), Number(numeroMes) - 1, Number(dia));
+                            setDataInicio(dataReal);
+                            setCalendarioAberto(null);
+                          }
+                        }, 1);
+
+                        // Impede que as setas de mudar de mês fechem o popover antes da hora
+                        e.stopPropagation();
+                      }
+                    }}
+                  >
+                    <CalendarWidget key={dataInicio.getTime()} />
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </div>
 
+        {/* Bloco ATÉ */}
         <div className="relatorios-form-group mt-4">
           <label className="relatorios-label uppercase tracking-wider font-bold">Até</label>
           <div className="relatorios-date-row">
             <div className="relatorios-date-display">
               <Calendar size={16} className="text-[#5f52eb]" />
-              <span>28/05/2026</span>
+              <span>{dataFim.toLocaleDateString("pt-BR")}</span>
             </div>
-            <button className="relatorios-alterar-btn">Alterar</button>
+            {/* Wrapper para ancorar o modal em cima do botão */}
+            <div className="calendario-modal-wrapper">
+              <div className="calendario-popover-container">
+                <button 
+                  className="relatorios-alterar-btn"
+                  onClick={() => setCalendarioAberto(calendarioAberto === "ate" ? null : "ate")}
+                >
+                  Alterar
+                </button>
+
+                {calendarioAberto === "ate" && (
+                  <div className="calendario-popover" onClick={(e) => {
+                    const container = e.currentTarget;
+                    const target = e.target as HTMLElement;
+                    // 1. Monitora cliques em qualquer botão de dentro do Widget de Calendário
+                    if (target.closest("button")) {
+                      // Dá um tempo milimétrico (1ms) para o Widget processar o clique e aplicar a classe roxa no novo dia
+                      setTimeout(() => {
+                        // Procura o botão que ganhou a classe roxa de selecionado no seu widget
+                        const botaoSelecionado = container.querySelector("button[class*='bg-[#5a4cf2]']");
+                        
+                        if (botaoSelecionado instanceof HTMLElement) {
+                          const dia = botaoSelecionado.innerText.padStart(2, "0");
+                          
+                          // Lê o mês e o ano que estão visíveis no cabeçalho do seu calendário agora
+                          const textoMes = container.querySelector(".capitalize")?.textContent?.toLowerCase() || "";
+                          const ano = container.querySelector(".flex.gap-2 span:last-child")?.textContent || "2026";
+
+                          // Mapeia o texto do cabeçalho para achar o número do mês correto
+                          const meses: { [key: string]: string } = {
+                            jan: "01", fev: "02", mar: "03", abr: "04", mai: "05", jun: "06", 
+                            jul: "07", ago: "08", set: "09", out: "10", nov: "11", dez: "12"
+                          };
+
+                          const prefixoMes = textoMes.trim().substring(0, 3);
+                          const numeroMes = meses[prefixoMes] || "06";
+
+                          // Alimenta o useState correto da tela com a data capturada por completo
+                            const dataReal = new Date(Number(ano), Number(numeroMes) - 1, Number(dia));
+                            setDataFim(dataReal);
+                            setCalendarioAberto(null); 
+                          
+                        }
+                      }, 1);
+
+                      // Impede que as setas de mudar de mês fechem o popover antes da hora
+                      e.stopPropagation();
+                    }
+                  }}
+                  >
+                    <CalendarWidget key={dataFim.getTime()} />
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </div>
 
-        <Button className="relatorios-btn-primary hover:opacity-90">
-          <Plus size={16} />
-          Gerar relatório
-        </Button>
+      <Button className="relatorios-btn-primary hover:opacity-90">
+        <Plus size={16} />
+        Gerar relatório
+      </Button>
       </section>
 
     </div>
   </div>
-)
+ )
 }
