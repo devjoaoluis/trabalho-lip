@@ -124,5 +124,22 @@
   @apply bg-[#5b4df6] hover:bg-[#6a5ef7];
 }
 
+.profile-avatar--green {
+  @apply !bg-[#00ca32];
+}
 
+.profile-avatar--pink {
+  @apply !bg-[#ff6078];
+}
 
+.profile-avatar--blue {
+  @apply !bg-[#559aff];
+}
+
+.profile-avatar--yellow {
+  @apply !bg-[#ff9d00];
+}
+
+.profile-color.is-active {
+  @apply scale-110 ring-2 ring-[#0f172a] ring-offset-2 ring-offset-white transition-all duration-200 ease-in-out;
+}

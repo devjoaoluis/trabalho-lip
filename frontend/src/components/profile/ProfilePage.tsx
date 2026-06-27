@@ -23,16 +23,52 @@ export function ProfilePage() {
   const token = localStorage.getItem("meu_token_jwt")
   const API_URL = "http://localhost:3300"
 
-  // 2. BUSCAR DADOS DA API AO CARREGAR A TELA
   useEffect(() => {
-    // Forçamos os dados a aparecerem na tela na hora
-    setFormData({
-      id: "id_simulado_joao", 
-      nome: "João Luis Gomes", 
-      email: "joaoluis@gmail.com" 
-    })
-    setLoading(false)
-  }, [])
+    async function loadUserData() {
+      try {
+        const response = await fetch(`${API_URL}/users/me`, {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
+        })
+
+        if (!response.ok) {
+          throw new Error("Erro ao carregar dados do usuário")
+        }
+
+        const data = await response.json()
+        
+        let nomeLimpo = data.nome || ""
+        let corSalva = "blue"
+
+        if (nomeLimpo.includes("|")) {
+          const partes = nomeLimpo.split("|")
+          nomeLimpo = partes[0]
+          corSalva = partes[1] || "blue"
+        }
+        
+        setFormData({
+          id: data.id,
+          nome: nomeLimpo,
+          email: data.email
+        })
+        setActiveColor(corSalva)
+      } catch (error) {
+        console.error(error)
+        alert("Não foi possível carregar as informações do perfil. Verifique seu login.")
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    if (token) {
+      loadUserData()
+    } else {
+      setLoading(false)
+    }
+  }, [token])
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target
@@ -43,7 +79,34 @@ export function ProfilePage() {
   }
 
   async function handleSave() {
-    alert("Perfil atualizado com sucesso no modo offline!")
+    if (!formData.id) {
+      alert("ID do usuário não encontrado.")
+      return
+    }
+
+    try {
+      const nomeComCor = `${formData.nome}|${activeColor}`
+
+      const response = await fetch(`${API_URL}/users/${formData.id}`, {
+        method: "PATCH",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          nome: nomeComCor,
+          email: formData.email
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error("Erro ao atualizar o perfil no servidor")
+      }
+      
+    } catch (error) {
+      console.error(error)
+      alert("Erro ao salvar as alterações do perfil.")
+    }
   }
 
   if (loading) {
@@ -57,14 +120,13 @@ export function ProfilePage() {
           <div className="profile-hero__header">
             <User size={16} />
             <p className="profile-hero__title">Perfil</p>
-            <p className="profile-hero__subtitle">código em 0000/0000</p>
+            <p className="profile-hero__subtitle">Conectado ao Servidor</p>
           </div>
 
-          <div className="profile-avatar">
-            {/* Fallback caso o nome ainda esteja vazio no carregamento */}
+          <div className={`profile-avatar profile-avatar--${activeColor}`}>
             {formData.nome 
               ? formData.nome.split(" ").slice(0, 2).map((n) => n[0]).join("").toUpperCase()
-              : "U"
+              : "User"
             }
           </div>
 
