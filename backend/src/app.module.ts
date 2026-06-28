@@ -7,6 +7,7 @@ import { UsersModule } from "./users/users.module";
 import { AuthModule } from "./auth/auth.module";
 import { TaskModule } from "./task/task.module";
 import { ReportModule } from './report/report.module';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ReportModule } from './report/report.module';
     AuthModule,
     TaskModule,
     ReportModule,
+    CloudinaryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
