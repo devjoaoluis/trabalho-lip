@@ -2,13 +2,17 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { DrizzleService } from "../db/drizzle.service";
+import { CloudinaryService } from "../cloudinary/cloudinary.service";
 import { usuarios } from "src/db/schema";
 import { eq, and } from "drizzle-orm";
 import * as bcrypt from "bcrypt";
 
 @Injectable()
 export class UsersService {
-  constructor(private db: DrizzleService) {}
+  constructor(
+    private db: DrizzleService,
+    private cloudinaryService: CloudinaryService
+  ) {}
 
   async create(dto: CreateUserDto) {
     const hash = await bcrypt.hash(dto.password, 10);
@@ -120,5 +124,33 @@ export class UsersService {
       .update(usuarios)
       .set({ senhaHash: hashedPassword })
       .where(eq(usuarios.id, userId));
+  }
+
+  async updateProfilePhoto(usuarioId: string, file: Express.Multer.File) {
+    const [usuario] = await this.db.db.select().from(usuarios).where(eq(usuarios.id, usuarioId));
+
+    if (!usuario) {
+      throw new NotFoundException("Usuário não encontrado.");
+    }
+
+    const uploadResult = await this.cloudinaryService.uploadImage(file, "task-lip/users");
+
+    const [usuarioAtualizado] = await this.db.db
+      .update(usuarios)
+      .set({
+        fotoUrl: uploadResult.secure_url,
+        atualizadoEm: new Date(),
+      })
+      .where(eq(usuarios.id, usuarioId))
+      .returning({
+        id: usuarios.id,
+        nome: usuarios.nome,
+        email: usuarios.email,
+        fotoUrl: usuarios.fotoUrl,
+        criadoEm: usuarios.criadoEm,
+        atualizadoEm: usuarios.atualizadoEm,
+      });
+
+    return usuarioAtualizado;
   }
 }
