@@ -1,6 +1,7 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { UploadApiResponse, v2 as cloudinary } from "cloudinary";
 import { Readable } from "stream";
+import type {} from "multer";
 
 @Injectable()
 export class CloudinaryService {
