@@ -1,4 +1,4 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 
 export class UserResponseDto {
   @ApiProperty({
@@ -30,4 +30,11 @@ export class UserResponseDto {
     description: "Data da última atualização do usuário.",
   })
   atualizadoEm!: Date;
+
+  @ApiPropertyOptional({
+    example: "https://res.cloudinary.com/seu-cloud/image/upload/v123/foto.jpg",
+    description: "URL da foto de perfil do usuário.",
+    nullable: true,
+  })
+  fotoUrl!: string | null;
 }

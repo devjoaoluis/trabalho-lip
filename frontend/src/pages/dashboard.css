@@ -6,37 +6,13 @@
   font-family: "Inter", sans-serif;
 }
 
+/* When rendered inside AppLayout, the panel fills the content area */
+.dashboard-panel {
+  @apply flex flex-col flex-1 p-4 lg:p-6 overflow-y-auto min-h-0;
+}
+
 .dashboard-main {
-  @apply flex-1 flex flex-col p-6 max-w-[1400px] mx-auto overflow-y-auto;
-}
-
-/* Sidebar */
-.dashboard-sidebar {
-  @apply w-[250px] bg-[#131527] border-r border-white/5 flex flex-col pt-8 pb-6 px-4 shrink-0 h-screen sticky top-0;
-}
-
-.dashboard-sidebar__logo {
-  @apply px-4 mb-10;
-}
-
-.dashboard-sidebar__nav {
-  @apply flex flex-col h-full;
-}
-
-.dashboard-sidebar__menu {
-  @apply flex flex-col gap-2;
-}
-
-.dashboard-sidebar__menu--bottom {
-  @apply mt-auto border-t border-white/5 pt-4;
-}
-
-.dashboard-sidebar__link {
-  @apply flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-white/60 hover:text-white hover:bg-white/5 transition-colors;
-}
-
-.dashboard-sidebar__link--active {
-  @apply bg-[#4b3fda] text-white hover:bg-[#5a4cf2];
+  @apply flex-1 flex flex-col p-4 lg:p-6 overflow-y-auto min-h-screen;
 }
 
 /* Header */

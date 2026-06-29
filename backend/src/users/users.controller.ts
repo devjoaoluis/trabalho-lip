@@ -6,8 +6,12 @@ import {
   Patch,
   Param,
   Delete,
+  Req,
   UseGuards,
   ForbiddenException,
+  UseInterceptors,
+  BadRequestException,
+  UploadedFile,
 } from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { CreateUserDto } from "./dto/create-user.dto";
@@ -27,7 +31,9 @@ import {
   ApiParam,
   ApiTags,
   ApiUnauthorizedResponse,
+  ApiConsumes,
 } from "@nestjs/swagger";
+import { FileInterceptor } from "@nestjs/platform-express";
 
 @ApiTags("Users")
 @Controller("users")
@@ -206,5 +212,58 @@ export class UsersController {
       throw new ForbiddenException("Usuário não autorizado a acessar este recurso");
     }
     return this.usersService.remove(id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @Patch("me/photo")
+  @UseInterceptors(
+    FileInterceptor("file", {
+      limits: {
+        fileSize: 2 * 1024 * 1024,
+      },
+      fileFilter: (req, file, callback) => {
+        if (!file.mimetype.match(/^image\/(jpeg|png|webp)$/)) {
+          return callback(
+            new BadRequestException("Apenas imagens JPEG, PNG ou WEBP são permitidas."),
+            false
+          );
+        }
+
+        callback(null, true);
+      },
+    })
+  )
+  @ApiOperation({
+    summary: "Atualizar foto de perfil",
+    description:
+      "Envia uma imagem para o Cloudinary e salva a URL como foto de perfil do usuário autenticado.",
+  })
+  @ApiConsumes("multipart/form-data")
+  @ApiBody({
+    schema: {
+      type: "object",
+      properties: {
+        file: {
+          type: "string",
+          format: "binary",
+          description: "Imagem de perfil do usuário.",
+        },
+      },
+      required: ["file"],
+    },
+  })
+  @ApiOkResponse({
+    description: "Foto de perfil atualizada com sucesso.",
+    type: UserResponseDto,
+  })
+  async updateProfilePhoto(@Req() req: any, @UploadedFile() file: Express.Multer.File) {
+    if (!file) {
+      throw new BadRequestException("Imagem não enviada.");
+    }
+
+    const usuarioId = req.user.id ?? req.user.sub;
+
+    return this.usersService.updateProfilePhoto(usuarioId, file);
   }
 }
