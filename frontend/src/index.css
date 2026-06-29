@@ -118,4 +118,44 @@
 }
 
 @layer base {
+  button,
+  a,
+  [role="button"],
+  label[for],
+  select {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  [aria-disabled="true"] {
+    cursor: not-allowed;
+  }
+
+  /* Scrollbar global personalizada */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(124, 111, 247, 0.25) transparent;
+  }
+
+  *::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: rgba(124, 111, 247, 0.25);
+    border-radius: 9999px;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(124, 111, 247, 0.5);
+  }
+
+  *::-webkit-scrollbar-corner {
+    background: transparent;
+  }
 }

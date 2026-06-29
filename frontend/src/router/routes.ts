@@ -7,6 +7,6 @@ export const ROUTES = {
   RESET_PASSWORD: "/reset-password",
   SETTINGS: "/settings",
   NOT_FOUND: "/404",
+  RELATORIOS: "/relatorios",
+  PROFILE: "/perfil",
 } as const
-
-export type AppRoute = (typeof ROUTES)[keyof typeof ROUTES]

@@ -16,15 +16,15 @@
 }
 
 .register-page__hero {
-  @apply relative flex flex-col px-8 py-10;
+  @apply relative flex flex-col flex-1 items-end px-20 py-12;
 }
 
 .register-page__hero-content {
-  @apply flex flex-col gap-8;
+  @apply flex flex-col gap-8 items-end;
 }
 
 .register-page__headline {
-  @apply text-4xl font-extrabold leading-tight tracking-tight text-white;
+  @apply font-extrabold leading-tight tracking-tight text-white text-end;
 }
 
 .register-page__cta {
@@ -40,7 +40,7 @@
 }
 
 .register-card-wrapper__shadow {
-  @apply absolute inset-0 translate-x-3 translate-y-3 rounded-2xl bg-[#7c6ff7];
+  @apply absolute inset-0 -translate-x-8 translate-y-8 rounded-2xl bg-[#7c6ff7];
 }
 
 .register-card {
@@ -82,7 +82,7 @@
 }
 
 .register-form__password-toggle {
-  @apply absolute right-3 text-gray-400 transition-colors;
+  @apply absolute right-3 text-gray-400 transition-colors cursor-pointer;
 }
 
 /* ── Hints de validação de senha ── */
@@ -122,4 +122,26 @@
   @apply mt-1 w-full h-11 rounded-lg
          bg-[#7c6ff7] text-white font-semibold text-sm
          transition-colors cursor-pointer;
+}
+
+@media (max-width: 1024px){
+  .register-page {
+    @apply flex-col-reverse justify-end;
+  }
+  
+  .register-page__hero {
+    @apply flex-0 px-8 py-10 items-center;
+  }
+
+  .register-page__hero-content {
+    @apply items-center;
+  }
+
+  .register-page__cta {
+    @apply text-center;
+  }
+
+  .register-page__headline {
+    @apply text-center;
+  }
 }

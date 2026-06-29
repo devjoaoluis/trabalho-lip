@@ -12,6 +12,8 @@ const TasksPage            = lazy(() => import("#pages/TasksPage"))
 const NotFoundPage         = lazy(() => import("#pages/NotFoundPage"))
 const ForgotPasswordPage   = lazy(() => import("#pages/ForgotPasswordPage"))
 const ResetPasswordPage    = lazy(() => import("#pages/ResetPasswordPage"))
+const RelatoriosPage       = lazy(() => import("#pages/RelatoriosPage"))
+const ProfilePage          = lazy(() => import("#pages/ProfilePage"))
 const SettingsPage         = lazy(() => import("#pages/SettingsPage"))
 
 function PageLoader() {
@@ -44,7 +46,9 @@ export function AppRouter() {
             <Route element={<AppLayout />}>
               <Route path={ROUTES.DASHBOARD} element={<DashboardPage />} />
               <Route path={ROUTES.TASKS}     element={<TasksPage />} />
+              <Route path={ROUTES.PROFILE}   element={<ProfilePage />} />
               <Route path={ROUTES.SETTINGS}  element={<SettingsPage />} />
+              <Route path={ROUTES.RELATORIOS}  element={<RelatoriosPage />} />
               {/* Adicione novas rotas autenticadas aqui */}
             </Route>
           </Route>

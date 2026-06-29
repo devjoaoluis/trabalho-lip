@@ -244,3 +244,9 @@
 .task-list__footer-btn {
   @apply text-xs font-medium text-[#5a4cf2] hover:text-[#6c5ef7] hover:underline cursor-pointer;
 }
+
+@media (max-width: 768px) {
+  .summary-widget {
+    @apply flex items-start flex-col gap-2 h-full;
+  }
+}

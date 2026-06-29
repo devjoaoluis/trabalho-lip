@@ -126,13 +126,13 @@ export function LoginPage() {
     <main className="login-page flex-col lg:flex-row">
       {/* Coluna esquerda – hero */}
       <section
-        className="login-page__hero flex-1 lg:px-16 lg:py-12"
+        className="login-page__hero"
         aria-label="Apresentação do produto"
       >
-        <TaskLipLogo className="login-page__hero-logo mb-auto" />
+        <TaskLipLogo className="login-page__hero-logo" />
 
         <div className="login-page__hero-content mt-16 lg:mt-0 lg:flex-1 lg:justify-center">
-          <h2 className="login-page__headline sm:text-5xl lg:text-6xl xl:text-7xl">
+          <h2 className="login-page__headline text-6xl lg:text-8xl">
             Gerencie suas<br />Tarefas
           </h2>
 
@@ -150,7 +150,7 @@ export function LoginPage() {
 
       {/* Coluna direita – formulário */}
       <aside
-        className="login-page__form-col w-full lg:w-[55%]"
+        className="login-page__form-col w-full lg:w-[50%]"
         aria-label="Formulário de acesso"
       >
         <LoginForm />

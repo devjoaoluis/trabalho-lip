@@ -1,0 +1,276 @@
+@reference "../../index.css";
+
+/* ── Layout ─────────────────────────────────────────────────── */
+.relatorios-layout {
+  @apply flex min-h-screen bg-[#0d0f1e] text-white font-sans antialiased p-8;
+}
+
+.relatorios-main-container {
+  @apply flex flex-col-reverse lg:flex-row gap-6 w-full items-start max-w-none;
+}
+
+/* ── Filtro de período ────────────────────────────────────────── */
+.relatorios-filters-container {
+  @apply flex items-center gap-3 w-full;
+}
+
+.relatorios-filter-btn {
+  @apply flex items-center gap-2 text-xs font-medium text-white/60 border border-white/10 bg-[#11132c] rounded-lg px-3 h-9 transition-colors cursor-pointer;
+}
+
+.relatorios-filter-btn--active {
+  @apply text-[#a39bf5] border-[#5f52eb]/60 bg-[#5f52eb]/10;
+}
+
+.relatorios-filter-popover {
+  @apply absolute left-0 mt-2 p-4 bg-[#111326] border border-white/10 rounded-xl shadow-2xl z-50 w-80 text-white flex flex-col gap-4;
+}
+
+.relatorios-filter-popover__header {
+  @apply flex items-center justify-between border-b border-white/5 pb-2 w-full;
+}
+
+.relatorios-filter-popover__label {
+  @apply text-[11px] font-bold uppercase tracking-wider text-white/40;
+}
+
+.relatorios-filter-popover__clear {
+  @apply text-[10px] text-rose-400 transition-colors cursor-pointer;
+}
+
+/* ── Cards ────────────────────────────────────────────────────── */
+
+.relatorios-card--list {
+  @apply w-full;
+}
+
+.relatorios-card--form {
+  @apply w-full lg:w-90 shrink-0 overflow-visible relative;
+}
+
+.relatorios-card__header {
+  @apply flex items-center justify-between border-b border-white/[0.04] pb-4 mb-2;
+}
+
+.relatorios-card__title {
+  @apply text-sm font-semibold text-white;
+}
+
+.relatorios-badge {
+  @apply bg-white/10 text-white/60 text-[10px] font-bold px-2 py-0.5 rounded-md;
+}
+
+/* ── Lista ────────────────────────────────────────────────────── */
+.relatorios-list {
+  @apply flex flex-col gap-3 w-full;
+}
+
+.relatorios-row {
+  @apply w-full flex items-center justify-between gap-4 py-3.5 px-4 bg-[#161832]/40 rounded-xl transition-colors;
+}
+
+.relatorios-row__icon {
+  @apply flex items-center justify-center w-8 h-8 rounded-lg bg-[#5f52eb]/10 text-[#5f52eb] shrink-0;
+}
+
+.relatorios-row__name {
+  @apply text-sm font-medium text-white/90 leading-tight;
+}
+
+.relatorios-row__sub {
+  @apply text-xs text-emerald-400/80 mt-0.5;
+}
+
+.relatorios-row__date {
+  @apply text-xs text-white/40 font-mono;
+}
+
+/* ── Estado vazio / erro ─────────────────────────────────────── */
+.relatorios-empty-state {
+  @apply flex flex-col items-center justify-center gap-3 py-10 text-xs text-white/40;
+}
+
+.relatorios-retry-btn {
+  @apply text-xs text-[#a39bf5] underline underline-offset-2 transition-colors cursor-pointer;
+}
+
+/* ── Menu de opções (três pontinhos) ─────────────────────────── */
+.relatorios-menu-trigger {
+  @apply text-white/40 p-1 rounded-md transition-colors cursor-pointer;
+}
+
+.relatorios-dropdown {
+  @apply absolute right-0 mt-1 w-44 rounded-xl bg-[#161832] border border-white/10 shadow-xl z-30 p-1;
+}
+
+.relatorios-dropdown__item {
+  @apply w-full flex items-center gap-2 px-3 py-2 text-left text-xs text-white/80 rounded-lg transition-colors cursor-pointer;
+}
+
+.relatorios-dropdown__item--danger {
+  @apply text-rose-400;
+}
+
+/* ── Paginação ────────────────────────────────────────────────── */
+.relatorios-pagination {
+  @apply flex items-center justify-between pt-4 mt-2 border-t border-white/[0.03];
+}
+
+.relatorios-pagination__controls {
+  @apply flex items-center gap-2;
+}
+
+.relatorios-page-arrow {
+  @apply text-white/40 p-1 transition-colors disabled:opacity-20 cursor-pointer disabled:cursor-not-allowed;
+}
+
+.relatorios-page-num {
+  @apply text-xs font-medium w-6 h-6 rounded flex items-center justify-center text-white/40 transition-colors cursor-pointer;
+}
+
+.relatorios-page-num.active {
+  @apply bg-[#5f52eb] text-white rounded-md;
+}
+
+/* ── Formulário (coluna direita) ─────────────────────────────── */
+.relatorios-form__main-title {
+  @apply text-base font-semibold text-white mb-6;
+}
+
+.relatorios-form-group {
+  @apply flex flex-col gap-2 mb-5;
+}
+
+.relatorios-label {
+  @apply text-[11px] font-bold text-white/50 tracking-wider;
+}
+
+.relatorios-name-input {
+  @apply bg-[#161832] border border-white/10 rounded-lg px-2 py-1 text-xs text-white outline-none w-full;
+}
+
+.relatorios-date-row {
+  @apply flex items-center gap-3 w-full;
+}
+
+.relatorios-date-display {
+  @apply flex items-center gap-3 bg-[#161832] border border-white/[0.02] rounded-xl px-3 h-10 flex-1 text-xs font-medium text-white/80;
+}
+
+.relatorios-alterar-btn {
+  @apply h-10 px-4 border border-white/20 rounded-lg text-xs font-medium text-white/90 transition-colors cursor-pointer;
+}
+
+.relatorios-btn-primary {
+  @apply flex items-center justify-center gap-2 h-11 px-5 bg-[#4f3df5] text-white text-xs font-semibold rounded-xl transition-all cursor-pointer;
+}
+
+/* ── Calendário popover ───────────────────────────────────────── */
+.relatorios-calendario-wrapper {
+  @apply relative;
+}
+
+.relatorios-calendario-popover {
+  @apply absolute right-0 top-full mt-1 bg-[#111326] border border-white/10 rounded-xl shadow-2xl z-50;
+}
+
+.relatorios-calendario-popover .dashboard-card,
+.relatorios-calendario-popover > div {
+  @apply !m-0 !bg-transparent !border-none !shadow-none;
+}
+
+/* Calendário dentro do filtro popover — embutido sem wrapper extra */
+.relatorios-filter-popover .relatorios-calendario-wrapper {
+  @apply static;
+}
+
+.relatorios-filter-popover .dashboard-card,
+.relatorios-filter-popover > div > div {
+  @apply !m-0 !bg-transparent !border-none !shadow-none;
+}
+
+/* Indicador de etapa do filtro */
+.relatorios-filter-etapa {
+  @apply flex items-center gap-2 text-xs bg-[#5f52eb]/10 border border-[#5f52eb]/20 rounded-lg px-3 py-2;
+}
+
+.relatorios-filter-etapa__label {
+  @apply text-white/40;
+}
+
+.relatorios-filter-etapa__value {
+  @apply text-white/80 font-medium flex-1;
+}
+
+.relatorios-filter-etapa__edit {
+  @apply text-[#a39bf5] text-[10px] underline underline-offset-2 cursor-pointer;
+}
+
+/* ── Modal de detalhes ────────────────────────────────────────── */
+.relatorios-modal {
+  @apply bg-[#111326] border border-white/10 w-full max-w-md rounded-2xl p-6 shadow-2xl relative text-white;
+}
+
+.relatorios-modal__header {
+  @apply flex items-center justify-between border-b border-white/5 pb-4 mb-5;
+}
+
+.relatorios-modal__title {
+  @apply text-sm font-semibold tracking-wide uppercase text-white/50;
+}
+
+.relatorios-modal__id {
+  @apply text-xs text-white/30 mt-0.5;
+}
+
+.relatorios-modal__close {
+  @apply text-white/40 bg-white/5 px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer;
+}
+
+.relatorios-modal__loading {
+  @apply flex flex-col items-center justify-center gap-3 py-12 text-xs text-white/40;
+}
+
+.relatorios-modal__periodo {
+  @apply bg-[#161832] border border-white/5 rounded-xl p-3 flex items-center gap-3;
+}
+
+.relatorios-modal__kpi {
+  @apply rounded-xl p-4 text-center border;
+}
+
+.relatorios-modal__kpi--green {
+  @apply bg-emerald-500/10 border-emerald-500/20;
+}
+
+.relatorios-modal__kpi--orange {
+  @apply bg-orange-500/10 border-orange-500/20;
+}
+
+.relatorios-modal__kpi-value {
+  @apply text-2xl font-bold block;
+}
+
+.relatorios-modal__kpi--green .relatorios-modal__kpi-value {
+  @apply text-emerald-400;
+}
+
+.relatorios-modal__kpi--orange .relatorios-modal__kpi-value {
+  @apply text-orange-400;
+}
+
+.relatorios-modal__kpi-label {
+  @apply text-[11px] text-white/40 font-medium uppercase tracking-wider mt-1 block;
+}
+
+.relatorios-modal__history {
+  @apply bg-[#161832] border border-white/5 rounded-xl divide-y divide-white/5 max-h-36 overflow-y-auto;
+}
+
+.relatorios-modal__history-row {
+  @apply flex items-center justify-between p-3 text-xs;
+}
+
+.relatorios-modal__history-badge {
+  @apply font-semibold bg-[#5f52eb]/20 text-[#a39bf5] px-2 py-0.5 rounded-md text-[10px];
+}

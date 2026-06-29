@@ -11,10 +11,11 @@ import { Button } from "#components/ui/button"
 import { TaskLipLogo } from "#components/ui/TaskLipLogo"
 import { ROUTES } from "../../router/routes"
 
-export type ActivePage = "dashboard" | "tasks" | "settings" | "reports"
+export type ActivePage = "dashboard" | "tasks" | "settings" | "reports" | "profile"
 
 interface SidebarProps {
   userName: string
+  userPhotoUrl?: string | null
   activePage: ActivePage
   onLogout: () => void
 }
@@ -28,7 +29,7 @@ function getInitials(name: string): string {
     .toUpperCase()
 }
 
-export function Sidebar({ userName, activePage, onLogout }: SidebarProps) {
+export function Sidebar({ userName, userPhotoUrl, activePage, onLogout }: SidebarProps) {
   const navigate = useNavigate()
 
   return (
@@ -75,8 +76,15 @@ export function Sidebar({ userName, activePage, onLogout }: SidebarProps) {
         <li>
           <Button
             variant="ghost"
-            className="tasks-sidebar__item w-full justify-start hover:bg-white/5"
+            className={cn(
+              "tasks-sidebar__item w-full justify-start",
+              activePage === "reports"
+                ? "tasks-sidebar__item--active"
+                : "hover:bg-white/5"
+            )}
             aria-label="Relatórios"
+            aria-current={activePage === "reports" ? "page" : undefined}
+            onClick={() => navigate(ROUTES.RELATORIOS)}
           >
             <BarChart2 size={18} aria-hidden="true" />
             <span>Relatórios</span>
@@ -85,12 +93,33 @@ export function Sidebar({ userName, activePage, onLogout }: SidebarProps) {
       </ul>
 
       <div className="tasks-sidebar__footer">
-        <div className="tasks-sidebar__user">
-          <span className="tasks-sidebar__avatar" aria-hidden="true">
-            {getInitials(userName)}
-          </span>
+        {/* Usuário — clicável para ir ao perfil */}
+        <button
+          type="button"
+          className={cn(
+            "tasks-sidebar__user w-full text-left rounded-lg transition-colors",
+            activePage === "profile"
+              ? "bg-[#7c6ff7]/20 ring-1 ring-[#7c6ff7]/40"
+              : "hover:bg-white/5"
+          )}
+          aria-label="Ver perfil"
+          aria-current={activePage === "profile" ? "page" : undefined}
+          onClick={() => navigate(ROUTES.PROFILE)}
+        >
+          {userPhotoUrl ? (
+            <img
+              src={userPhotoUrl}
+              alt={userName}
+              className="tasks-sidebar__avatar object-cover"
+            />
+          ) : (
+            <span className="tasks-sidebar__avatar" aria-hidden="true">
+              {getInitials(userName)}
+            </span>
+          )}
           <span className="text-sm truncate">{userName}</span>
-        </div>
+        </button>
+
         <Button
           variant="ghost"
           className={cn(
@@ -106,6 +135,7 @@ export function Sidebar({ userName, activePage, onLogout }: SidebarProps) {
           <Settings size={18} aria-hidden="true" />
           <span>Configurações</span>
         </Button>
+
         <Button
           variant="ghost"
           className="tasks-sidebar__item w-full justify-start hover:bg-red-500/10 hover:text-red-400"

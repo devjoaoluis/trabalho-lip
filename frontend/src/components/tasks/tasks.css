@@ -5,7 +5,7 @@
 }
 
 .tasks-sidebar {
-  @apply flex flex-col w-56 shrink-0 bg-[#10122a] border-r border-white/5 py-6 px-3;
+  @apply flex flex-col w-56 shrink-0 bg-[#10122a] border-r border-white/5 py-6 px-3 h-screen sticky top-0 overflow-y-auto;
 }
 
 .tasks-sidebar__logo {
@@ -33,11 +33,11 @@
 }
 
 .tasks-sidebar__user {
-  @apply flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70;
+  @apply flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 cursor-pointer;
 }
 
 .tasks-sidebar__avatar {
-  @apply flex items-center justify-center w-8 h-8 rounded-full bg-[#7c6ff7] text-white text-xs font-bold shrink-0;
+  @apply flex items-center justify-center w-8 h-8 rounded-full bg-[#7c6ff7] text-white text-xs font-bold shrink-0 overflow-hidden;
 }
 
 .tasks-main {
@@ -45,7 +45,7 @@
 }
 
 .tasks-topbar {
-  @apply flex items-center gap-4 px-6 py-4 border-b border-white/5;
+  @apply flex items-center gap-3 px-2 py-4 border-b border-white/5;
 }
 
 .tasks-topbar__search {
@@ -77,7 +77,7 @@
 }
 
 .tasks-panel {
-  @apply flex flex-col flex-1 px-6 py-5 overflow-auto;
+  @apply flex flex-col flex-1 px-3 py-5 overflow-auto;
 }
 
 .tasks-tabs {
@@ -89,7 +89,7 @@
 }
 
 .tasks-tab--active {
-  @apply text-white border-b-2 border-[#7c6ff7] rounded-none pb-1;
+  @apply text-white;
 }
 
 .tasks-tab__badge {
@@ -113,11 +113,11 @@
 }
 
 .tasks-table__col-priority {
-  @apply w-28 text-center;
+  @apply w-28 flex items-center justify-center;
 }
 
 .tasks-table__col-date {
-  @apply w-32 text-center;
+  @apply w-32 flex items-center justify-center text-xs text-white/50;
 }
 
 .tasks-table__col-actions {
@@ -209,11 +209,15 @@
 }
 
 .task-edit-panel {
-  @apply flex flex-col w-80 shrink-0 bg-[#10122a] border-l border-white/5 p-5 overflow-auto;
+  @apply flex flex-col w-[90%] shrink-0 bg-[#10122a] border-l border-white/5 p-5 overflow-auto;
 }
 
 .task-edit-panel__header {
   @apply flex items-center gap-2 mb-4;
+}
+
+.task-edit-panel__drag-handle {
+  @apply hidden mx-auto mb-3 h-1 w-10 rounded-full bg-white/20;
 }
 
 .task-edit-panel__title {
@@ -330,11 +334,11 @@
 }
 
 .tasks-confirm-modal__btn-cancel {
-  @apply flex-1 h-10 rounded-lg border border-white/20 bg-transparent text-white text-sm font-medium;
+  @apply flex-1 h-10 rounded-lg border border-white/20 bg-transparent text-white text-sm font-medium cursor-pointer;
 }
 
 .tasks-confirm-modal__btn-delete {
-  @apply flex-1 h-10 rounded-lg bg-red-500 text-white text-sm font-semibold;
+  @apply flex-1 h-10 rounded-lg bg-red-500 text-white text-sm font-semibold cursor-pointer;
 }
 
 /* ── Notification Bell (shared) ──────────────────────────────── */
@@ -447,14 +451,13 @@
 /* ── Sidebar collapsed (responsive) ──────────────────────────── */
 @media (max-width: 768px) {
   .tasks-sidebar {
-    @apply w-16 px-2;
+    @apply w-14 px-2;
   }
 
   .tasks-sidebar__logo {
     @apply justify-center px-0;
   }
 
-  /* Oculta o texto "Task Lip" do logo */
   .tasks-sidebar__logo .tasklip-logo__text {
     @apply hidden;
   }
@@ -470,5 +473,108 @@
 
   .tasks-sidebar__user {
     @apply justify-center px-0;
+  }
+}
+
+/* ── Mobile/tablet: abaixo de 1024px ─────────────────────────── */
+@media (max-width: 1023px) {
+  /* Topbar compacto */
+  .tasks-topbar {
+    @apply px-2 py-2 gap-2;
+  }
+
+  .tasks-topbar__search {
+    @apply max-w-none py-1.5 min-w-0;
+  }
+
+  .tasks-topbar__new-btn {
+    @apply px-3 shrink-0;
+  }
+
+  .tasks-topbar__new-btn span {
+    @apply hidden;
+  }
+
+  /* Panel */
+  .tasks-panel {
+    @apply px-2 py-3;
+  }
+
+  /* Tabs: scroll horizontal sem quebra */
+  .tasks-tabs {
+    @apply flex-nowrap overflow-x-auto pb-1;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .tasks-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tasks-tab {
+    @apply px-2.5 py-1.5 text-xs shrink-0;
+  }
+
+  .tasks-filter {
+    @apply shrink-0 px-2.5 py-1.5 text-xs;
+  }
+
+  /* Tabela: scroll horizontal para manter todas as colunas */
+  .tasks-table-wrapper {
+    @apply overflow-x-auto -mx-2 px-2;
+  }
+
+  .tasks-table__header {
+    @apply px-3 min-w-[480px];
+  }
+
+  .tasks-table {
+    @apply min-w-[480px];
+  }
+
+  .task-row {
+    @apply px-3;
+  }
+
+  /* Paginação: centralizada sem o texto */
+  .tasks-pagination {
+    @apply justify-center;
+  }
+
+  .tasks-pagination__info {
+    @apply hidden;
+  }
+
+  .tasks-pagination__controls {
+    @apply ml-0;
+  }
+
+  /* Edit panel: drawer que sobe da base */
+  .task-edit-panel {
+    @apply fixed inset-x-0 bottom-0 w-full h-[85vh] border-l-0 border-t border-white/10 rounded-t-2xl z-40 shadow-2xl;
+    animation: drawer-slide-up 0.3s cubic-bezier(0.32, 0.72, 0, 1) both;
+  }
+
+  @keyframes drawer-slide-up {
+    from { transform: translateY(100%); }
+    to   { transform: translateY(0);    }
+  }
+
+  .task-edit-panel__drag-handle {
+    @apply block;
+  }
+}
+
+/* ── Desktop: 1024px+ ─────────────────────────────────────────── */
+@media (min-width: 1024px) {
+  .tasks-topbar {
+    @apply gap-4 px-6;
+  }
+
+  .tasks-panel {
+    @apply px-6;
+  }
+
+  .task-edit-panel {
+    @apply w-90;
   }
 }
