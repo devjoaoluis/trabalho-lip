@@ -14,4 +14,8 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   @IsOptional()
   @MinLength(6)
   password?: string;
+
+  @IsOptional()
+  @MinLength(4)
+  profileColor?: string;
 }

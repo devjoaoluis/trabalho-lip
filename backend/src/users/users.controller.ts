@@ -17,6 +17,7 @@ import { UsersService } from "./users.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { UserResponseDto } from "./dto/response-user.dto";
+import { UpdateNotificationPreferenceDto } from "./dto/update-notification-preference.dto";
 import { JwtAuthGuard, type JwtPayload } from "../auth/guards/jwt-auth.guard";
 import { CurrentUser } from "../auth/decorators/user.decorator";
 import { ParseUUIDPipe } from "@nestjs/common";
@@ -32,6 +33,7 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
   ApiConsumes,
+  ApiBadRequestResponse,
 } from "@nestjs/swagger";
 import { FileInterceptor } from "@nestjs/platform-express";
 
@@ -265,5 +267,53 @@ export class UsersController {
     const usuarioId = req.user.id ?? req.user.sub;
 
     return this.usersService.updateProfilePhoto(usuarioId, file);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @Delete("me/photo")
+  @ApiOperation({
+    summary: "Remover foto de perfil",
+    description:
+      "Remove a imagem de perfil do Cloudinary e apaga a URL salva no usuário autenticado.",
+  })
+  @ApiOkResponse({
+    description: "Foto de perfil removida com sucesso.",
+    type: UserResponseDto,
+  })
+  @ApiBadRequestResponse({
+    description: "Usuário não possui foto de perfil.",
+  })
+  @ApiUnauthorizedResponse({
+    description: "Token não encontrado ou inválido.",
+  })
+  async removeProfilePhoto(@Req() req: any) {
+    const usuarioId = req.user.id ?? req.user.sub;
+
+    return this.usersService.removeProfilePhoto(usuarioId);
+  }
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @Patch("me/notifications")
+  @ApiOperation({
+    summary: "Atualizar preferência de notificações",
+    description:
+      "Permite que o usuário autenticado ative ou desative o recebimento de notificações.",
+  })
+  @ApiBody({ type: UpdateNotificationPreferenceDto })
+  @ApiOkResponse({
+    description: "Preferência de notificações atualizada com sucesso.",
+    type: UserResponseDto,
+  })
+  @ApiUnauthorizedResponse({
+    description: "Token não encontrado ou inválido.",
+  })
+  async updateNotificationPreference(
+    @Req() req: any,
+    @Body() dto: UpdateNotificationPreferenceDto
+  ) {
+    const usuarioId = req.user.id ?? req.user.sub;
+
+    return this.usersService.updateNotificationPreference(usuarioId, dto);
   }
 }

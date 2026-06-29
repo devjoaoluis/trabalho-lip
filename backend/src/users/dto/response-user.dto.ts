@@ -37,4 +37,16 @@ export class UserResponseDto {
     nullable: true,
   })
   fotoUrl!: string | null;
+
+  @ApiProperty({
+    example: "#7c6ff7",
+    description: "Cor padrão do perfil do usuário.",
+  })
+  profileColor!: string;
+
+  @ApiProperty({
+    example: true,
+    description: "Indica se o usuário deseja receber notificações.",
+  })
+  receberNotificacoes!: boolean;
 }
