@@ -2,6 +2,8 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 import { lazy, Suspense } from "react"
 import { ROUTES } from "./routes"
 import { AuthGuard, GuestGuard } from "./AuthGuard"
+import { SessionExpiredModal } from "#components/ui/SessionExpiredModal"
+import { AppLayout } from "#components/layout/AppLayout"
 
 const LoginPage            = lazy(() => import("#pages/LoginPage"))
 const RegisterPage         = lazy(() => import("#pages/RegisterPage"))
@@ -23,6 +25,7 @@ function PageLoader() {
 export function AppRouter() {
   return (
     <BrowserRouter>
+      <SessionExpiredModal />
       <Suspense fallback={<PageLoader />}>
         <Routes>
           {/* Rota raiz → redireciona para login */}
@@ -36,12 +39,14 @@ export function AppRouter() {
             <Route path={ROUTES.RESET_PASSWORD}   element={<ResetPasswordPage />} />
           </Route>
 
-          {/* Rotas protegidas — exige autenticação */}
+          {/* Rotas protegidas — Sidebar + Topbar sempre visíveis */}
           <Route element={<AuthGuard />}>
-            <Route path={ROUTES.DASHBOARD} element={<DashboardPage />} />
-            <Route path={ROUTES.TASKS}     element={<TasksPage />} />
-            <Route path={ROUTES.SETTINGS}  element={<SettingsPage />} />
-            {/* Adicione novas rotas autenticadas aqui */}
+            <Route element={<AppLayout />}>
+              <Route path={ROUTES.DASHBOARD} element={<DashboardPage />} />
+              <Route path={ROUTES.TASKS}     element={<TasksPage />} />
+              <Route path={ROUTES.SETTINGS}  element={<SettingsPage />} />
+              {/* Adicione novas rotas autenticadas aqui */}
+            </Route>
           </Route>
 
           {/* Fallback — rota não encontrada */}

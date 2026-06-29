@@ -3,7 +3,6 @@ import {
   LayoutDashboard,
   ClipboardList,
   BarChart2,
-  LineChart,
   Settings,
   LogOut,
 } from "lucide-react"
@@ -12,7 +11,7 @@ import { Button } from "#components/ui/button"
 import { TaskLipLogo } from "#components/ui/TaskLipLogo"
 import { ROUTES } from "../../router/routes"
 
-export type ActivePage = "dashboard" | "tasks" | "settings" | "reports" | "statistics"
+export type ActivePage = "dashboard" | "tasks" | "settings" | "reports"
 
 interface SidebarProps {
   userName: string
@@ -81,16 +80,6 @@ export function Sidebar({ userName, activePage, onLogout }: SidebarProps) {
           >
             <BarChart2 size={18} aria-hidden="true" />
             <span>Relatórios</span>
-          </Button>
-        </li>
-        <li>
-          <Button
-            variant="ghost"
-            className="tasks-sidebar__item w-full justify-start hover:bg-white/5"
-            aria-label="Estatísticas"
-          >
-            <LineChart size={18} aria-hidden="true" />
-            <span>Estatísticas</span>
           </Button>
         </li>
       </ul>
