@@ -32,6 +32,7 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
   ApiConsumes,
+  ApiBadRequestResponse,
 } from "@nestjs/swagger";
 import { FileInterceptor } from "@nestjs/platform-express";
 
@@ -265,5 +266,29 @@ export class UsersController {
     const usuarioId = req.user.id ?? req.user.sub;
 
     return this.usersService.updateProfilePhoto(usuarioId, file);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @Delete("me/photo")
+  @ApiOperation({
+    summary: "Remover foto de perfil",
+    description:
+      "Remove a imagem de perfil do Cloudinary e apaga a URL salva no usuário autenticado.",
+  })
+  @ApiOkResponse({
+    description: "Foto de perfil removida com sucesso.",
+    type: UserResponseDto,
+  })
+  @ApiBadRequestResponse({
+    description: "Usuário não possui foto de perfil.",
+  })
+  @ApiUnauthorizedResponse({
+    description: "Token não encontrado ou inválido.",
+  })
+  async removeProfilePhoto(@Req() req: any) {
+    const usuarioId = req.user.id ?? req.user.sub;
+
+    return this.usersService.removeProfilePhoto(usuarioId);
   }
 }

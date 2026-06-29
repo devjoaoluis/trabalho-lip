@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable, NotFoundException, BadRequestException } from "@nestjs/common";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { DrizzleService } from "../db/drizzle.service";
@@ -139,6 +139,40 @@ export class UsersService {
       .update(usuarios)
       .set({
         fotoUrl: uploadResult.secure_url,
+        fotoPublicId: uploadResult.public_id,
+        atualizadoEm: new Date(),
+      })
+      .where(eq(usuarios.id, usuarioId))
+      .returning({
+        id: usuarios.id,
+        nome: usuarios.nome,
+        email: usuarios.email,
+        fotoUrl: usuarios.fotoUrl,
+        criadoEm: usuarios.criadoEm,
+        atualizadoEm: usuarios.atualizadoEm,
+      });
+
+    return usuarioAtualizado;
+  }
+
+  async removeProfilePhoto(usuarioId: string) {
+    const [usuario] = await this.db.db.select().from(usuarios).where(eq(usuarios.id, usuarioId));
+
+    if (!usuario) {
+      throw new NotFoundException("Usuário não encontrado.");
+    }
+
+    if (!usuario.fotoPublicId) {
+      throw new BadRequestException("Usuário não possui foto de perfil.");
+    }
+
+    await this.cloudinaryService.deleteImage(usuario.fotoPublicId);
+
+    const [usuarioAtualizado] = await this.db.db
+      .update(usuarios)
+      .set({
+        fotoUrl: null,
+        fotoPublicId: null,
         atualizadoEm: new Date(),
       })
       .where(eq(usuarios.id, usuarioId))

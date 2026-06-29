@@ -28,4 +28,11 @@ export class CloudinaryService {
       Readable.from(file.buffer).pipe(uploadStream);
     });
   }
+
+  async deleteImage(publicId: string) {
+    return this.cloudinaryClient.uploader.destroy(publicId, {
+      resource_type: "image",
+      invalidate: true,
+    });
+  }
 }
