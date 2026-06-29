@@ -3,7 +3,7 @@ import api from "./api";
 export interface RegisterCredentials {
   nome: string;
   email: string;
-  senha: string;
+  password: string;
 }
 
 export interface RegisterResponse {

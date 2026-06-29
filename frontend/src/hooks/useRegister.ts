@@ -4,7 +4,7 @@ import { registerUser } from "../../service/register";
 interface RegisterFields {
   nome: string;
   email: string;
-  senha: string;
+  password: string;
 }
 
 interface UseRegisterReturn {

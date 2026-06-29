@@ -61,14 +61,14 @@ function RegisterForm() {
   const [showConfirm, setShowConfirm] = useState(false)
   const [nome, setNome] = useState("")
   const [email, setEmail] = useState("")
-  const [senha, setSenha] = useState("")
-  const [confirmSenha, setConfirmSenha] = useState("")
+  const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
   const [agreedToTerms, setAgreedToTerms] = useState(false)
   const navigate = useNavigate()
   const { isLoading, error, submit } = useRegister()
 
-  const allRulesValid = PASSWORD_RULES.every((r) => r.test(senha))
-  const passwordsMatch = senha === confirmSenha && confirmSenha.length > 0
+  const allRulesValid = PASSWORD_RULES.every((r) => r.test(password))
+  const passwordsMatch = password === confirmPassword && confirmPassword.length > 0
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -78,7 +78,7 @@ function RegisterForm() {
     if (!agreedToTerms) return
 
     await submit(
-      { nome, email, senha },
+      { nome, email, password },
       () => navigate(ROUTES.LOGIN, { replace: true, state: { registered: true } })
     )
   }
@@ -145,9 +145,9 @@ function RegisterForm() {
               id="register-senha"
               type={showPassword ? "text" : "password"}
               placeholder="Sua senha"
-              value={senha}
+              value={password}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setSenha(e.target.value)
+                setPassword(e.target.value)
               }
               autoComplete="new-password"
               required
@@ -172,27 +172,27 @@ function RegisterForm() {
           </div>
 
           {/* Hints de validação */}
-          {senha.length > 0 && (
+          {password.length > 0 && (
             <div id="register-password-hints">
-              <PasswordHints password={senha} />
+              <PasswordHints password={password} />
             </div>
           )}
 
-          {/* Campo confirmação de senha */}
+          {/* Campo confirmação de password */}
           <div className="register-form__field register-form__field--password">
             <Input
               id="register-confirm-senha"
               type={showConfirm ? "text" : "password"}
               placeholder="Confirmação da senha"
-              value={confirmSenha}
+              value={confirmPassword}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setConfirmSenha(e.target.value)
+                setConfirmPassword(e.target.value)
               }
               autoComplete="new-password"
               required
               aria-label="Confirmação da senha"
               aria-invalid={
-                confirmSenha.length > 0 && !passwordsMatch ? true : undefined
+                confirmPassword.length > 0 && !passwordsMatch ? true : undefined
               }
               className="register-form__input register-form__input--password"
               disabled={isLoading}
@@ -213,7 +213,7 @@ function RegisterForm() {
           </div>
 
           {/* Feedback senhas não coincidem */}
-          {confirmSenha.length > 0 && !passwordsMatch && (
+          {confirmPassword.length > 0 && !passwordsMatch && (
             <p className="text-xs text-red-500 -mt-1" role="alert">
               As senhas não coincidem.
             </p>
