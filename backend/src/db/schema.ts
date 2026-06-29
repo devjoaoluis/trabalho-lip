@@ -9,6 +9,7 @@ import {
   timestamp,
   integer,
   json,
+  boolean,
 } from "drizzle-orm/pg-core";
 
 export const prioridadeEnum = pgEnum("prioridade", ["BAIXA", "MEDIA", "ALTA"]);
@@ -28,6 +29,7 @@ export const usuarios = pgTable("usuarios", {
   fotoUrl: varchar("foto_url", { length: 500 }),
   fotoPublicId: varchar("foto_public_id", { length: 255 }),
   profileColor: varchar("profile_color", { length: 7 }).default("#7c6ff7").notNull(),
+  receberNotificacoes: boolean("receber_notificacoes").default(false).notNull(),
 });
 
 export const tarefas = pgTable("tarefas", {

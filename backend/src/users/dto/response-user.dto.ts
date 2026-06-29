@@ -43,4 +43,10 @@ export class UserResponseDto {
     description: "Cor padrão do perfil do usuário.",
   })
   profileColor!: string;
+
+  @ApiProperty({
+    example: true,
+    description: "Indica se o usuário deseja receber notificações.",
+  })
+  receberNotificacoes!: boolean;
 }

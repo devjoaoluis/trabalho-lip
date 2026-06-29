@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException, BadRequestException } from "@nestjs/common";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
+import { UpdateNotificationPreferenceDto } from "./dto/update-notification-preference.dto";
 import { DrizzleService } from "../db/drizzle.service";
 import { CloudinaryService } from "../cloudinary/cloudinary.service";
 import { usuarios } from "src/db/schema";
@@ -187,6 +188,32 @@ export class UsersService {
         criadoEm: usuarios.criadoEm,
         atualizadoEm: usuarios.atualizadoEm,
       });
+
+    return usuarioAtualizado;
+  }
+
+  async updateNotificationPreference(usuarioId: string, dto: UpdateNotificationPreferenceDto) {
+    const [usuarioAtualizado] = await this.db.db
+      .update(usuarios)
+      .set({
+        receberNotificacoes: dto.receberNotificacoes,
+        atualizadoEm: new Date(),
+      })
+      .where(eq(usuarios.id, usuarioId))
+      .returning({
+        id: usuarios.id,
+        nome: usuarios.nome,
+        email: usuarios.email,
+        fotoUrl: usuarios.fotoUrl,
+        profileColor: usuarios.profileColor,
+        receberNotificacoes: usuarios.receberNotificacoes,
+        criadoEm: usuarios.criadoEm,
+        atualizadoEm: usuarios.atualizadoEm,
+      });
+
+    if (!usuarioAtualizado) {
+      throw new NotFoundException("Usuário não encontrado.");
+    }
 
     return usuarioAtualizado;
   }

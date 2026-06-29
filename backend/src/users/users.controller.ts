@@ -17,6 +17,7 @@ import { UsersService } from "./users.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { UserResponseDto } from "./dto/response-user.dto";
+import { UpdateNotificationPreferenceDto } from "./dto/update-notification-preference.dto";
 import { JwtAuthGuard, type JwtPayload } from "../auth/guards/jwt-auth.guard";
 import { CurrentUser } from "../auth/decorators/user.decorator";
 import { ParseUUIDPipe } from "@nestjs/common";
@@ -290,5 +291,29 @@ export class UsersController {
     const usuarioId = req.user.id ?? req.user.sub;
 
     return this.usersService.removeProfilePhoto(usuarioId);
+  }
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @Patch("me/notifications")
+  @ApiOperation({
+    summary: "Atualizar preferência de notificações",
+    description:
+      "Permite que o usuário autenticado ative ou desative o recebimento de notificações.",
+  })
+  @ApiBody({ type: UpdateNotificationPreferenceDto })
+  @ApiOkResponse({
+    description: "Preferência de notificações atualizada com sucesso.",
+    type: UserResponseDto,
+  })
+  @ApiUnauthorizedResponse({
+    description: "Token não encontrado ou inválido.",
+  })
+  async updateNotificationPreference(
+    @Req() req: any,
+    @Body() dto: UpdateNotificationPreferenceDto
+  ) {
+    const usuarioId = req.user.id ?? req.user.sub;
+
+    return this.usersService.updateNotificationPreference(usuarioId, dto);
   }
 }
