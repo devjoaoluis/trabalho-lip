@@ -129,7 +129,7 @@ export function ProfilePage() {
     <main className="profile-page">
       <div className="profile-container">
         {/* ── Card hero — avatar + cores ── */}
-        <section className="profile-hero" aria-label="Avatar do perfil">
+        <section className="dashboard-card" aria-label="Avatar do perfil">
           <div className="profile-hero__header">
             <User size={16} aria-hidden="true" />
             <p className="profile-hero__title">Perfil</p>
@@ -211,14 +211,15 @@ export function ProfilePage() {
         </section>
 
         {/* ── Card Sobre sua Conta ── */}
-        <section className="profile-account-card" aria-label="Sobre sua conta">
+        <section className="dashboard-card flex gap-3" aria-label="Sobre sua conta">
           <h2 className="profile-account-card__title">
             <CircleAlert size={16} aria-hidden="true" />
             Sobre sua Conta
           </h2>
+          <p className="text-sm text-white/40 mb-6">Aqui você pode visualizar e alterar suas informações de nome e email que estão registrados na conta.</p>
 
-          <div className="profile-form">
-            <div className="profile-form__group">
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-4">
               <Label htmlFor="nome" className="profile-form__label">
                 Nome de Usuário
                 <Pencil size={14} strokeWidth={3.5} className="text-white/80" aria-hidden="true" />
@@ -232,7 +233,7 @@ export function ProfilePage() {
               />
             </div>
 
-            <div className="profile-form__group">
+            <div className="flex flex-col gap-4">
               <Label htmlFor="email" className="profile-form__label">
                 E-mail
                 <Pencil size={14} strokeWidth={3.5} className="text-white/80" aria-hidden="true" />

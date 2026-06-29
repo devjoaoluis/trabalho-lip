@@ -7,7 +7,7 @@
 
 
 .profile-container {
-  @apply mx-8 mt-6 flex flex-col gap-4;
+  @apply flex flex-col gap-4 max-w-[900px] m-auto;
 }
 
 
@@ -98,7 +98,7 @@
 
 
 .profile-account-card__title {
-  @apply mb-4 flex items-center gap-2 text-sm font-medium text-white;
+  @apply flex items-center gap-2 text-sm font-medium text-white;
 }
 
 
