@@ -48,3 +48,12 @@ export async function updateProfilePhoto(file: File): Promise<UserProfile> {
   })
   return data
 }
+
+export async function removeProfilePhoto(): Promise<UserProfile> {
+  const { data } = await api.patch<UserProfile>(
+    "/users/me/photo",
+    { file: null },
+    { headers: authHeaders() }
+  )
+  return data
+}

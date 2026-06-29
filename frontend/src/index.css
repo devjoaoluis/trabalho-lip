@@ -118,4 +118,16 @@
 }
 
 @layer base {
+  button,
+  a,
+  [role="button"],
+  label[for],
+  select {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  [aria-disabled="true"] {
+    cursor: not-allowed;
+  }
 }

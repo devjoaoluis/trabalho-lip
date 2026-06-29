@@ -15,7 +15,7 @@
 }
 
 .relatorios-filter-btn {
-  @apply flex items-center gap-2 text-xs font-medium text-white/60 border border-white/10 bg-[#11132c] rounded-lg px-3 h-9 transition-colors;
+  @apply flex items-center gap-2 text-xs font-medium text-white/60 border border-white/10 bg-[#11132c] rounded-lg px-3 h-9 transition-colors cursor-pointer;
 }
 
 .relatorios-filter-btn--active {
@@ -35,7 +35,7 @@
 }
 
 .relatorios-filter-popover__clear {
-  @apply text-[10px] text-rose-400 transition-colors;
+  @apply text-[10px] text-rose-400 transition-colors cursor-pointer;
 }
 
 /* ── Cards ────────────────────────────────────────────────────── */
@@ -91,12 +91,12 @@
 }
 
 .relatorios-retry-btn {
-  @apply text-xs text-[#a39bf5] underline underline-offset-2 transition-colors;
+  @apply text-xs text-[#a39bf5] underline underline-offset-2 transition-colors cursor-pointer;
 }
 
 /* ── Menu de opções (três pontinhos) ─────────────────────────── */
 .relatorios-menu-trigger {
-  @apply text-white/40 p-1 rounded-md transition-colors;
+  @apply text-white/40 p-1 rounded-md transition-colors cursor-pointer;
 }
 
 .relatorios-dropdown {
@@ -104,7 +104,7 @@
 }
 
 .relatorios-dropdown__item {
-  @apply w-full flex items-center gap-2 px-3 py-2 text-left text-xs text-white/80 rounded-lg transition-colors;
+  @apply w-full flex items-center gap-2 px-3 py-2 text-left text-xs text-white/80 rounded-lg transition-colors cursor-pointer;
 }
 
 .relatorios-dropdown__item--danger {
@@ -121,11 +121,11 @@
 }
 
 .relatorios-page-arrow {
-  @apply text-white/40 p-1 transition-colors disabled:opacity-20;
+  @apply text-white/40 p-1 transition-colors disabled:opacity-20 cursor-pointer disabled:cursor-not-allowed;
 }
 
 .relatorios-page-num {
-  @apply text-xs font-medium w-6 h-6 rounded flex items-center justify-center text-white/40 transition-colors;
+  @apply text-xs font-medium w-6 h-6 rounded flex items-center justify-center text-white/40 transition-colors cursor-pointer;
 }
 
 .relatorios-page-num.active {
@@ -158,11 +158,11 @@
 }
 
 .relatorios-alterar-btn {
-  @apply h-10 px-4 border border-white/20 rounded-lg text-xs font-medium text-white/90 transition-colors;
+  @apply h-10 px-4 border border-white/20 rounded-lg text-xs font-medium text-white/90 transition-colors cursor-pointer;
 }
 
 .relatorios-btn-primary {
-  @apply flex items-center justify-center gap-2 h-11 px-5 bg-[#4f3df5] text-white text-xs font-semibold rounded-xl transition-all;
+  @apply flex items-center justify-center gap-2 h-11 px-5 bg-[#4f3df5] text-white text-xs font-semibold rounded-xl transition-all cursor-pointer;
 }
 
 /* ── Calendário popover ───────────────────────────────────────── */
@@ -203,7 +203,7 @@
 }
 
 .relatorios-filter-etapa__edit {
-  @apply text-[#a39bf5] text-[10px] underline underline-offset-2;
+  @apply text-[#a39bf5] text-[10px] underline underline-offset-2 cursor-pointer;
 }
 
 /* ── Modal de detalhes ────────────────────────────────────────── */
@@ -224,7 +224,7 @@
 }
 
 .relatorios-modal__close {
-  @apply text-white/40 bg-white/5 px-3 py-1.5 rounded-lg text-xs transition-colors;
+  @apply text-white/40 bg-white/5 px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer;
 }
 
 .relatorios-modal__loading {

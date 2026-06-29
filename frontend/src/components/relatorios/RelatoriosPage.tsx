@@ -27,8 +27,10 @@ function formatarParaExibicao(dataISO: string): string {
 
 export function RelatoriosPage() {
   // ── Estado de geração ─────────────────────────────────────
-  const [dataInicio, setDataInicio]       = useState<Date | null>(null)
-  const [dataFim, setDataFim]             = useState<Date | null>(null)
+  const hoje = new Date()
+  hoje.setHours(0, 0, 0, 0)
+  const [dataInicio, setDataInicio]       = useState<Date | null>(hoje)
+  const [dataFim, setDataFim]             = useState<Date | null>(hoje)
   const [calendarioAberto, setCalendarioAberto] = useState<"inicio" | "fim" | null>(null)
   const [nomeRelatorio, setNomeRelatorio] = useState("Meu Relatório")
   const [isEditing, setIsEditing]         = useState(false)

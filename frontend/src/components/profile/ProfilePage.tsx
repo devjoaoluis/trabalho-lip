@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from "react"
-import { ImageUp, Pencil, CircleAlert, User, Loader2 } from "lucide-react"
+import { ImageUp, Pencil, CircleAlert, User, Loader2, Trash2 } from "lucide-react"
 import { Button } from "#components/ui/button"
 import { Input } from "#components/ui/input"
 import { Label } from "#components/ui/label"
 import { useCurrentUser } from "#hooks/useCurrentUser"
-import { updateUser, updateProfilePhoto } from "../../../service/user"
+import { updateUser, updateProfilePhoto, removeProfilePhoto } from "../../../service/user"
 import { format } from "date-fns"
 import { ptBR } from "date-fns/locale"
 import "./profile.css"
@@ -43,6 +43,7 @@ export function ProfilePage() {
 
   const [isSaving, setIsSaving] = useState(false)
   const [isUploadingPhoto, setIsUploadingPhoto] = useState(false)
+  const [isRemovingPhoto, setIsRemovingPhoto] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
   const [saveSuccess, setSaveSuccess] = useState(false)
   const [photoError, setPhotoError] = useState<string | null>(null)
@@ -89,6 +90,20 @@ export function ProfilePage() {
 
   function handleUploadClick() {
     fileInputRef.current?.click()
+  }
+
+  async function handleRemovePhoto() {
+    setIsRemovingPhoto(true)
+    setPhotoError(null)
+    try {
+      await removeProfilePhoto()
+      setPhotoPreview(null)
+      await refetch()
+    } catch {
+      setPhotoError("Erro ao remover a foto. Tente novamente.")
+    } finally {
+      setIsRemovingPhoto(false)
+    }
   }
 
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -192,6 +207,24 @@ export function ProfilePage() {
             )}
             {isUploadingPhoto ? "Enviando…" : "Upload de imagem"}
           </button>
+
+          {/* Botão de remover foto — só visível quando há foto */}
+          {currentPhoto && (
+            <button
+              type="button"
+              className="profile-remove-photo-btn"
+              onClick={handleRemovePhoto}
+              disabled={isRemovingPhoto || isUploadingPhoto}
+              aria-label="Remover foto de perfil"
+            >
+              {isRemovingPhoto ? (
+                <Loader2 size={14} className="animate-spin" aria-hidden="true" />
+              ) : (
+                <Trash2 size={14} aria-hidden="true" />
+              )}
+              {isRemovingPhoto ? "Removendo…" : "Remover foto"}
+            </button>
+          )}
 
           {/* Input de arquivo oculto */}
           <input

@@ -33,7 +33,7 @@
 }
 
 .tasks-sidebar__user {
-  @apply flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70;
+  @apply flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 cursor-pointer;
 }
 
 .tasks-sidebar__avatar {
@@ -330,11 +330,11 @@
 }
 
 .tasks-confirm-modal__btn-cancel {
-  @apply flex-1 h-10 rounded-lg border border-white/20 bg-transparent text-white text-sm font-medium;
+  @apply flex-1 h-10 rounded-lg border border-white/20 bg-transparent text-white text-sm font-medium cursor-pointer;
 }
 
 .tasks-confirm-modal__btn-delete {
-  @apply flex-1 h-10 rounded-lg bg-red-500 text-white text-sm font-semibold;
+  @apply flex-1 h-10 rounded-lg bg-red-500 text-white text-sm font-semibold cursor-pointer;
 }
 
 /* ── Notification Bell (shared) ──────────────────────────────── */
@@ -368,6 +368,25 @@
 
 .notif-panel__list {
   @apply flex flex-col p-2 max-h-80 overflow-y-auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(124, 111, 247, 0.3) transparent;
+}
+
+.notif-panel__list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.notif-panel__list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.notif-panel__list::-webkit-scrollbar-thumb {
+  background-color: rgba(124, 111, 247, 0.3);
+  border-radius: 9999px;
+}
+
+.notif-panel__list::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(124, 111, 247, 0.6);
 }
 
 .notif-item {

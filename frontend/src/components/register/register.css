@@ -82,7 +82,7 @@
 }
 
 .register-form__password-toggle {
-  @apply absolute right-3 text-gray-400 transition-colors;
+  @apply absolute right-3 text-gray-400 transition-colors cursor-pointer;
 }
 
 /* ── Hints de validação de senha ── */
