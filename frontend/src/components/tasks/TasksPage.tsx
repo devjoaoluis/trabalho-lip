@@ -401,7 +401,7 @@ export function TasksPage() {
                   </button>
                   <div className="task-row__info">
                     <span className={cn("task-row__title", task.status === "CONCLUIDA" && "task-row__title--done")}>{task.titulo}</span>
-                    <span className="task-row__subtitle">{task.descricao ? task.descricao.length > 20 ? task.descricao.slice(0, 20) + "…" : task.descricao : "Sem descrição"}</span>
+                    <span className="task-row__subtitle">{task.descricao ? task.descricao.length > 14 ? task.descricao.slice(0, 14) + "..." : task.descricao : "Sem descrição"}</span>
                   </div>
                   <div className="tasks-table__col-priority flex justify-center"><PriorityBadge prioridade={task.prioridade} /></div>
                   <div className="tasks-table__col-date text-center text-xs text-white/50">{formatDate(task.dataLimite)}</div>

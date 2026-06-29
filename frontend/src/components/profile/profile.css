@@ -31,8 +31,20 @@
 }
 
 
+.profile-avatar__wrapper {
+  @apply relative mx-auto mt-5 flex h-20 w-20 items-center justify-center;
+}
+
 .profile-avatar {
-  @apply mx-auto mt-5 flex h-20 w-20 items-center justify-center rounded-full bg-[#7f6df8] text-3xl font-semibold text-white;
+  @apply flex h-20 w-20 items-center justify-center rounded-full bg-[#7f6df8] text-3xl font-semibold text-white;
+}
+
+.profile-avatar--photo {
+  @apply object-cover bg-transparent;
+}
+
+.profile-avatar__uploading {
+  @apply absolute inset-0 flex items-center justify-center rounded-full bg-black/60;
 }
 
 

@@ -3,6 +3,8 @@ import { ListTodo, Plus, Check, AlertTriangle } from "lucide-react";
 import { type Task } from "../../../service/task";
 import { format, isSameDay } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { Link } from "react-router-dom";
+import { ROUTES } from "../../router/routes"
 
 function truncate(text: string, max = 20): string {
   return text.length > max ? text.slice(0, max) + "…" : text;
@@ -123,9 +125,7 @@ export function TaskList({
                     <span className={`task-item__title ${isDone ? "task-item__title--done" : ""}`}>
                       {truncate(task.titulo)}
                     </span>
-                    <span className="task-item__desc">
-                      {task.descricao ? truncate(task.descricao) : "Sem descrição"}
-                    </span>
+                    <span className="task-item__desc">{task.descricao ? task.descricao.length > 14 ? task.descricao.slice(0, 14) + "..." : task.descricao : "Sem descrição"}</span>
                   </div>
                 </div>
 
@@ -150,7 +150,14 @@ export function TaskList({
         </div>
 
         <div className="task-list__footer mt-auto">
-          <button className="task-list__footer-btn">Ver todas</button>
+          <button className="task-list__footer-btn">
+            <Link
+              to={ROUTES.TASKS}
+              className="login-page__cta-link hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7c6ff7] rounded"
+            >
+              Ver todas
+            </Link>
+            </button>
           <button className="task-list__footer-btn text-[#10b981]" onClick={onCompleteAll}>
             Completar Todas
           </button>

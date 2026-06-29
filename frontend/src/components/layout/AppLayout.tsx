@@ -4,24 +4,17 @@ import { Sidebar } from "#components/ui/Sidebar"
 import { NotificationBell } from "#components/ui/NotificationBell"
 import { NewTaskModal } from "#components/tasks/NewTaskModal"
 import { TasksProvider, useTasksContext } from "../../contexts/TasksContext"
+import { useCurrentUser } from "#hooks/useCurrentUser"
 import { ROUTES } from "../../router/routes"
 import type { ActivePage } from "#components/ui/Sidebar"
 import "../tasks/tasks.css"
 import "../../pages/dashboard.css"
 
-function getUserName(): string {
-  try {
-    const raw = localStorage.getItem("accessToken") ?? ""
-    const payload = JSON.parse(atob(raw.split(".")[1] ?? "e30="))
-    return (payload.nome as string | undefined) ?? "Usuário"
-  } catch {
-    return "Usuário"
-  }
-}
-
 function routeToActivePage(pathname: string): ActivePage {
   if (pathname.startsWith(ROUTES.TASKS)) return "tasks"
   if (pathname.startsWith(ROUTES.SETTINGS)) return "settings"
+  if (pathname.startsWith(ROUTES.RELATORIOS)) return "reports"
+  if (pathname.startsWith(ROUTES.PROFILE)) return "profile"
   return "dashboard"
 }
 
@@ -29,7 +22,9 @@ function routeToActivePage(pathname: string): ActivePage {
 function AppLayoutInner() {
   const navigate = useNavigate()
   const location = useLocation()
-  const { tasks, addTask, showNewTaskModal, openNewTaskModal, closeNewTaskModal, search, setSearch } = useTasksContext()
+  const { tasks, addTask, showNewTaskModal, openNewTaskModal, closeNewTaskModal, search, setSearch } =
+    useTasksContext()
+  const { user } = useCurrentUser()
 
   const activePage = routeToActivePage(location.pathname)
 
@@ -41,7 +36,8 @@ function AppLayoutInner() {
   return (
     <div className="tasks-layout">
       <Sidebar
-        userName={getUserName()}
+        userName={user?.nome ?? "Usuário"}
+        userPhotoUrl={user?.fotoUrl}
         activePage={activePage}
         onLogout={handleLogout}
       />

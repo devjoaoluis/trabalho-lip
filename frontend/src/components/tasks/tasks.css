@@ -5,7 +5,7 @@
 }
 
 .tasks-sidebar {
-  @apply flex flex-col w-56 shrink-0 bg-[#10122a] border-r border-white/5 py-6 px-3;
+  @apply flex flex-col w-56 shrink-0 bg-[#10122a] border-r border-white/5 py-6 px-3 h-screen sticky top-0 overflow-y-auto;
 }
 
 .tasks-sidebar__logo {
@@ -37,7 +37,7 @@
 }
 
 .tasks-sidebar__avatar {
-  @apply flex items-center justify-center w-8 h-8 rounded-full bg-[#7c6ff7] text-white text-xs font-bold shrink-0;
+  @apply flex items-center justify-center w-8 h-8 rounded-full bg-[#7c6ff7] text-white text-xs font-bold shrink-0 overflow-hidden;
 }
 
 .tasks-main {
@@ -45,7 +45,7 @@
 }
 
 .tasks-topbar {
-  @apply flex items-center gap-4 px-6 py-4 border-b border-white/5;
+  @apply flex items-center gap-3 px-2 py-4 border-b border-white/5;
 }
 
 .tasks-topbar__search {
@@ -77,7 +77,7 @@
 }
 
 .tasks-panel {
-  @apply flex flex-col flex-1 px-6 py-5 overflow-auto;
+  @apply flex flex-col flex-1 px-3 py-5 overflow-auto;
 }
 
 .tasks-tabs {
@@ -89,7 +89,7 @@
 }
 
 .tasks-tab--active {
-  @apply text-white border-b-2 border-[#7c6ff7] rounded-none pb-1;
+  @apply text-white;
 }
 
 .tasks-tab__badge {
@@ -209,7 +209,7 @@
 }
 
 .task-edit-panel {
-  @apply flex flex-col w-80 shrink-0 bg-[#10122a] border-l border-white/5 p-5 overflow-auto;
+  @apply flex flex-col w-[90%] shrink-0 bg-[#10122a] border-l border-white/5 p-5 overflow-auto;
 }
 
 .task-edit-panel__header {
@@ -470,5 +470,23 @@
 
   .tasks-sidebar__user {
     @apply justify-center px-0;
+  }
+
+  .tasks-tabs {
+    @apply flex-col items-start;
+  }
+}
+
+@media (min-width: 1024px){
+  .tasks-topbar{
+     @apply gap-4 px-6;
+  }
+
+  .tasks-panel{
+     @apply px-6;
+  }
+
+  .task-edit-panel{
+    @apply w-90;
   }
 }

@@ -72,7 +72,7 @@ export function SummaryWidget({ total, completed, pending }: SummaryWidgetProps)
           <CircularProgress value={total} max={total} color="#7c6ff7" icon={Flame} />
           <div className="summary-item__info">
             <span className="summary-item__value">{total}</span>
-            <span className="summary-item__label">Tarefas Totais</span>
+            <span className="summary-item__label">Tarefas</span>
           </div>
         </div>
 

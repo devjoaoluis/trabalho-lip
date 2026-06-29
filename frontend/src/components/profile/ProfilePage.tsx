@@ -1,211 +1,282 @@
-import { useState, useEffect } from "react"
-import { Image, Pencil, CircleAlert, User } from "lucide-react"
-
+import { useState, useEffect, useRef } from "react"
+import { ImageUp, Pencil, CircleAlert, User, Loader2 } from "lucide-react"
+import { Button } from "#components/ui/button"
+import { Input } from "#components/ui/input"
+import { Label } from "#components/ui/label"
+import { useCurrentUser } from "#hooks/useCurrentUser"
+import { updateUser, updateProfilePhoto } from "../../../service/user"
+import { format } from "date-fns"
+import { ptBR } from "date-fns/locale"
 import "./profile.css"
 
-interface UserProfile {
-  id?: string
-  email: string
-  nome: string
+type AvatarColor = "green" | "pink" | "blue" | "yellow"
+
+const COLOR_OPTIONS: AvatarColor[] = ["green", "pink", "blue", "yellow"]
+
+function getInitials(name: string): string {
+  return name
+    .split(" ")
+    .slice(0, 2)
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase()
 }
 
-const defaultProfile: UserProfile = {
-  id: "",
-  nome: "",
-  email: "",
+function formatDate(iso: string): string {
+  try {
+    return format(new Date(iso), "dd/MM/yyyy", { locale: ptBR })
+  } catch {
+    return "--/--/----"
+  }
 }
 
 export function ProfilePage() {
-  const [formData, setFormData] = useState<UserProfile>(defaultProfile)
-  const [activeColor, setActiveColor] = useState("blue")
-  const [loading, setLoading] = useState(true)
+  const { user, isLoading, refetch } = useCurrentUser()
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const token = localStorage.getItem("meu_token_jwt")
-  const API_URL = "http://localhost:3300"
+  const [nome, setNome] = useState("")
+  const [email, setEmail] = useState("")
+  const [activeColor, setActiveColor] = useState<AvatarColor>("blue")
 
+  // Prévia local da foto antes de ser enviada
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null)
+
+  const [isSaving, setIsSaving] = useState(false)
+  const [isUploadingPhoto, setIsUploadingPhoto] = useState(false)
+  const [saveError, setSaveError] = useState<string | null>(null)
+  const [saveSuccess, setSaveSuccess] = useState(false)
+  const [photoError, setPhotoError] = useState<string | null>(null)
+
+  // Preenche os campos quando o usuário carrega
   useEffect(() => {
-    async function loadUserData() {
-      try {
-        const response = await fetch(`${API_URL}/users/me`, {
-          method: "GET",
-          headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json"
-          }
-        })
+    if (!user) return
 
-        if (!response.ok) {
-          throw new Error("Erro ao carregar dados do usuário")
-        }
-
-        const data = await response.json()
-        
-        let nomeLimpo = data.nome || ""
-        let corSalva = "blue"
-
-        if (nomeLimpo.includes("|")) {
-          const partes = nomeLimpo.split("|")
-          nomeLimpo = partes[0]
-          corSalva = partes[1] || "blue"
-        }
-        
-        setFormData({
-          id: data.id,
-          nome: nomeLimpo,
-          email: data.email
-        })
-        setActiveColor(corSalva)
-      } catch (error) {
-        console.error(error)
-        alert("Não foi possível carregar as informações do perfil. Verifique seu login.")
-      } finally {
-        setLoading(false)
+    // O campo nome pode conter a cor codificada: "João|blue"
+    if (user.nome.includes("|")) {
+      const [nomeLimpo, cor] = user.nome.split("|")
+      setNome(nomeLimpo)
+      if (COLOR_OPTIONS.includes(cor as AvatarColor)) {
+        setActiveColor(cor as AvatarColor)
       }
-    }
-
-    if (token) {
-      loadUserData()
     } else {
-      setLoading(false)
+      setNome(user.nome)
     }
-  }, [token])
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const { name, value } = e.target
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }))
-  }
+    setEmail(user.email)
+    // Limpa a prévia quando os dados do servidor chegam
+    setPhotoPreview(null)
+  }, [user])
 
   async function handleSave() {
-    if (!formData.id) {
-      alert("ID do usuário não encontrado.")
-      return
-    }
-
+    if (!user) return
+    setIsSaving(true)
+    setSaveError(null)
+    setSaveSuccess(false)
     try {
-      const nomeComCor = `${formData.nome}|${activeColor}`
-
-      const response = await fetch(`${API_URL}/users/${formData.id}`, {
-        method: "PATCH",
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          nome: nomeComCor,
-          email: formData.email
-        })
+      await updateUser(user.id, {
+        nome: `${nome}|${activeColor}`,
+        email,
       })
-
-      if (!response.ok) {
-        throw new Error("Erro ao atualizar o perfil no servidor")
-      }
-      
-    } catch (error) {
-      console.error(error)
-      alert("Erro ao salvar as alterações do perfil.")
+      await refetch()
+      setSaveSuccess(true)
+      setTimeout(() => setSaveSuccess(false), 3000)
+    } catch {
+      setSaveError("Erro ao salvar as alterações. Tente novamente.")
+    } finally {
+      setIsSaving(false)
     }
   }
 
-  if (loading) {
-    return <div className="loading">Carregando perfil...</div>
+  function handleUploadClick() {
+    fileInputRef.current?.click()
   }
+
+  async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    // Mostra prévia local imediatamente
+    const previewUrl = URL.createObjectURL(file)
+    setPhotoPreview(previewUrl)
+    setPhotoError(null)
+
+    setIsUploadingPhoto(true)
+    try {
+      await updateProfilePhoto(file)
+      await refetch()
+    } catch {
+      setPhotoError("Erro ao enviar a foto. Tente novamente.")
+      setPhotoPreview(null)
+    } finally {
+      setIsUploadingPhoto(false)
+      // Limpa o input para permitir re-upload do mesmo arquivo
+      if (fileInputRef.current) fileInputRef.current.value = ""
+    }
+  }
+
+  if (isLoading) {
+    return (
+      <div className="profile-page flex items-center justify-center">
+        <span className="text-white/40 text-sm">Carregando perfil…</span>
+      </div>
+    )
+  }
+
+  const criadoEm = user?.criadoEm ? formatDate(user.criadoEm) : "--/--/----"
+  const currentPhoto = photoPreview ?? user?.fotoUrl ?? null
 
   return (
     <main className="profile-page">
       <div className="profile-container">
-        <section className="profile-hero">
+        {/* ── Card hero — avatar + cores ── */}
+        <section className="profile-hero" aria-label="Avatar do perfil">
           <div className="profile-hero__header">
-            <User size={16} />
+            <User size={16} aria-hidden="true" />
             <p className="profile-hero__title">Perfil</p>
-            <p className="profile-hero__subtitle">Conectado ao Servidor</p>
+            <p className="profile-hero__subtitle">criado em {criadoEm}</p>
           </div>
 
-          <div className={`profile-avatar profile-avatar--${activeColor}`}>
-            {formData.nome 
-              ? formData.nome.split(" ").slice(0, 2).map((n) => n[0]).join("").toUpperCase()
-              : "User"
-            }
+          {/* Avatar — foto real ou iniciais com cor */}
+          <div className="profile-avatar__wrapper">
+            {currentPhoto ? (
+              <img
+                src={currentPhoto}
+                alt={nome}
+                className="profile-avatar profile-avatar--photo"
+              />
+            ) : (
+              <div
+                className={`profile-avatar profile-avatar--${activeColor}`}
+                aria-hidden="true"
+              >
+                {nome ? getInitials(nome) : "U"}
+              </div>
+            )}
+
+            {/* Spinner sobre o avatar durante o upload */}
+            {isUploadingPhoto && (
+              <div className="profile-avatar__uploading" aria-label="Enviando foto…">
+                <Loader2 size={28} className="animate-spin text-white" aria-hidden="true" />
+              </div>
+            )}
           </div>
 
-          <button type="button" className="profile-upload-btn">
-            <Image size={14} className="text-white/70" />
-            Upload de imagem
+          {/* Seletor de cor — só visível quando não há foto */}
+          {!currentPhoto && (
+            <div className="profile-colors" aria-label="Cor do avatar">
+              {COLOR_OPTIONS.map((color) => (
+                <button
+                  key={color}
+                  type="button"
+                  className={`profile-color profile-color--${color} ${activeColor === color ? "is-active" : ""}`}
+                  aria-label={`Cor ${color}`}
+                  aria-pressed={activeColor === color}
+                  onClick={() => setActiveColor(color)}
+                />
+              ))}
+            </div>
+          )}
+
+          {/* Botão de upload */}
+          <button
+            type="button"
+            className="profile-upload-btn"
+            onClick={handleUploadClick}
+            disabled={isUploadingPhoto}
+            aria-label="Enviar foto de perfil"
+          >
+            {isUploadingPhoto ? (
+              <Loader2 size={14} className="animate-spin" aria-hidden="true" />
+            ) : (
+              <ImageUp size={14} aria-hidden="true" />
+            )}
+            {isUploadingPhoto ? "Enviando…" : "Upload de imagem"}
           </button>
 
-          <div className="profile-colors" aria-label="Cores do avatar">
-            <button
-              type="button"
-              className={`profile-color profile-color--green ${activeColor === "green" ? "is-active" : ""}`}
-              onClick={() => setActiveColor("green")}
-            />
-            <button
-              type="button"
-              className={`profile-color profile-color--pink ${activeColor === "pink" ? "is-active" : ""}`}
-              onClick={() => setActiveColor("pink")}
-            />
-            <button
-              type="button"
-              className={`profile-color profile-color--blue ${activeColor === "blue" ? "is-active" : ""}`}
-              onClick={() => setActiveColor("blue")}
-            />
-            <button
-              type="button"
-              className={`profile-color profile-color--yellow ${activeColor === "yellow" ? "is-active" : ""}`}
-              onClick={() => setActiveColor("yellow")}
-            />
-          </div>
+          {/* Input de arquivo oculto */}
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            className="sr-only"
+            aria-hidden="true"
+            onChange={handleFileChange}
+          />
+
+          {photoError && (
+            <p className="text-xs text-red-400 text-center mt-2" role="alert" aria-live="polite">
+              {photoError}
+            </p>
+          )}
         </section>
 
-        <section className="profile-account-card">
+        {/* ── Card Sobre sua Conta ── */}
+        <section className="profile-account-card" aria-label="Sobre sua conta">
           <h2 className="profile-account-card__title">
-            <CircleAlert size={16} />
+            <CircleAlert size={16} aria-hidden="true" />
             Sobre sua Conta
           </h2>
 
-          <form className="profile-form" onSubmit={(e) => e.preventDefault()}>
+          <div className="profile-form">
             <div className="profile-form__group">
-              <label htmlFor="nome" className="profile-form__label">
+              <Label htmlFor="nome" className="profile-form__label">
                 Nome de Usuário
-                <Pencil size={14} strokeWidth={3.5} className="text-white/80" />
-              </label>
-
-              <input
+                <Pencil size={14} strokeWidth={3.5} className="text-white/80" aria-hidden="true" />
+              </Label>
+              <Input
                 id="nome"
-                name="nome"
-                value={formData.nome}
-                onChange={handleChange}
+                value={nome}
+                onChange={(e) => setNome(e.target.value)}
                 className="profile-form__input"
+                aria-label="Nome de usuário"
               />
             </div>
 
             <div className="profile-form__group">
-              <label htmlFor="email" className="profile-form__label">
+              <Label htmlFor="email" className="profile-form__label">
                 E-mail
-              </label>
-
-              <input
+                <Pencil size={14} strokeWidth={3.5} className="text-white/80" aria-hidden="true" />
+              </Label>
+              <Input
                 id="email"
                 type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="profile-form__input"
+                aria-label="E-mail"
               />
             </div>
-          </form>
+          </div>
         </section>
 
+        {/* ── Ações ── */}
         <div className="profile-actions">
-          <button
+          {saveError && (
+            <p className="text-sm text-red-400 mb-2" role="alert" aria-live="polite">
+              {saveError}
+            </p>
+          )}
+          {saveSuccess && (
+            <p className="text-sm text-emerald-400 mb-2" role="status" aria-live="polite">
+              Perfil atualizado com sucesso!
+            </p>
+          )}
+          <Button
             type="button"
             className="profile-form__btn profile-form__btn--save"
+            disabled={isSaving}
             onClick={handleSave}
+            aria-label="Salvar alterações do perfil"
           >
-            Salvar
-          </button>
+            {isSaving ? (
+              <>
+                <Loader2 size={14} className="animate-spin mr-1" aria-hidden="true" />
+                Salvando…
+              </>
+            ) : (
+              "Salvar"
+            )}
+          </Button>
         </div>
       </div>
     </main>
