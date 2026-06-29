@@ -59,6 +59,7 @@ export class UsersService {
       .set({
         ...(dto.nome && { nome: dto.nome }),
         ...(dto.email && { email: dto.email }),
+        ...(dto.profileColor && { profileColor: dto.profileColor }),
       })
       .where(eq(usuarios.id, id))
       .returning();
