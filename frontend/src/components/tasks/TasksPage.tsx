@@ -377,6 +377,7 @@ export function TasksPage() {
         </div>
 
         {/* Cabeçalho da tabela */}
+        <div className="tasks-table-wrapper">
         <div className="tasks-table__header">
           <span className="tasks-table__col-title">Tarefas <span className="text-white/30">{filtered.length}</span></span>
           <span className="tasks-table__col-priority">Prioridade</span>
@@ -427,6 +428,7 @@ export function TasksPage() {
             ))}
           </ul>
         )}
+        </div>{/* fim tasks-table-wrapper */}
 
         {/* Paginação */}
         {!isLoading && filtered.length > 0 && (
@@ -447,7 +449,7 @@ export function TasksPage() {
       {/* Painel lateral de edição */}
       {selectedTaskId && selectedTask && (
         <>
-          {/* Overlay mobile para fechar o drawer ao clicar fora */}
+          {/* Overlay para fechar o drawer ao clicar fora — só abaixo de 1024px */}
           <div
             className="fixed inset-0 z-30 bg-black/50 lg:hidden"
             onClick={closePanel}

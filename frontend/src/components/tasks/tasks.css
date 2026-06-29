@@ -474,8 +474,11 @@
   .tasks-sidebar__user {
     @apply justify-center px-0;
   }
+}
 
-  /* Topbar mobile: compacto */
+/* ── Mobile/tablet: abaixo de 1024px ─────────────────────────── */
+@media (max-width: 1023px) {
+  /* Topbar compacto */
   .tasks-topbar {
     @apply px-2 py-2 gap-2;
   }
@@ -484,7 +487,6 @@
     @apply max-w-none py-1.5 min-w-0;
   }
 
-  /* Esconde o texto "Nova Tarefa", mantém só o ícone */
   .tasks-topbar__new-btn {
     @apply px-3 shrink-0;
   }
@@ -493,12 +495,12 @@
     @apply hidden;
   }
 
-  /* Panel mobile */
+  /* Panel */
   .tasks-panel {
     @apply px-2 py-3;
   }
 
-  /* Tabs: linha única com overflow horizontal sem quebra */
+  /* Tabs: scroll horizontal sem quebra */
   .tasks-tabs {
     @apply flex-nowrap overflow-x-auto pb-1;
     -webkit-overflow-scrolling: touch;
@@ -516,58 +518,24 @@
     @apply shrink-0 px-2.5 py-1.5 text-xs;
   }
 
-  /* Cabeçalho da tabela: só título + ações */
+  /* Tabela: scroll horizontal para manter todas as colunas */
+  .tasks-table-wrapper {
+    @apply overflow-x-auto -mx-2 px-2;
+  }
+
   .tasks-table__header {
+    @apply px-3 min-w-[480px];
+  }
+
+  .tasks-table {
+    @apply min-w-[480px];
+  }
+
+  .task-row {
     @apply px-3;
   }
 
-  .tasks-table__col-priority,
-  .tasks-table__col-date {
-    @apply hidden;
-  }
-
-  /* Cada linha vira card de 2 linhas via grid */
-  .task-row {
-    @apply grid px-3 py-3 gap-x-2 gap-y-1.5;
-    grid-template-columns: 20px 1fr auto;
-    grid-template-rows: auto auto;
-    align-items: start;
-  }
-
-  /* linha 1, col 1: checkbox */
-  .task-row__check {
-    grid-column: 1;
-    grid-row: 1;
-    @apply mt-0.5;
-  }
-
-  /* linha 1, col 2: título + descrição */
-  .task-row__info {
-    grid-column: 2;
-    grid-row: 1;
-  }
-
-  /* linha 1, col 3: botão de ações (três pontinhos) */
-  .tasks-table__col-actions {
-    grid-column: 3;
-    grid-row: 1;
-    @apply w-auto;
-  }
-
-  /* linha 2, col 2-3: prioridade + data em linha */
-  .tasks-table__col-priority {
-    grid-column: 2;
-    grid-row: 2;
-    @apply flex w-auto text-left;
-  }
-
-  .tasks-table__col-date {
-    grid-column: 3;
-    grid-row: 2;
-    @apply w-auto text-left text-xs text-white/40 whitespace-nowrap;
-  }
-
-  /* Paginação: centralizada sem o texto informativo */
+  /* Paginação: centralizada sem o texto */
   .tasks-pagination {
     @apply justify-center;
   }
@@ -587,12 +555,8 @@
   }
 
   @keyframes drawer-slide-up {
-    from {
-      transform: translateY(100%);
-    }
-    to {
-      transform: translateY(0);
-    }
+    from { transform: translateY(100%); }
+    to   { transform: translateY(0);    }
   }
 
   .task-edit-panel__drag-handle {
@@ -600,6 +564,7 @@
   }
 }
 
+/* ── Desktop: 1024px+ ─────────────────────────────────────────── */
 @media (min-width: 1024px) {
   .tasks-topbar {
     @apply gap-4 px-6;
