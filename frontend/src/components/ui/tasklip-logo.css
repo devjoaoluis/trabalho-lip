@@ -9,7 +9,7 @@
 }
 
 .tasklip-logo__text {
-  @apply text-sm font-semibold;
+  @apply text-base font-semibold;
 }
 
 .tasklip-logo__text--white {

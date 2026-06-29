@@ -271,10 +271,10 @@ function RegisterForm() {
 
 export function RegisterPage() {
   return (
-    <main className="register-page flex-col lg:flex-row-reverse">
+    <main className="register-page lg:flex-row">
       {/* Coluna esquerda – formulário */}
       <aside
-        className="register-page__form-col w-full lg:w-[55%]"
+        className="register-page__form-col w-full lg:w-[50%]"
         aria-label="Formulário de cadastro"
       >
         <RegisterForm />
@@ -282,14 +282,14 @@ export function RegisterPage() {
 
       {/* Coluna direita – hero */}
       <section
-        className="register-page__hero flex-1 lg:px-16 lg:py-12"
+        className="register-page__hero"
         aria-label="Apresentação do produto"
       >
         <TaskLipLogo className="register-page__hero-logo mb-auto" />
 
         <div className="register-page__hero-content mt-16 lg:mt-0 lg:flex-1 lg:justify-center">
-          <h2 className="register-page__headline sm:text-5xl lg:text-6xl xl:text-7xl">
-            Crie sua conta<br />para começar
+          <h2 className="register-page__headline text-6xl lg:text-8xl">
+            Crie sua conta !
           </h2>
 
           <p className="register-page__cta">
