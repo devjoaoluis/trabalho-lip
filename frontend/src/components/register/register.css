@@ -130,10 +130,18 @@
   }
   
   .register-page__hero {
-    @apply flex-0 px-8 py-10;
+    @apply flex-0 px-8 py-10 items-center;
+  }
+
+  .register-page__hero-content {
+    @apply items-center;
   }
 
   .register-page__cta {
+    @apply text-center;
+  }
+
+  .register-page__headline {
     @apply text-center;
   }
 }

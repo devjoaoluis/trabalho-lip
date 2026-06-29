@@ -113,11 +113,11 @@
 }
 
 .tasks-table__col-priority {
-  @apply w-28 text-center;
+  @apply w-28 flex items-center justify-center;
 }
 
 .tasks-table__col-date {
-  @apply w-32 text-center;
+  @apply w-32 flex items-center justify-center text-xs text-white/50;
 }
 
 .tasks-table__col-actions {
@@ -214,6 +214,10 @@
 
 .task-edit-panel__header {
   @apply flex items-center gap-2 mb-4;
+}
+
+.task-edit-panel__drag-handle {
+  @apply hidden mx-auto mb-3 h-1 w-10 rounded-full bg-white/20;
 }
 
 .task-edit-panel__title {
@@ -368,25 +372,6 @@
 
 .notif-panel__list {
   @apply flex flex-col p-2 max-h-80 overflow-y-auto;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(124, 111, 247, 0.3) transparent;
-}
-
-.notif-panel__list::-webkit-scrollbar {
-  width: 4px;
-}
-
-.notif-panel__list::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.notif-panel__list::-webkit-scrollbar-thumb {
-  background-color: rgba(124, 111, 247, 0.3);
-  border-radius: 9999px;
-}
-
-.notif-panel__list::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(124, 111, 247, 0.6);
 }
 
 .notif-item {
@@ -466,14 +451,13 @@
 /* ── Sidebar collapsed (responsive) ──────────────────────────── */
 @media (max-width: 768px) {
   .tasks-sidebar {
-    @apply w-16 px-2;
+    @apply w-14 px-2;
   }
 
   .tasks-sidebar__logo {
     @apply justify-center px-0;
   }
 
-  /* Oculta o texto "Task Lip" do logo */
   .tasks-sidebar__logo .tasklip-logo__text {
     @apply hidden;
   }
@@ -491,21 +475,141 @@
     @apply justify-center px-0;
   }
 
+  /* Topbar mobile: compacto */
+  .tasks-topbar {
+    @apply px-2 py-2 gap-2;
+  }
+
+  .tasks-topbar__search {
+    @apply max-w-none py-1.5 min-w-0;
+  }
+
+  /* Esconde o texto "Nova Tarefa", mantém só o ícone */
+  .tasks-topbar__new-btn {
+    @apply px-3 shrink-0;
+  }
+
+  .tasks-topbar__new-btn span {
+    @apply hidden;
+  }
+
+  /* Panel mobile */
+  .tasks-panel {
+    @apply px-2 py-3;
+  }
+
+  /* Tabs: linha única com overflow horizontal sem quebra */
   .tasks-tabs {
-    @apply flex-col items-start;
+    @apply flex-nowrap overflow-x-auto pb-1;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .tasks-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tasks-tab {
+    @apply px-2.5 py-1.5 text-xs shrink-0;
+  }
+
+  .tasks-filter {
+    @apply shrink-0 px-2.5 py-1.5 text-xs;
+  }
+
+  /* Cabeçalho da tabela: só título + ações */
+  .tasks-table__header {
+    @apply px-3;
+  }
+
+  .tasks-table__col-priority,
+  .tasks-table__col-date {
+    @apply hidden;
+  }
+
+  /* Cada linha vira card de 2 linhas via grid */
+  .task-row {
+    @apply grid px-3 py-3 gap-x-2 gap-y-1.5;
+    grid-template-columns: 20px 1fr auto;
+    grid-template-rows: auto auto;
+    align-items: start;
+  }
+
+  /* linha 1, col 1: checkbox */
+  .task-row__check {
+    grid-column: 1;
+    grid-row: 1;
+    @apply mt-0.5;
+  }
+
+  /* linha 1, col 2: título + descrição */
+  .task-row__info {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  /* linha 1, col 3: botão de ações (três pontinhos) */
+  .tasks-table__col-actions {
+    grid-column: 3;
+    grid-row: 1;
+    @apply w-auto;
+  }
+
+  /* linha 2, col 2-3: prioridade + data em linha */
+  .tasks-table__col-priority {
+    grid-column: 2;
+    grid-row: 2;
+    @apply flex w-auto text-left;
+  }
+
+  .tasks-table__col-date {
+    grid-column: 3;
+    grid-row: 2;
+    @apply w-auto text-left text-xs text-white/40 whitespace-nowrap;
+  }
+
+  /* Paginação: centralizada sem o texto informativo */
+  .tasks-pagination {
+    @apply justify-center;
+  }
+
+  .tasks-pagination__info {
+    @apply hidden;
+  }
+
+  .tasks-pagination__controls {
+    @apply ml-0;
+  }
+
+  /* Edit panel: drawer que sobe da base */
+  .task-edit-panel {
+    @apply fixed inset-x-0 bottom-0 w-full h-[85vh] border-l-0 border-t border-white/10 rounded-t-2xl z-40 shadow-2xl;
+    animation: drawer-slide-up 0.3s cubic-bezier(0.32, 0.72, 0, 1) both;
+  }
+
+  @keyframes drawer-slide-up {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  .task-edit-panel__drag-handle {
+    @apply block;
   }
 }
 
-@media (min-width: 1024px){
-  .tasks-topbar{
-     @apply gap-4 px-6;
+@media (min-width: 1024px) {
+  .tasks-topbar {
+    @apply gap-4 px-6;
   }
 
-  .tasks-panel{
-     @apply px-6;
+  .tasks-panel {
+    @apply px-6;
   }
 
-  .task-edit-panel{
+  .task-edit-panel {
     @apply w-90;
   }
 }

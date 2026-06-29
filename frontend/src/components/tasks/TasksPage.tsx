@@ -200,6 +200,8 @@ function EditPanel({ task, isLoadingDetail = false, onClose, onSave, onRequestDe
 
   return (
     <aside className="task-edit-panel" aria-label="Editar tarefa">
+      {/* Handle visual para mobile (drawer) */}
+      <div className="task-edit-panel__drag-handle" aria-hidden="true" />
       <div className="task-edit-panel__header">
         <Pencil size={14} className="text-white/40" aria-hidden="true" />
         <span className="task-edit-panel__title">Editar tarefa</span>
@@ -403,8 +405,8 @@ export function TasksPage() {
                     <span className={cn("task-row__title", task.status === "CONCLUIDA" && "task-row__title--done")}>{task.titulo}</span>
                     <span className="task-row__subtitle">{task.descricao ? task.descricao.length > 14 ? task.descricao.slice(0, 14) + "..." : task.descricao : "Sem descrição"}</span>
                   </div>
-                  <div className="tasks-table__col-priority flex justify-center"><PriorityBadge prioridade={task.prioridade} /></div>
-                  <div className="tasks-table__col-date text-center text-xs text-white/50">{formatDate(task.dataLimite)}</div>
+                  <div className="tasks-table__col-priority"><PriorityBadge prioridade={task.prioridade} /></div>
+                  <div className="tasks-table__col-date">{formatDate(task.dataLimite)}</div>
                   <div className="tasks-table__col-actions flex justify-center relative">
                     <Button variant="ghost" size="icon" className="text-white/30 hover:text-white hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-[#7c6ff7]" onClick={(e) => { e.stopPropagation(); setMenuOpenId(menuOpenId === task.id ? null : task.id) }} aria-label="Mais opções" aria-haspopup="true" aria-expanded={menuOpenId === task.id}>
                       <MoreVertical size={15} aria-hidden="true" />
@@ -444,10 +446,18 @@ export function TasksPage() {
 
       {/* Painel lateral de edição */}
       {selectedTaskId && selectedTask && (
-        <EditPanel key={selectedTaskId} task={selectedTask} isLoadingDetail={isLoadingDetail} onClose={closePanel}
-          onSave={async (id, payload) => { await editTask(id, payload); void fetchById(id) }}
-          onRequestDelete={requestDelete}
-        />
+        <>
+          {/* Overlay mobile para fechar o drawer ao clicar fora */}
+          <div
+            className="fixed inset-0 z-30 bg-black/50 lg:hidden"
+            onClick={closePanel}
+            aria-hidden="true"
+          />
+          <EditPanel key={selectedTaskId} task={selectedTask} isLoadingDetail={isLoadingDetail} onClose={closePanel}
+            onSave={async (id, payload) => { await editTask(id, payload); void fetchById(id) }}
+            onRequestDelete={requestDelete}
+          />
+        </>
       )}
 
       {/* Modals */}
