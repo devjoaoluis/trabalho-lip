@@ -1,5 +1,5 @@
 import { cn } from "#lib/utils"
-import Tools from "../../../public/design-tools.svg"
+import Tools from "/design-tools.svg?url"
 import "./tasklip-logo.css"
 
 interface TaskLipLogoProps {
