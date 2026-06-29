@@ -148,6 +148,7 @@ export class UsersService {
         nome: usuarios.nome,
         email: usuarios.email,
         fotoUrl: usuarios.fotoUrl,
+        profileColor: usuarios.profileColor,
         criadoEm: usuarios.criadoEm,
         atualizadoEm: usuarios.atualizadoEm,
       });
@@ -181,6 +182,7 @@ export class UsersService {
         nome: usuarios.nome,
         email: usuarios.email,
         fotoUrl: usuarios.fotoUrl,
+        profileColor: usuarios.profileColor,
         criadoEm: usuarios.criadoEm,
         atualizadoEm: usuarios.atualizadoEm,
       });

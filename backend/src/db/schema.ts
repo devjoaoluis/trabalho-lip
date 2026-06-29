@@ -27,6 +27,7 @@ export const usuarios = pgTable("usuarios", {
   resetTokenExpiry: timestamp("reset_token_expiry"),
   fotoUrl: varchar("foto_url", { length: 500 }),
   fotoPublicId: varchar("foto_public_id", { length: 255 }),
+  profileColor: varchar("profile_color", { length: 7 }).default("#7c6ff7").notNull(),
 });
 
 export const tarefas = pgTable("tarefas", {
