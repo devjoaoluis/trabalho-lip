@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState, useCallback } from "react"
-import { Bell, Clock, Check, Flame } from "lucide-react"
+import { Bell, Clock, Check, Flame, Settings2 } from "lucide-react"
 import { cn } from "#lib/utils"
 import {
   useNotifications,
@@ -10,6 +10,16 @@ import type { Task } from "../../../service/task"
 import "../tasks/tasks.css"
 
 const DISMISSED_KEY = "task_lip_dismissed_notifications"
+const GUIDE_NOTIF_ID = "system-enable-notifications-guide"
+
+/** Notificação-guia mostrada quando o usuário ainda não ativou as notificações */
+const GUIDE_NOTIFICATION: AppNotification = {
+  id: GUIDE_NOTIF_ID,
+  type: "nova",
+  taskId: "",
+  taskTitle: "",
+  eventDate: new Date().toISOString(),
+}
 
 function loadDismissed(): Set<string> {
   try {
@@ -33,6 +43,8 @@ function saveDismissed(ids: Set<string>): void {
 
 interface NotificationBellProps {
   tasks: Task[]
+  /** Whether the user has notifications enabled (from backend preference) */
+  notificationsEnabled?: boolean
   /** Extra classes for the wrapper */
   className?: string
   /** Visual variant: "tasks" uses the dark rounded square style; "dashboard" uses the original style */
@@ -68,6 +80,7 @@ function notifLabel(n: AppNotification): string {
 
 export function NotificationBell({
   tasks,
+  notificationsEnabled = false,
   className,
   variant = "tasks",
   onNavigateToTask,
@@ -76,9 +89,15 @@ export function NotificationBell({
   // dismissed IDs persisted in localStorage
   const [dismissed, setDismissed] = useState<Set<string>>(() => loadDismissed())
   const ref = useRef<HTMLDivElement>(null)
-  const { notifications } = useNotifications(tasks)
+  const { notifications: taskNotifications } = useNotifications(tasks)
 
-  const visible = notifications.filter((n) => !dismissed.has(n.id))
+  // Se notificações estão desativadas, mostra apenas a guia (a menos que ela já tenha sido dispensada)
+  // Se ativadas, mostra as notificações de tarefas normalmente
+  const allNotifications: AppNotification[] = notificationsEnabled
+    ? taskNotifications
+    : [GUIDE_NOTIFICATION]
+
+  const visible = allNotifications.filter((n) => !dismissed.has(n.id))
   const unreadCount = visible.length
 
   // Sync dismissed set to localStorage whenever it changes
@@ -96,14 +115,14 @@ export function NotificationBell({
 
   const handleClearAll = useCallback(() => {
     // Mark all current notifications as dismissed
-    const allIds = new Set(notifications.map((n) => n.id))
+    const allIds = new Set(allNotifications.map((n) => n.id))
     setDismissed(allIds)
     saveDismissed(allIds)
     // Also wipe the notifications array from localStorage so on reload it starts fresh
     clearNotificationsStorage()
     // Remove dismissed list too since there's nothing to dismiss anymore
     localStorage.removeItem(DISMISSED_KEY)
-  }, [notifications])
+  }, [allNotifications])
 
   const bellClass =
     variant === "dashboard"
@@ -155,23 +174,50 @@ export function NotificationBell({
           ) : (
             <ul className="notif-panel__list" role="list">
               {visible.map((n) => (
-                <li key={n.id} className="notif-item">
-                  <NotificationIcon type={n.type} />
+                <li key={n.id} className={cn("notif-item", n.id === GUIDE_NOTIF_ID && "notif-item--guide")}>
+                  {n.id === GUIDE_NOTIF_ID ? (
+                    <span className="notif-icon notif-icon--guide" aria-hidden="true">
+                      <Settings2 size={15} />
+                    </span>
+                  ) : (
+                    <NotificationIcon type={n.type} />
+                  )}
                   <div className="notif-item__content">
-                    <p className="notif-item__text">{notifLabel(n)}</p>
-                    {onNavigateToTask && (
-                      <button
-                        className="notif-item__link"
-                        onClick={() => {
-                          onNavigateToTask(n.taskId)
-                          setOpen(false)
-                        }}
-                      >
-                        Ver tarefa →
-                      </button>
+                    {n.id === GUIDE_NOTIF_ID ? (
+                      <p className="notif-item__text notif-item__text--guide">
+                        Ative as notificações nas{" "}
+                        <strong className="text-[#7c6ff7]">Configurações</strong>{" "}
+                        para receber alertas das suas tarefas.
+                      </p>
+                    ) : (
+                      <>
+                        <p className="notif-item__text">{notifLabel(n)}</p>
+                        {onNavigateToTask && n.taskId && (
+                          <button
+                            className="notif-item__link"
+                            onClick={() => {
+                              onNavigateToTask(n.taskId)
+                              setOpen(false)
+                            }}
+                          >
+                            Ver tarefa →
+                          </button>
+                        )}
+                      </>
                     )}
                   </div>
-                  <span className="notif-item__time">{n.eventDate ? new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" }).format(new Date(n.eventDate)) : ""}</span>
+                  {n.id !== GUIDE_NOTIF_ID && (
+                    <span className="notif-item__time">
+                      {n.eventDate
+                        ? new Intl.DateTimeFormat("pt-BR", {
+                            day: "2-digit",
+                            month: "short",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          }).format(new Date(n.eventDate))
+                        : ""}
+                    </span>
+                  )}
                 </li>
               ))}
             </ul>

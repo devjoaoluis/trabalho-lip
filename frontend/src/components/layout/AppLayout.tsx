@@ -4,7 +4,7 @@ import { Sidebar } from "#components/ui/Sidebar"
 import { NotificationBell } from "#components/ui/NotificationBell"
 import { NewTaskModal } from "#components/tasks/NewTaskModal"
 import { TasksProvider, useTasksContext } from "../../contexts/TasksContext"
-import { useCurrentUser } from "#hooks/useCurrentUser"
+import { useUserContext } from "../../contexts/UserContext"
 import { ROUTES } from "../../router/routes"
 import type { ActivePage } from "#components/ui/Sidebar"
 import "../tasks/tasks.css"
@@ -24,7 +24,7 @@ function AppLayoutInner() {
   const location = useLocation()
   const { tasks, addTask, showNewTaskModal, openNewTaskModal, closeNewTaskModal, search, setSearch } =
     useTasksContext()
-  const { user } = useCurrentUser()
+  const { user } = useUserContext()
 
   const activePage = routeToActivePage(location.pathname)
 
@@ -38,6 +38,7 @@ function AppLayoutInner() {
       <Sidebar
         userName={user?.nome ?? "Usuário"}
         userPhotoUrl={user?.fotoUrl}
+        userAvatarColor={user?.profileColor ?? null}
         activePage={activePage}
         onLogout={handleLogout}
       />
@@ -63,7 +64,11 @@ function AppLayoutInner() {
             >
               <Plus size={18} aria-hidden="true" /> Nova Tarefa
             </button>
-            <NotificationBell tasks={tasks} variant="dashboard" />
+            <NotificationBell
+              tasks={tasks}
+              notificationsEnabled={user?.receberNotificacoes ?? false}
+              variant="dashboard"
+            />
           </div>
         </header>
 

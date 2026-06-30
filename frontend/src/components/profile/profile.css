@@ -140,6 +140,10 @@
   @apply bg-[#5b4df6] hover:bg-[#6a5ef7];
 }
 
+.profile-avatar--loading {
+  @apply !bg-[#7c6ff7];
+}
+
 .profile-avatar--green {
   @apply !bg-[#00ca32];
 }
@@ -154,6 +158,26 @@
 
 .profile-avatar--yellow {
   @apply !bg-[#ff9d00];
+}
+
+.profile-color--loading {
+  @apply bg-[#7c6ff7];
+}
+
+.profile-color--green {
+  @apply bg-[#00ca32];
+}
+
+.profile-color--pink {
+  @apply bg-[#ff6078];
+}
+
+.profile-color--blue {
+  @apply bg-[#559aff];
+}
+
+.profile-color--yellow {
+  @apply bg-[#ff9d00];
 }
 
 .profile-color.is-active {

@@ -7,11 +7,14 @@ export interface UserProfile {
   criadoEm: string
   atualizadoEm: string
   fotoUrl: string | null
+  profileColor?: string
+  receberNotificacoes?: boolean
 }
 
 export interface UpdateUserPayload {
   nome?: string
   email?: string
+  profileColor?: string
 }
 
 function authHeaders() {
@@ -50,9 +53,24 @@ export async function updateProfilePhoto(file: File): Promise<UserProfile> {
 }
 
 export async function removeProfilePhoto(): Promise<UserProfile> {
+  const { data } = await api.delete<UserProfile>("/users/me/photo", {
+    headers: authHeaders(),
+  })
+  return data
+}
+
+export async function deleteUser(id: string): Promise<void> {
+  await api.delete(`/users/${id}`, {
+    headers: authHeaders(),
+  })
+}
+
+export async function updateNotificationPreference(
+  receberNotificacoes: boolean
+): Promise<UserProfile> {
   const { data } = await api.patch<UserProfile>(
-    "/users/me/photo",
-    { file: null },
+    "/users/me/notifications",
+    { receberNotificacoes },
     { headers: authHeaders() }
   )
   return data

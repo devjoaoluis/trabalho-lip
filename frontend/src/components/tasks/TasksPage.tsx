@@ -33,10 +33,22 @@ const STATUS_LABEL: Record<StatusTarefa, string> = {
   CONCLUIDA: "Concluído",
 }
 
+function parseDate(dateStr: string): Date {
+  // "YYYY-MM-DD" sem hora: constrói como local para não deslocar pelo UTC offset
+  if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+    const [y, m, d] = dateStr.split("-").map(Number)
+    return new Date(y, m - 1, d)
+  }
+  return new Date(dateStr)
+}
+
 function formatDate(dateStr?: string | null): string {
   if (!dateStr) return "—"
-  const d = new Date(dateStr)
+  const d = parseDate(dateStr)
   if (isNaN(d.getTime())) return dateStr
+  if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+    return d.toLocaleDateString("pt-BR", { day: "2-digit", month: "short" })
+  }
   return d.toLocaleDateString("pt-BR", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })
 }
 
@@ -78,87 +90,6 @@ function ConfirmDeleteModal({ onConfirm, onCancel, isDeleting }: ConfirmDeleteMo
             {isDeleting ? "Excluindo…" : "Excluir"}
           </Button>
         </div>
-      </div>
-    </div>
-  )
-}
-
-/* ─── New Task Modal ───────────────────────────────────────── */
-interface NewTaskModalProps {
-  onClose: () => void
-  onSubmit: (payload: CreateTaskPayload) => Promise<void>
-}
-
-function NewTaskModal({ onClose, onSubmit }: NewTaskModalProps) {
-  const [titulo, setTitulo] = useState("")
-  const [descricao, setDescricao] = useState("")
-  const [prioridade, setPrioridade] = useState<Prioridade>("MEDIA")
-  const [status, setStatus] = useState<StatusTarefa>("PENDENTE")
-  const [dataLimite, setDataLimite] = useState("")
-  const [isSaving, setIsSaving] = useState(false)
-  const [submitError, setSubmitError] = useState<string | null>(null)
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    if (!titulo.trim()) return
-    setIsSaving(true)
-    setSubmitError(null)
-    try {
-      await onSubmit({ titulo: titulo.trim(), descricao: descricao.trim() || undefined, prioridade, status, dataLimite: dataLimite || undefined })
-      onClose()
-    } catch {
-      setSubmitError("Erro ao criar tarefa. Tente novamente.")
-    } finally {
-      setIsSaving(false)
-    }
-  }
-
-  return (
-    <div className="tasks-modal-overlay" role="dialog" aria-modal="true" aria-label="Nova tarefa">
-      <div className="tasks-modal">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="tasks-modal__title">Nova Tarefa</h2>
-          <Button variant="ghost" size="icon" className="text-white/40 hover:text-white hover:bg-white/10" onClick={onClose} aria-label="Fechar modal">
-            <X size={18} aria-hidden="true" />
-          </Button>
-        </div>
-        <form onSubmit={(e) => void handleSubmit(e)} noValidate aria-label="Formulário de nova tarefa">
-          <div className="task-field">
-            <Label className="task-field__label" htmlFor="new-titulo">Título *</Label>
-            <Input id="new-titulo" className="task-field__input" placeholder="Título da tarefa" value={titulo} onChange={(e) => setTitulo(e.target.value)} required disabled={isSaving} />
-          </div>
-          <div className="task-field">
-            <Label className="task-field__label" htmlFor="new-desc">Descrição</Label>
-            <textarea id="new-desc" className="task-field__textarea focus-visible:ring-2 focus-visible:ring-[#7c6ff7]" placeholder="Descrição opcional..." rows={3} value={descricao} onChange={(e) => setDescricao(e.target.value)} disabled={isSaving} />
-          </div>
-          <div className="flex gap-3">
-            <div className="task-field flex-1">
-              <Label className="task-field__label" htmlFor="new-prioridade">Prioridade</Label>
-              <select id="new-prioridade" className="task-field__select focus-visible:ring-2 focus-visible:ring-[#7c6ff7]" value={prioridade} onChange={(e) => setPrioridade(e.target.value as Prioridade)} disabled={isSaving}>
-                <option value="ALTA">Alta</option>
-                <option value="MEDIA">Média</option>
-                <option value="BAIXA">Baixo</option>
-              </select>
-            </div>
-            <div className="task-field flex-1">
-              <Label className="task-field__label" htmlFor="new-status">Status</Label>
-              <select id="new-status" className="task-field__select focus-visible:ring-2 focus-visible:ring-[#7c6ff7]" value={status} onChange={(e) => setStatus(e.target.value as StatusTarefa)} disabled={isSaving}>
-                <option value="PENDENTE">Pendente</option>
-                <option value="EM_ANDAMENTO">Em andamento</option>
-                <option value="CONCLUIDA">Concluído</option>
-              </select>
-            </div>
-          </div>
-          <div className="task-field">
-            <Label className="task-field__label" htmlFor="new-data">Data limite</Label>
-            <Input id="new-data" type="date" className="task-field__input" value={dataLimite} onChange={(e) => setDataLimite(e.target.value)} disabled={isSaving} />
-          </div>
-          {submitError && <p className="text-xs text-red-400 mb-3" role="alert">{submitError}</p>}
-          <div className="task-edit-panel__actions mt-2">
-            <Button type="button" variant="ghost" className="tasks-btn-cancel hover:bg-white/10" onClick={onClose} disabled={isSaving}>Cancelar</Button>
-            <Button type="submit" className="tasks-btn-save hover:bg-[#6a5fe0] active:bg-[#5c52cc]" disabled={isSaving || !titulo.trim()}>{isSaving ? "Criando…" : "Criar Tarefa"}</Button>
-          </div>
-        </form>
       </div>
     </div>
   )
@@ -282,7 +213,7 @@ const PAGE_SIZE = 9
 type TabFilter = "todas" | "hoje" | "atrasadas" | "concluidas"
 
 export function TasksPage() {
-  const { tasks, isLoading, error, addTask, editTask, removeTask, search } = useTasksContext()
+  const { tasks, isLoading, error, editTask, removeTask, search } = useTasksContext()
   const { task: detailedTask, isLoading: isLoadingDetail, fetchById, clear: clearDetail } = useTaskDetail()
 
   const [tab, setTab] = useState<TabFilter>("todas")
@@ -321,8 +252,8 @@ export function TasksPage() {
     let list = tasks
     if (search.trim()) { const q = search.toLowerCase(); list = list.filter((t) => t.titulo.toLowerCase().includes(q)) }
     if (tab === "concluidas") list = list.filter((t) => t.status === "CONCLUIDA")
-    else if (tab === "hoje") list = list.filter((t) => { if (!t.dataLimite) return false; const d = new Date(t.dataLimite); d.setHours(0,0,0,0); return d.getTime() === today.getTime() })
-    else if (tab === "atrasadas") list = list.filter((t) => { if (!t.dataLimite || t.status === "CONCLUIDA") return false; const d = new Date(t.dataLimite); d.setHours(0,0,0,0); return d.getTime() < today.getTime() })
+    else if (tab === "hoje") list = list.filter((t) => { if (!t.dataLimite) return false; const d = parseDate(t.dataLimite); d.setHours(0,0,0,0); return d.getTime() === today.getTime() })
+    else if (tab === "atrasadas") list = list.filter((t) => { if (!t.dataLimite || t.status === "CONCLUIDA") return false; const d = parseDate(t.dataLimite); d.setHours(0,0,0,0); return d.getTime() < today.getTime() })
     if (priorityFilter !== "TODAS") list = list.filter((t) => t.prioridade === priorityFilter)
     return list
   }, [tasks, search, tab, priorityFilter, today])
@@ -336,8 +267,8 @@ export function TasksPage() {
     await editTask(task.id, { status: newStatus })
   }
 
-  const countHoje = tasks.filter((t) => { if (!t.dataLimite) return false; const d = new Date(t.dataLimite); d.setHours(0,0,0,0); return d.getTime() === today.getTime() }).length
-  const countAtrasadas = tasks.filter((t) => { if (!t.dataLimite || t.status === "CONCLUIDA") return false; const d = new Date(t.dataLimite); d.setHours(0,0,0,0); return d.getTime() < today.getTime() }).length
+  const countHoje = tasks.filter((t) => { if (!t.dataLimite) return false; const d = parseDate(t.dataLimite); d.setHours(0,0,0,0); return d.getTime() === today.getTime() }).length
+  const countAtrasadas = tasks.filter((t) => { if (!t.dataLimite || t.status === "CONCLUIDA") return false; const d = parseDate(t.dataLimite); d.setHours(0,0,0,0); return d.getTime() < today.getTime() }).length
   const countConcluidas = tasks.filter((t) => t.status === "CONCLUIDA").length
 
   return (

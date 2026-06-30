@@ -394,6 +394,18 @@
   @apply bg-[#7c6ff7]/15 text-[#7c6ff7];
 }
 
+.notif-icon--guide {
+  @apply bg-[#7c6ff7]/15 text-[#7c6ff7];
+}
+
+.notif-item--guide {
+  @apply bg-[#7c6ff7]/5 border border-[#7c6ff7]/20;
+}
+
+.notif-item__text--guide {
+  @apply text-sm text-white/70 leading-relaxed;
+}
+
 .notif-item__content {
   @apply flex flex-col gap-0.5 flex-1 min-w-0;
 }

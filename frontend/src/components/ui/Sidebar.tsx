@@ -16,6 +16,7 @@ export type ActivePage = "dashboard" | "tasks" | "settings" | "reports" | "profi
 interface SidebarProps {
   userName: string
   userPhotoUrl?: string | null
+  userAvatarColor?: string | null
   activePage: ActivePage
   onLogout: () => void
 }
@@ -29,7 +30,7 @@ function getInitials(name: string): string {
     .toUpperCase()
 }
 
-export function Sidebar({ userName, userPhotoUrl, activePage, onLogout }: SidebarProps) {
+export function Sidebar({ userName, userPhotoUrl, userAvatarColor, activePage, onLogout }: SidebarProps) {
   const navigate = useNavigate()
 
   return (
@@ -113,7 +114,11 @@ export function Sidebar({ userName, userPhotoUrl, activePage, onLogout }: Sideba
               className="tasks-sidebar__avatar object-cover"
             />
           ) : (
-            <span className="tasks-sidebar__avatar" aria-hidden="true">
+            <span
+              className="tasks-sidebar__avatar"
+              style={userAvatarColor ? { backgroundColor: userAvatarColor } : undefined}
+              aria-hidden="true"
+            >
               {getInitials(userName)}
             </span>
           )}
