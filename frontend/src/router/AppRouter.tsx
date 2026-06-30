@@ -4,6 +4,7 @@ import { ROUTES } from "./routes"
 import { AuthGuard, GuestGuard } from "./AuthGuard"
 import { SessionExpiredModal } from "#components/ui/SessionExpiredModal"
 import { AppLayout } from "#components/layout/AppLayout"
+import { UserProvider } from "../contexts/UserContext"
 
 const LoginPage            = lazy(() => import("#pages/LoginPage"))
 const RegisterPage         = lazy(() => import("#pages/RegisterPage"))
@@ -43,7 +44,7 @@ export function AppRouter() {
 
           {/* Rotas protegidas — Sidebar + Topbar sempre visíveis */}
           <Route element={<AuthGuard />}>
-            <Route element={<AppLayout />}>
+            <Route element={<UserProvider><AppLayout /></UserProvider>}>
               <Route path={ROUTES.DASHBOARD} element={<DashboardPage />} />
               <Route path={ROUTES.TASKS}     element={<TasksPage />} />
               <Route path={ROUTES.PROFILE}   element={<ProfilePage />} />

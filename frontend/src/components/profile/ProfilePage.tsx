@@ -3,15 +3,37 @@ import { ImageUp, Pencil, CircleAlert, User, Loader2, Trash2 } from "lucide-reac
 import { Button } from "#components/ui/button"
 import { Input } from "#components/ui/input"
 import { Label } from "#components/ui/label"
-import { useCurrentUser } from "#hooks/useCurrentUser"
+import { useUserContext } from "../../contexts/UserContext"
 import { updateUser, updateProfilePhoto, removeProfilePhoto } from "../../../service/user"
 import { format } from "date-fns"
 import { ptBR } from "date-fns/locale"
 import "./profile.css"
 
-type AvatarColor = "green" | "pink" | "blue" | "yellow"
+type AvatarColor = "green" | "pink" | "blue" | "yellow" | "loading"
 
-const COLOR_OPTIONS: AvatarColor[] = ["green", "pink", "blue", "yellow"]
+const COLOR_OPTIONS: AvatarColor[] = ["loading", "green", "pink", "blue", "yellow"]
+
+// Mapeamento entre nome de cor (CSS) e valor hex armazenado no backend
+const COLOR_TO_HEX: Record<AvatarColor, string> = {
+  loading: "#7c6ff7",
+  green: "#00ca32",
+  pink: "#ff6078",
+  blue: "#559aff",
+  yellow: "#ff9d00",
+}
+
+const HEX_TO_COLOR: Record<string, AvatarColor> = {
+  "#7c6ff7": "loading",
+  "#00ca32": "green",
+  "#ff6078": "pink",
+  "#559aff": "blue",
+  "#ff9d00": "yellow",
+}
+
+function hexToAvatarColor(hex: string | undefined): AvatarColor {
+  if (!hex) return "loading"
+  return HEX_TO_COLOR[hex.toLowerCase()] ?? "loading"
+}
 
 function getInitials(name: string): string {
   return name
@@ -31,7 +53,7 @@ function formatDate(iso: string): string {
 }
 
 export function ProfilePage() {
-  const { user, isLoading, refetch } = useCurrentUser()
+  const { user, isLoading, refetch } = useUserContext()
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const [nome, setNome] = useState("")
@@ -52,18 +74,9 @@ export function ProfilePage() {
   useEffect(() => {
     if (!user) return
 
-    // O campo nome pode conter a cor codificada: "João|blue"
-    if (user.nome.includes("|")) {
-      const [nomeLimpo, cor] = user.nome.split("|")
-      setNome(nomeLimpo)
-      if (COLOR_OPTIONS.includes(cor as AvatarColor)) {
-        setActiveColor(cor as AvatarColor)
-      }
-    } else {
-      setNome(user.nome)
-    }
-
+    setNome(user.nome)
     setEmail(user.email)
+    setActiveColor(hexToAvatarColor(user.profileColor))
     // Limpa a prévia quando os dados do servidor chegam
     setPhotoPreview(null)
   }, [user])
@@ -75,8 +88,9 @@ export function ProfilePage() {
     setSaveSuccess(false)
     try {
       await updateUser(user.id, {
-        nome: `${nome}|${activeColor}`,
+        nome,
         email,
+        profileColor: COLOR_TO_HEX[activeColor],
       })
       await refetch()
       setSaveSuccess(true)

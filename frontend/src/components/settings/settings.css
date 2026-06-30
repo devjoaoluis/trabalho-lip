@@ -84,3 +84,80 @@
 .settings-feedback--success {
   @apply text-green-400;
 }
+
+/* ── Danger zone card ────────────────────────────────────────── */
+.settings-card--danger {
+  @apply border-red-500/20 bg-red-500/5;
+}
+
+.settings-card__title--danger {
+  @apply text-red-400;
+}
+
+.settings-danger__row {
+  @apply flex items-center justify-between gap-4 flex-wrap;
+}
+
+.settings-danger__info {
+  @apply flex flex-col gap-1;
+}
+
+.settings-danger__label {
+  @apply text-sm font-medium text-white/80;
+}
+
+.settings-danger__hint {
+  @apply text-xs text-white/40 max-w-xs;
+}
+
+.settings-btn-delete {
+  @apply flex items-center justify-center h-9 px-4 rounded-lg
+         bg-red-500/80 text-white text-sm font-semibold
+         cursor-pointer transition-colors;
+}
+
+/* ── Delete account modal ────────────────────────────────────── */
+.settings-modal-overlay {
+  @apply fixed inset-0 z-50 flex items-center justify-center
+         bg-black/60 backdrop-blur-sm px-4;
+}
+
+.settings-modal {
+  @apply w-full max-w-md rounded-2xl border border-white/10
+         bg-[#10122a] px-8 py-8 flex flex-col items-center gap-4
+         shadow-2xl;
+}
+
+.settings-modal__icon-wrapper {
+  @apply flex items-center justify-center w-14 h-14 rounded-full
+         bg-red-500/15 border border-red-500/25;
+}
+
+.settings-modal__title {
+  @apply text-lg font-semibold text-white text-center;
+}
+
+.settings-modal__desc {
+  @apply text-sm text-white/55 text-center leading-relaxed;
+}
+
+.settings-modal__warning {
+  @apply text-sm font-medium text-white/80 text-center;
+}
+
+.settings-modal__actions {
+  @apply flex gap-3 w-full mt-2;
+}
+
+.settings-modal__btn {
+  @apply flex-1 flex items-center justify-center h-10 rounded-lg
+         text-sm font-semibold cursor-pointer transition-colors;
+}
+
+.settings-modal__btn--cancel {
+  @apply bg-white/8 text-white/70 border border-white/10;
+}
+
+.settings-modal__btn--delete {
+  @apply bg-red-500 text-white;
+}

@@ -1,4 +1,4 @@
-import { useMemo, useEffect, useRef } from "react"
+import { useMemo, useRef } from "react"
 import type { Task } from "../../service/task"
 
 export type NotificationType = "atrasada" | "concluida" | "nova"
@@ -73,7 +73,8 @@ function deriveNotifications(tasks: Task[]): AppNotification[] {
   for (const task of tasks) {
     // Tarefa atrasada
     if (task.dataLimite && task.status !== "CONCLUIDA") {
-      const deadline = new Date(task.dataLimite)
+      const [y, m, d] = task.dataLimite.split("T")[0].split("-").map(Number)
+      const deadline = new Date(y, m - 1, d)
       deadline.setHours(0, 0, 0, 0)
       if (deadline < now) {
         result.push({
