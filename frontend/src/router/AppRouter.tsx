@@ -1,0 +1,64 @@
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
+import { lazy, Suspense } from "react"
+import { ROUTES } from "./routes"
+import { AuthGuard, GuestGuard } from "./AuthGuard"
+import { SessionExpiredModal } from "#components/ui/SessionExpiredModal"
+import { AppLayout } from "#components/layout/AppLayout"
+import { UserProvider } from "../contexts/UserContext"
+
+const LoginPage            = lazy(() => import("#pages/LoginPage"))
+const RegisterPage         = lazy(() => import("#pages/RegisterPage"))
+const DashboardPage        = lazy(() => import("#pages/DashboardPage"))
+const TasksPage            = lazy(() => import("#pages/TasksPage"))
+const NotFoundPage         = lazy(() => import("#pages/NotFoundPage"))
+const ForgotPasswordPage   = lazy(() => import("#pages/ForgotPasswordPage"))
+const ResetPasswordPage    = lazy(() => import("#pages/ResetPasswordPage"))
+const RelatoriosPage       = lazy(() => import("#pages/RelatoriosPage"))
+const ProfilePage          = lazy(() => import("#pages/ProfilePage"))
+const SettingsPage         = lazy(() => import("#pages/SettingsPage"))
+
+function PageLoader() {
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-[#0d0f1e]">
+      <span className="text-white/50 text-sm">Carregando…</span>
+    </div>
+  )
+}
+
+export function AppRouter() {
+  return (
+    <BrowserRouter>
+      <SessionExpiredModal />
+      <Suspense fallback={<PageLoader />}>
+        <Routes>
+          {/* Rota raiz → redireciona para login */}
+          <Route path="/" element={<Navigate to={ROUTES.LOGIN} replace />} />
+
+          {/* Rotas públicas — redireciona para dashboard se já autenticado */}
+          <Route element={<GuestGuard />}>
+            <Route path={ROUTES.LOGIN}            element={<LoginPage />} />
+            <Route path={ROUTES.REGISTER}         element={<RegisterPage />} />
+            <Route path={ROUTES.FORGOT_PASSWORD}  element={<ForgotPasswordPage />} />
+            <Route path={ROUTES.RESET_PASSWORD}   element={<ResetPasswordPage />} />
+          </Route>
+
+          {/* Rotas protegidas — Sidebar + Topbar sempre visíveis */}
+          <Route element={<AuthGuard />}>
+            <Route element={<UserProvider><AppLayout /></UserProvider>}>
+              <Route path={ROUTES.DASHBOARD} element={<DashboardPage />} />
+              <Route path={ROUTES.TASKS}     element={<TasksPage />} />
+              <Route path={ROUTES.PROFILE}   element={<ProfilePage />} />
+              <Route path={ROUTES.SETTINGS}  element={<SettingsPage />} />
+              <Route path={ROUTES.RELATORIOS}  element={<RelatoriosPage />} />
+              {/* Adicione novas rotas autenticadas aqui */}
+            </Route>
+          </Route>
+
+          {/* Fallback — rota não encontrada */}
+          <Route path={ROUTES.NOT_FOUND} element={<NotFoundPage />} />
+          <Route path="*" element={<Navigate to={ROUTES.NOT_FOUND} replace />} />
+        </Routes>
+      </Suspense>
+    </BrowserRouter>
+  )
+}

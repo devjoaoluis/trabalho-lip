@@ -1,0 +1,51 @@
+/* =============================================================
+   NOT FOUND PAGE – BEM styles
+   NOTA: No Tailwind v4, @apply não suporta variantes (lg:, hover:, sm:…).
+   Variantes responsivas e de estado ficam no className do TSX.
+   ============================================================= */
+
+@reference "../../index.css";
+
+
+.not-found-page {
+  @apply min-h-screen w-full flex bg-[#0d0f1e];
+}
+
+
+.not-found-page__left {
+  @apply flex flex-1 flex-col items-center justify-center px-8 py-10;
+}
+
+.not-found-page__code {
+  @apply text-[10rem] font-extrabold leading-none tracking-tighter select-none;
+  color: transparent;
+  -webkit-text-stroke: 4px #7c6ff7;
+  text-shadow:
+    6px 6px 0 #5c52cc,
+    12px 12px 0 #3a336e;
+}
+
+.not-found-page__divider {
+  @apply mt-6 w-48 border-t border-white/20;
+}
+
+/* ── Coluna direita – card ── */
+.not-found-page__right {
+  @apply flex items-center justify-center px-6 py-12;
+}
+
+.not-found-card {
+  @apply flex flex-col gap-6 rounded-2xl bg-white p-10 shadow-xl w-full max-w-md;
+}
+
+.not-found-card__title {
+  @apply text-4xl font-extrabold leading-tight tracking-tight text-gray-900;
+}
+
+.not-found-card__description {
+  @apply text-sm text-gray-500 leading-relaxed -mt-2;
+}
+
+.not-found-card__link {
+  @apply inline-flex items-center gap-2 text-sm font-medium text-[#7c6ff7] underline-offset-4;
+}

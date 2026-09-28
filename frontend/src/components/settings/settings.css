@@ -1,0 +1,163 @@
+@reference "../../index.css";
+
+/* ── Layout ─────────────────────────────────────────────────── */
+.settings-main {
+  @apply flex flex-col flex-1 overflow-y-auto min-h-0;
+}
+
+/* ── Content ─────────────────────────────────────────────────── */
+.settings-content {
+  @apply flex flex-col gap-4 px-8 py-6 max-w-3xl;
+}
+
+/* ── Card ────────────────────────────────────────────────────── */
+.settings-card {
+  @apply bg-[#10122a] border border-white/8 rounded-xl px-6 py-5;
+}
+
+.settings-card__header {
+  @apply flex items-center gap-2 mb-4;
+}
+
+.settings-card__title {
+  @apply text-sm font-semibold text-white;
+}
+
+/* ── Notifications row ───────────────────────────────────────── */
+.settings-notif__row {
+  @apply flex items-center justify-between;
+}
+
+.settings-notif__label {
+  @apply text-sm text-white/70;
+}
+
+/* ── Toggle switch ───────────────────────────────────────────── */
+.settings-toggle {
+  @apply relative inline-flex items-center w-11 h-6 rounded-full cursor-pointer
+         transition-colors duration-200 focus-visible:outline-none
+         focus-visible:ring-2 focus-visible:ring-[#7c6ff7];
+}
+
+.settings-toggle--on {
+  @apply bg-[#7c6ff7];
+}
+
+.settings-toggle--off {
+  @apply bg-white/20;
+}
+
+.settings-toggle__thumb {
+  @apply block w-5 h-5 rounded-full bg-white shadow-sm
+         transition-transform duration-200;
+}
+
+.settings-toggle__thumb--on {
+  @apply translate-x-5;
+}
+
+.settings-toggle__thumb--off {
+  @apply translate-x-0.5;
+}
+
+/* ── Security section ────────────────────────────────────────── */
+.settings-security__desc {
+  @apply text-sm text-white/60 mb-4;
+}
+
+/* ── Change password button ──────────────────────────────────── */
+.settings-btn-change-password {
+  @apply flex items-center justify-center h-10 px-6 rounded-lg
+         bg-[#7c6ff7] text-white text-sm font-semibold
+         cursor-pointer transition-colors;
+}
+
+/* ── Feedback messages ───────────────────────────────────────── */
+.settings-feedback {
+  @apply text-xs mb-3 font-medium;
+}
+
+.settings-feedback--error {
+  @apply text-red-400;
+}
+
+.settings-feedback--success {
+  @apply text-green-400;
+}
+
+/* ── Danger zone card ────────────────────────────────────────── */
+.settings-card--danger {
+  @apply border-red-500/20 bg-red-500/5;
+}
+
+.settings-card__title--danger {
+  @apply text-red-400;
+}
+
+.settings-danger__row {
+  @apply flex items-center justify-between gap-4 flex-wrap;
+}
+
+.settings-danger__info {
+  @apply flex flex-col gap-1;
+}
+
+.settings-danger__label {
+  @apply text-sm font-medium text-white/80;
+}
+
+.settings-danger__hint {
+  @apply text-xs text-white/40 max-w-xs;
+}
+
+.settings-btn-delete {
+  @apply flex items-center justify-center h-9 px-4 rounded-lg
+         bg-red-500/80 text-white text-sm font-semibold
+         cursor-pointer transition-colors;
+}
+
+/* ── Delete account modal ────────────────────────────────────── */
+.settings-modal-overlay {
+  @apply fixed inset-0 z-50 flex items-center justify-center
+         bg-black/60 backdrop-blur-sm px-4;
+}
+
+.settings-modal {
+  @apply w-full max-w-md rounded-2xl border border-white/10
+         bg-[#10122a] px-8 py-8 flex flex-col items-center gap-4
+         shadow-2xl;
+}
+
+.settings-modal__icon-wrapper {
+  @apply flex items-center justify-center w-14 h-14 rounded-full
+         bg-red-500/15 border border-red-500/25;
+}
+
+.settings-modal__title {
+  @apply text-lg font-semibold text-white text-center;
+}
+
+.settings-modal__desc {
+  @apply text-sm text-white/55 text-center leading-relaxed;
+}
+
+.settings-modal__warning {
+  @apply text-sm font-medium text-white/80 text-center;
+}
+
+.settings-modal__actions {
+  @apply flex gap-3 w-full mt-2;
+}
+
+.settings-modal__btn {
+  @apply flex-1 flex items-center justify-center h-10 rounded-lg
+         text-sm font-semibold cursor-pointer transition-colors;
+}
+
+.settings-modal__btn--cancel {
+  @apply bg-white/8 text-white/70 border border-white/10;
+}
+
+.settings-modal__btn--delete {
+  @apply bg-red-500 text-white;
+}
